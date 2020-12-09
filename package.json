@@ -1,7 +1,8 @@
 {
 	"private": true,
 	"scripts": {
-		"start": "webpack serve --mode development --open --watch"
+        "eslint": "eslint --max-warnings 0 --ext .jsx,.js .",
+        "start": "webpack serve --mode development --open --watch"
 	},
     "dependencies": {
 		"prop-types": "~15.7.2",
