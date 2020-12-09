@@ -1,0 +1,25 @@
+{
+    "root": true,
+    "parser": "babel-eslint",
+    "plugins": [
+        "jest",
+        "react",
+        "react-hooks"
+    ],
+    "settings": {
+        "react": {
+            "version": "17.0.1"
+        }
+    },
+    "rules": {
+        "react-hooks/exhaustive-deps": "warn",
+        "react-hooks/rules-of-hooks": "error",
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off"
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:jest/recommended",
+        "plugin:react/recommended"
+    ]
+}
