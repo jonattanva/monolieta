@@ -21,12 +21,30 @@ const Root = styled.div`
     width: 100%;
 `
 
+const Information = styled.div`
+    display: flex;
+    justify-content: flex-start;
+`
+
+const Item = styled.div`
+    align-items: center;
+    align-self: center;
+    display: flex;
+    font-size: .75rem;
+    justify-content: center;
+    margin: 0 4px;
+`
+
 const Status = memo((props) => {
     const filename = useName(props.filename)
 
     return (
         <Root>
-            { filename }
+            <Information>
+                <Item>
+                    { filename }
+                </Item>
+            </Information>
         </Root>
     )
 })
