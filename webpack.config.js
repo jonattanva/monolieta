@@ -14,6 +14,12 @@ module.exports = (env) => {
         devServer: {
             contentBase: path.resolve(__dirname, './public')
         },
+        cache: {
+            type: 'filesystem',
+            buildDependencies: {
+                config: [ __filename ]
+            }
+        },
 		module: {
 			rules: [{
 				test: /\.css$/i,

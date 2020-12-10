@@ -2,7 +2,16 @@ import { memo } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import useName from '../../hook/name.jsx'
+import Range from '../range/index.jsx'
+import usePercent from '../../hook/percent.jsx'
+import useFilename from '../../hook/filename.jsx'
+
+import {
+    Button,
+    Icon,
+    Item,
+    Separator
+} from '../common.jsx'
 
 const Root = styled.div`
     align-items: center;
@@ -21,30 +30,67 @@ const Root = styled.div`
     width: 100%;
 `
 
-const Information = styled.div`
+const Left = styled.div`
     display: flex;
     justify-content: flex-start;
 `
 
-const Item = styled.div`
-    align-items: center;
-    align-self: center;
+const Right = styled.div`
     display: flex;
-    font-size: .75rem;
-    justify-content: center;
-    margin: 0 4px;
+    justify-content: flex-end;
 `
 
 const Status = memo((props) => {
-    const filename = useName(props.filename)
+    const filename = useFilename(props.filename)
+    const percent = usePercent(props.zoom.value)
 
     return (
         <Root>
-            <Information>
+            <Left>
+                <Item>{ filename }</Item>
+            </Left>
+            <Right>
                 <Item>
-                    { filename }
+                    <Button role="button">
+                        <Icon width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                        </Icon>
+                    </Button>
                 </Item>
-            </Information>
+                <Item>
+                    <Button role="button">
+                        <Icon width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </Icon>
+                    </Button>
+                </Item>
+                <Separator />
+                <Item>
+                    <Button role="button" title="Reset zoom">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                        </svg>
+                    </Button>
+                </Item>
+                <Item>
+                    <Button role="button" title="Zoom out">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 12H6" />
+                        </svg>
+                    </Button>
+                </Item>
+                <Item>
+                    <Range />
+                </Item>
+                <Item>
+                    <Button role="button" title="Zoom in">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                    </Button>
+                </Item>
+                <Item>{ percent }</Item>
+            </Right>
         </Root>
     )
 })
@@ -52,11 +98,26 @@ const Status = memo((props) => {
 Status.displayName = 'Status'
 
 Status.propTypes = {
-    filename: PropTypes.string
+    /** File name */
+    filename: PropTypes.string,
+
+    /** Zoom settings */
+    zoom: PropTypes.shape({
+        max: PropTypes.number,
+        min: PropTypes.number,
+        step: PropTypes.number,
+        value: PropTypes.number
+    })
 }
 
 Status.defaultProps = {
-    filename: ''
+    filename: '',
+    zoom: {
+        max: 4,
+        min: 1,
+        step: 0.1,
+        value: 1
+    }
 }
 
 export default Status
