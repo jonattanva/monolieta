@@ -1,21 +1,22 @@
 {
-	"private": true,
-	"scripts": {
+    "private": true,
+    "scripts": {
         "eslint": "eslint --max-warnings 0 --ext .jsx,.js .",
         "start": "webpack serve --mode development --open --watch",
         "test": "jest"
-	},
+    },
     "dependencies": {
         "prop-types": "~15.7.2",
         "react": "~17.0.1",
         "react-custom-scrollbars": "~4.2.1",
         "react-dom": "~17.0.1",
         "styled-components": "~5.2.1"
-	},
-	"devDependencies": {
+    },
+    "devDependencies": {
         "@babel/core": "~7.12.10",
         "@babel/preset-env": "~7.12.10",
         "@babel/preset-react": "~7.12.10",
+        "@testing-library/react": "~11.2.2",
         "babel-eslint": "~10.1.0",
         "babel-jest": "~26.6.3",
         "babel-loader": "~8.2.2",

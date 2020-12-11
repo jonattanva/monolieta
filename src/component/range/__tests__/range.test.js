@@ -1,19 +1,12 @@
 import Range from '../index.jsx'
 import renderer from 'react-test-renderer'
-import { act, Simulate } from 'react-dom/test-utils'
-import { render, unmountComponentAtNode } from 'react-dom'
 
-let container = null
-beforeEach(() => {
-    container = document.createElement('div')
-    document.body.appendChild(container)
-})
+import {
+    render,
+    screen,
+    fireEvent
+} from '@testing-library/react'
 
-afterEach(() => {
-    unmountComponentAtNode(container)
-    container.remove()
-    container = null
-})
 
 describe('<Range />', function () {
 
@@ -26,23 +19,20 @@ describe('<Range />', function () {
             .toEqual('linear-gradient(to right, #6200ee 60%, #f5f5f5 0)')
     })
 
-    it('change', async function () {
+    it('change', function () {
         const props = {
             onChange: jest.fn(),
             value: 20
         }
 
-        act(() => {
-            render(
-                <Range { ...props } />, container
-            )
-        })
+        render(
+            <Range { ...props } />
+        )
 
-        const component = container.querySelector('input')
-        await act( async() => {
-            Simulate.change(component)
-        })
+        const input = screen.getByRole('input')
+        fireEvent.change(input, { target: { value: '10' } })
 
         expect(props.onChange).toHaveBeenCalledTimes(1)
+        expect(props.onChange.mock.calls[0][0]).toEqual(10)
     })
 })

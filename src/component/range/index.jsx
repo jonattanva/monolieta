@@ -55,7 +55,7 @@ const Range = memo((props) => {
         <Input type="range" min={ props.min } max={ props.max } step={ props.step }
             value={ props.value } onChange={ onChange } style={{
                 backgroundImage: `linear-gradient(to right, #6200ee ${nivel}%, #f5f5f5 0)`
-            }} />
+            }} role="input" />
     )
 })
 
