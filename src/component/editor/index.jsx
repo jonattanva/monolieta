@@ -1,7 +1,13 @@
-import { memo } from 'react'
 import styled from 'styled-components'
 
+import Canvas from '../canvas/index.jsx'
 import Status from '../status/index.jsx'
+
+import {
+    memo,
+    useState,
+    useCallback
+} from 'react'
 
 const Root = styled.div`
     align-content: flex-start;
@@ -61,14 +67,27 @@ const Sidebar = styled.div`
 `
 
 const Editor = memo(() => {
+    const [ zoom, setZoom ] = useState({
+        max: 4, min: 1, step: 0.1, value: 1
+    })
+
+    const onZoomHandle = useCallback((value) => {
+        setZoom(self => ({
+            ...self, value
+        }))
+    }, [ setZoom ])
+
 	return (
         <Root>
             <Container>
                 <Sidebar></Sidebar>
-                <Body></Body>
+                <Body>
+                    <Canvas zoom={ zoom } />
+                </Body>
                 <Sidebar></Sidebar>
             </Container>
-            <Status />
+            <Status zoom={ zoom }
+                onZoomHandle={ onZoomHandle } />
         </Root>
 	)
 })

@@ -2,8 +2,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import Range from '../range/index.jsx'
-import usePercent from '../../hook/percent.jsx'
-import useFilename from '../../hook/filename.jsx'
 
 import {
     Button,
@@ -14,6 +12,7 @@ import {
 
 import {
     memo,
+    useMemo,
     useCallback
 } from 'react'
 
@@ -45,8 +44,9 @@ const Right = styled.div`
 `
 
 const Status = memo((props) => {
-    const filename = useFilename(props.filename)
-    const percent = usePercent(props.zoom.value)
+    const filename = useMemo(() => (
+        props.filename.replace(/(.*\/.*\/|\?.*)/g, '')
+    ), [ props.filename ])
 
     const onLastHandle = useCallback(() => {
         if (!props.onNavigationHandle || props.navigation.number < 1) {
@@ -95,6 +95,12 @@ const Status = memo((props) => {
             props.zoom.value + props.zoom.step
         )
     }, [ props ])
+
+    const percent = useMemo(() => (
+        ((props.zoom.value * 100) / 100).toLocaleString('en', {
+            style: 'percent'
+        })
+    ), [ props.zoom.value ])
 
     return (
         <Root>
