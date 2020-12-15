@@ -7,7 +7,6 @@ import {
     fireEvent
 } from '@testing-library/react'
 
-
 describe('<Range />', function () {
 
     it('value', function () {
