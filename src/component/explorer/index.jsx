@@ -161,7 +161,7 @@ const Explorer = memo((props) => {
                                 src={ item.image }
                                 selected={ props.selected === key } />
                         </Picture>
-                        <Label>{ item.label }</Label>
+                        <Label>{ item.filename }</Label>
                     </Box>
                 )
             })
@@ -183,8 +183,8 @@ Explorer.displayName = 'Explorer'
 Explorer.propTypes = {
     /** Data set for image list */
     dataSource: PropTypes.arrayOf(PropTypes.shape({
-        image: PropTypes.string,
-        label: PropTypes.string
+        filename: PropTypes.string,
+        image: PropTypes.string
     })),
 
     /** Selected item */

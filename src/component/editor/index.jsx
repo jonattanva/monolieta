@@ -1,28 +1,16 @@
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import Canvas from '../canvas/index.jsx'
 import Status from '../status/index.jsx'
-import Explorer from '../explorer/index.jsx'
 
 import {
     memo,
+    lazy,
+    useMemo,
     useState,
+    Suspense,
     useCallback
 } from 'react'
-
-const mock = [{
-    "image": "https://images.unsplash.com/photo-1596049824409-b7d54464a0b9?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjE1MjcyN30",
-    "label": "Ave Calvar"
-}, {
-    "image": "https://images.unsplash.com/photo-1596047024891-2a0d07c0669c?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjE1MjcyN30",
-    "label": "Eduardo Alvarado"
-}, {
-    "image": "https://images.unsplash.com/photo-1596037016966-3dc477581798?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjE1MjcyN30",
-    "label": "Carolyn V"
-}, {
-    "image": "https://images.unsplash.com/photo-1595979485160-808eaefcc314?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjE1MjcyN30",
-    "label": "Chris J. Davis"
-}]
 
 const Root = styled.div`
     align-content: flex-start;
@@ -81,11 +69,42 @@ const Sidebar = styled.div`
     width: 300px;
 `
 
-const Editor = memo(() => {
+const Empty = styled.div`
+    display: none;
+`
+
+const Message = styled.div`
+    font-family: Roboto, sans-serif;
+    font-size: .875rem;
+    text-align: center;
+    width: 100%;
+`
+
+const Separator = styled.div`
+    margin: 8px 0;
+`
+
+const Button = lazy(() => (
+    import('../button/index.jsx')
+))
+
+const Explorer = lazy(() => (
+    import('../explorer/index.jsx')
+))
+
+const Canvas = lazy(() => (
+    import('../canvas/index.jsx')
+))
+
+const Editor = memo((props) => {
     const [ image, setImage ] = useState()
     const [ zoom, setZoom ] = useState({
         max: 4, min: 1, step: 0.1, value: 1
     })
+
+    const isEmptyDataSource = useMemo(() => (
+        props.dataSource.length === 0
+    ), [ props.dataSource ])
 
     const onZoomHandle = useCallback((value) => {
         setZoom(self => ({
@@ -97,16 +116,36 @@ const Editor = memo(() => {
         setImage(index)
     }, [ setImage ])
 
+    const visibleChildren = useMemo(() => {
+        if (isEmptyDataSource) {
+            return (
+                <Message>
+                    <Separator>You have not yet opened a folder.</Separator>
+                    <Button onClick={ props.onOpenFolder }>Open folder</Button>
+                </Message>
+            )
+        }
+
+        return (
+            <Explorer selected={ image }
+                onSelect={ onSelect }
+                dataSource={ props.dataSource } />
+        )
+
+    }, [ isEmptyDataSource, image, onSelect, props.onOpenFolder, props.dataSource ])
+
 	return (
         <Root>
             <Container>
                 <Sidebar>
-                    <Explorer dataSource={ mock }
-                        selected={ image }
-                        onSelect={ onSelect } />
+                    <Suspense fallback={ <Empty /> }>
+                        { visibleChildren }
+                    </Suspense>
                 </Sidebar>
                 <Body>
-                    <Canvas zoom={ zoom } />
+                    <Suspense fallback={ <Empty /> }>
+                        <Canvas zoom={ zoom } />
+                    </Suspense>
                 </Body>
                 <Sidebar></Sidebar>
             </Container>
@@ -117,5 +156,18 @@ const Editor = memo(() => {
 })
 
 Editor.displayName = 'Editor'
+
+Editor.propTypes = {
+    dataSource: PropTypes.arrayOf(PropTypes.shape({
+        filename: PropTypes.string,
+        image: PropTypes.string
+    })),
+    onOpenFolder: PropTypes.func
+}
+
+Editor.defaultProps = {
+    dataSource: [],
+    onOpenFolder: null
+}
 
 export default Editor

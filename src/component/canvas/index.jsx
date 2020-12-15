@@ -157,7 +157,8 @@ const Canvas = memo((props) => {
             <Scrollbars ref={ scrollRef }>
                 <Absolute style={{ ...contentSize }}>
                     <Absolute style={{ ...imageSize }}>
-                        <Image onLoad={ onLoadComplete } src="https://images.unsplash.com/photo-1594392175506-29798601d67e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80" />
+                        <Image onLoad={ onLoadComplete }
+                            src={ props.dataSource.image } />
                     </Absolute>
                 </Absolute>
             </Scrollbars>
@@ -168,6 +169,10 @@ const Canvas = memo((props) => {
 Canvas.displayName = 'Canvas'
 
 Canvas.propTypes = {
+    dataSource: PropTypes.shape({
+        image: PropTypes.string
+    }),
+
     /** Zoom settings */
     zoom: PropTypes.shape({
         max: PropTypes.number,
@@ -178,6 +183,7 @@ Canvas.propTypes = {
 }
 
 Canvas.defaultProps = {
+    dataSource: {},
     zoom: {
         max: 4,
         min: 1,
