@@ -8,6 +8,7 @@
         "test:coverage": "jest --coverage"
     },
     "dependencies": {
+        "@simonwep/pickr": "~1.8.0",
         "prop-types": "~15.7.2",
         "react": "~17.0.1",
         "react-custom-scrollbars": "~4.2.1",
@@ -42,6 +43,9 @@
         "coverageReporters": [
             "html",
             "text-summary"
-        ]
+        ],
+        "moduleNameMapper": {
+            "\\.(css)$": "identity-obj-proxy"
+        }
     }
 }
