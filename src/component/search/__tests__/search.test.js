@@ -29,4 +29,17 @@ describe('<Search />', function () {
         expect(onEnter).toHaveBeenCalledTimes(1)
         expect(onEnter.mock.calls[0][0]).toEqual('mock')
     })
+
+    it('search (Change)', function () {
+        const onChange = jest.fn()
+        render(
+            <Search onChange={ onChange } />
+        )
+
+        const input = screen.getByPlaceholderText("Search")
+        fireEvent.change(input, { target: { value: 'mock' } })
+
+        expect(onChange).toHaveBeenCalledTimes(1)
+        expect(onChange.mock.calls[0][0].target.value).toEqual('mock')
+    })
 })
