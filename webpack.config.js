@@ -1,15 +1,15 @@
 const path = require('path')
 
-module.exports = (env) => {
+module.exports = (_, argv) => {
 	return {
-		mode: env.production ? 'production' : 'development',
+		mode: argv.mode,
 		entry: [
 			'./src/application.jsx'
 		],
 		output: {
             publicPath: '/',
             filename: 'main.js',
-            path: path.resolve(__dirname, `./public`)
+            path: path.resolve(__dirname, `./public/main`)
         },
         devServer: {
             contentBase: path.resolve(__dirname, './public')

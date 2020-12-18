@@ -8,5 +8,5 @@ yarn install
 yarn test
 
 # Run code coverage
-yarn test --coverage
+yarn test:coverage
 ```

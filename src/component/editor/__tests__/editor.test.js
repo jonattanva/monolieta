@@ -29,4 +29,16 @@ describe('<Editor />', function () {
         expect(onOpenFolder).toHaveBeenCalledTimes(1)
     })
 
+    /*
+    it('open label', function () {
+        render(
+            <Editor />
+        )
+
+        const button = screen.getByRole('button', { name: 'Label' })
+        fireEvent.click(button)
+
+        screen.debug()
+    })*/
+
 })

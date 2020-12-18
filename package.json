@@ -1,9 +1,11 @@
 {
     "private": true,
+    "main": "./public/main.js",
     "scripts": {
         "eslint": "eslint --max-warnings 0 --ext .jsx,.js .",
-        "start": "webpack serve --mode development --open --watch",
-        "test": "jest"
+        "start": "webpack serve --mode=development --open --watch",
+        "test": "jest",
+        "test:coverage": "jest --coverage"
     },
     "dependencies": {
         "prop-types": "~15.7.2",
@@ -32,7 +34,7 @@
         "jest-styled-components": "~7.0.3",
         "react-test-renderer": "~17.0.1",
         "style-loader": "~2.0.0",
-        "webpack": "~5.10.2",
+        "webpack": "~5.10.3",
         "webpack-cli": "~4.2.0",
         "webpack-dev-server": "~3.11.0"
     },
