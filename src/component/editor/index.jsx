@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import Label from '../label/index.jsx'
 import Button from '../button/index.jsx'
 import Canvas from '../canvas/index.jsx'
 import Status from '../status/index.jsx'
@@ -161,7 +162,7 @@ const Separator = styled.div`
 `
 
 const Editor = memo((props) => {
-    const [ isLabel, setLabel ] = useState(false)
+    const [ isLabel, setLabel ] = useState(true)
     const [ isProject, setProject ] = useState(true)
 
     const onSelectedLabel = useCallback(() => {
@@ -220,7 +221,7 @@ const Editor = memo((props) => {
                     </Control>
                     {
                         isLabel && <Panel>
-
+                            <Label />
                         </Panel>
                     }
                 </Reverse>
