@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+
 import {
     memo,
     useRef,
@@ -9,33 +10,26 @@ import {
 const Icon = styled.div`
     background: transparent;
     box-sizing: border-box;
-    color: hsl(0, 0%, 45%);
-    color: var(--light-grey-text, hsl(0, 0%, 45%));
+    color: hsl(219, 13%, 66%);
     display: flex;
     padding: 9px;
     position: absolute;
 `
 
 const Input = styled.input`
-    background-color: transparent;
+    background-color: hsl(220,13%,15%);
     border-radius: 4px;
-    border-color: hsl(0, 0%, 85%);
+    border-color: transparent;
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
-    color: hsl(0, 0%, 29%);
-    color: var(--grey-text, hsl(0, 0%, 29%));
+    color: hsl(0, 0%, 90%);
     font-family: Roboto, sans-serif;
     font-size: .875rem;
     height: 38px;
-    outline-color: hsl(0, 0%, 80%);
-    outline-width: 1px;
+    outline: none;
     padding: 6px 12px 6px 36px;
     width: 100%;
-
-    &:disabled {
-        background-color: hsl(0,0%,95%);
-    }
 
     &:focus::-webkit-search-cancel-button {
         opacity: 1;
@@ -43,7 +37,7 @@ const Input = styled.input`
     }
 
     &::-webkit-search-cancel-button {
-        background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(0, 0, 0, .54)'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12' /></svg>");
+        background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='hsl(219, 13%, 66%)'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12' /></svg>");
         background-size: contain;
         background-position: 50% 50%;
         background-repeat: no-repeat;
@@ -118,7 +112,6 @@ Search.propTypes = {
 }
 
 Search.defaultProps = {
-    disabled: false,
     onChange: null,
     onEnter: null,
     placeholder: "Search"

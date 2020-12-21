@@ -3,18 +3,17 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const Input = styled.input`
-    background-color: transparent;
-    border-color: hsl(0, 0%, 85%);
+    background-color: hsl(220,13%,15%);
+    border-color: transparent;
     border-radius: 4px;
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
-    color: hsl(0, 0%, 29%);
+    color: hsl(0, 0%, 90%);
     font-family: Roboto, sans-serif;
     font-size: .875rem;
     min-height: 38px;
-    outline-color: hsl(0, 0%, 80%);
-    outline-width: 1px;
+    outline: none;
     padding: 6px 12px;
     width: 100%;
 `

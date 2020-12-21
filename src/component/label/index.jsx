@@ -1,48 +1,37 @@
 import styled from 'styled-components'
 
-import Text from '../text/index.jsx'
-import Color from '../color/index.jsx'
+import Title from '../title/index.jsx'
 import Search from '../search/index.jsx'
 
 import { memo } from 'react'
 
-const Item = styled.div`
-    align-content: center;
-    align-items: center;
-    background-color: transparent;
-    box-sizing: border-box;
-    display: inline-flex;
-    flex-direction: row;
-    height: 50px;
-    justify-content: flex-start;
+const Root = styled.div`
+    width: 100%;
+`
+
+const Header = styled.div`
     padding: 8px;
 `
 
-const Picker = styled.div`
-    border-radius: 4px;
-    cursor: pointer;
-    height: 36px;
-    width: 42px;
+const Button = styled.div`
+    display: flex;
 `
 
 const Label = memo(() => {
     return (
-        <div>
-            <div>Label</div>
-            <div>
+        <Root>
+            <Title>Label</Title>
+            <Header>
+                <Button role="button" title="Add label to the project">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                </Button>
                 <Search />
-                <div>
-                    <Item>
-                        <Picker>
-                            <Color />
-                        </Picker>
-                        <Text />
-                    </Item>
-                </div>
-            </div>
-        </div>
+            </Header>
+        </Root>
     )
-})
+});
 
 Label.displayName = 'Label'
 

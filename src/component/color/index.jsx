@@ -25,6 +25,14 @@ const Picker = styled.div`
     position: absolute;
     right: auto;
     z-index: 100;
+
+    & > .pcr-app {
+        background: hsl(220, 13%, 18%);
+
+        & > .pcr-interaction .pcr-save {
+            background-color: #6200ee;
+        }
+    }
 `
 
 const picker = (ref, color = '#42445a') => ({
@@ -63,7 +71,7 @@ const Color = memo((props) => {
     const colorRef = useRef()
     const pickrRef = useRef()
 
-    const [open, setOpen] = useState(false)
+    const [ open, setOpen ] = useState(false)
 
     useEffect(() => {
         pickrRef.current = Pickr.create(picker(colorRef))

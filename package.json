@@ -1,6 +1,5 @@
 {
     "private": true,
-    "main": "./public/main.js",
     "scripts": {
         "eslint": "eslint --max-warnings 0 --ext .jsx,.js .",
         "start": "webpack serve --mode=development --open --watch",

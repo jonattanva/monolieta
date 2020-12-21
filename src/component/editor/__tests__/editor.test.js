@@ -13,7 +13,7 @@ describe('<Editor />', function () {
             <Editor />
         )
 
-        expect(screen.getByText('You have not yet opened a folder.'))
+        expect(screen.getByText('You have not yet opened a folder'))
             .toBeDefined()
     })
 

@@ -59,17 +59,21 @@ const Reverse = styled(Sidebar)`
 `
 
 const Panel = styled.div`
-    align-content: flex-end;
-    align-items: center;
+    align-content: flex-start;
+    align-items: flex-start;
     align-self: stretch;
     background-color:  hsl(220, 13%, 23%);
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: flex-end;
+    justify-content: flex-start;
     min-width: 300px;
     width: 300px;
+`
+
+const Center = styled(Panel)`
+    align-items: center;
 `
 
 const Control = styled.div`
@@ -151,6 +155,7 @@ const Body = styled.div`
 `
 
 const Message = styled.div`
+    color: hsl(0, 0%, 90%);
     font-family: Roboto, sans-serif;
     font-size: .875rem;
     text-align: center;
@@ -190,14 +195,14 @@ const Editor = memo((props) => {
                         </Left>
                     </Control>
                     {
-                        isProject && <Panel>
+                        isProject && <Center>
                             {
                                 isEmptyDataSource && <Message>
-                                    <Separator>You have not yet opened a folder.</Separator>
+                                    <Separator>You have not yet opened a folder</Separator>
                                     <Button onClick={ props.onOpenFolder }>Open folder</Button>
                                 </Message>
                             }
-                        </Panel>
+                        </Center>
                     }
                 </Sidebar>
                 <Body>
