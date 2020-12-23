@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const Input = styled.input`
-    background-color: hsl(220,13%,15%);
+    background-color: hsl(220, 13%, 15%);
+    background-color: var(--color-primary-dark, hsl(220, 13%, 15%));
     border-color: transparent;
     border-radius: 4px;
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
     color: hsl(0, 0%, 90%);
+    color: var(--color-font, hsl(0, 0%, 90%));
     font-family: Roboto, sans-serif;
     font-size: .875rem;
     min-height: 38px;

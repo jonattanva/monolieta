@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import Label from '../label/index.jsx'
+import Panel from '../panel/index.jsx'
 import Button from '../button/index.jsx'
 import Canvas from '../canvas/index.jsx'
 import Status from '../status/index.jsx'
+import Classes from '../classes/index.jsx'
+
+import { Message } from '../common.jsx'
 
 import {
     memo,
@@ -58,24 +61,6 @@ const Reverse = styled(Sidebar)`
     flex-direction: row-reverse;
 `
 
-const Panel = styled.div`
-    align-content: flex-start;
-    align-items: flex-start;
-    align-self: stretch;
-    background-color:  hsl(220, 13%, 23%);
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    min-width: 300px;
-    width: 300px;
-`
-
-const Center = styled(Panel)`
-    align-items: center;
-`
-
 const Control = styled.div`
     align-content: flex-start;
     align-items: center;
@@ -110,6 +95,10 @@ const Item = styled.div`
     transition: 0.3s;
     width: 80px;
 
+    ${({ active }) => active && `
+        background-color: hsl(220, 13%, 5%);
+    `}
+
     &:hover {
         background-color: hsl(220, 13%, 5%);
     }
@@ -133,6 +122,7 @@ const Left = styled(Item)`
 const Right = styled(Item)`
     transform-origin: 25px 25px;
     transform: rotate(90deg) translateY(-2px);
+
     ${Icon} {
         transform: rotate(-90deg);
     }
@@ -154,25 +144,17 @@ const Body = styled.div`
     width: 100%;
 `
 
-const Message = styled.div`
-    color: hsl(0, 0%, 90%);
-    font-family: Roboto, sans-serif;
-    font-size: .875rem;
-    text-align: center;
-    width: 100%;
-`
-
 const Separator = styled.div`
     margin: 8px 0;
 `
 
 const Editor = memo((props) => {
-    const [ isLabel, setLabel ] = useState(true)
+    const [ isClass, setClass ] = useState(true)
     const [ isProject, setProject ] = useState(true)
 
-    const onSelectedLabel = useCallback(() => {
-        setLabel(value => !value)
-    }, [ setLabel ])
+    const onSelectedClass = useCallback(() => {
+        setClass(value => !value)
+    }, [ setClass ])
 
     const onSelectedProject = useCallback(() => {
         setProject(value => !value)
@@ -187,7 +169,7 @@ const Editor = memo((props) => {
             <Container>
                 <Sidebar>
                     <Control>
-                        <Left onClick={ onSelectedProject } role="button">
+                        <Left onClick={ onSelectedProject } role="button" active={ isProject }>
                             <Icon viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                             </Icon>
@@ -195,14 +177,14 @@ const Editor = memo((props) => {
                         </Left>
                     </Control>
                     {
-                        isProject && <Center>
+                        isProject && <Panel title="Explorer" onHideHandle={ onSelectedProject }>
                             {
                                 isEmptyDataSource && <Message>
                                     <Separator>You have not yet opened a folder</Separator>
                                     <Button onClick={ props.onOpenFolder }>Open folder</Button>
                                 </Message>
                             }
-                        </Center>
+                        </Panel>
                     }
                 </Sidebar>
                 <Body>
@@ -217,16 +199,16 @@ const Editor = memo((props) => {
                             </Icon>
                             <div>Objects</div>
                         </Right>
-                        <Right onClick={ onSelectedLabel } role="button">
+                        <Right onClick={ onSelectedClass } role="button" active={ isClass }>
                             <Icon viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
                             </Icon>
-                            <div>Label</div>
+                            <div>Classes</div>
                         </Right>
                     </Control>
                     {
-                        isLabel && <Panel>
-                            <Label />
+                        isClass && <Panel title="Classes" onHideHandle={ onSelectedClass }>
+                            <Classes />
                         </Panel>
                     }
                 </Reverse>

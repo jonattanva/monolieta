@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { memo } from 'react'
+import Minus from '../../icon/minus/index.jsx'
 
 const Root = styled.div`
     align-items: center;
@@ -19,6 +20,7 @@ const Root = styled.div`
 
 const Text = styled.div`
     color: hsla(0,0%,100%,.90);
+    color: var(--color-font, hsla(0,0%, 100%, .90));
     display: flex;
     font-weight: 500;
     justify-content: flex-start;
@@ -39,6 +41,7 @@ const Button = styled.div`
     background-color: transparent;
     border-radius: 4px;
     color: hsl(219, 13%, 66%);
+    color: var(--color-font-variant, hsl(219, 13%, 66%));
     cursor: pointer;
     display: flex;
     height: 24px;
@@ -57,9 +60,7 @@ const Title = memo((props) => (
         <Text>{ props.children }</Text>
         <Action>
             <Button onClick={ props.onHideHandle } role="button" title="Hide">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 12H6" />
-                </svg>
+                <Minus width="20" height="20" />
             </Button>
         </Action>
     </Root>

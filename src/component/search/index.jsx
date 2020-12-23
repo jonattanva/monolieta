@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import Search from '../icon/search/index.jsx'
+
 import {
     memo,
     useRef,
@@ -11,19 +13,22 @@ const Icon = styled.div`
     background: transparent;
     box-sizing: border-box;
     color: hsl(219, 13%, 66%);
+    color: var(--color-font-variant, hsl(219, 13%, 66%));
     display: flex;
     padding: 9px;
     position: absolute;
 `
 
 const Input = styled.input`
-    background-color: hsl(220,13%,15%);
+    background-color: hsl(220, 13%, 15%);
+    background-color: var(--color-primary-dark, hsl(220, 13%, 15%));
     border-radius: 4px;
     border-color: transparent;
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
     color: hsl(0, 0%, 90%);
+    color: var(--color-font, hsl(0, 0%, 90%));
     font-family: Roboto, sans-serif;
     font-size: .875rem;
     height: 38px;
@@ -50,7 +55,7 @@ const Input = styled.input`
     }
 `
 
-const Search = memo((props) => {
+const Root = memo((props) => {
     const beforeRef = useRef(null)
 
     const onChange = useCallback((event) => {
@@ -82,9 +87,7 @@ const Search = memo((props) => {
     return (
         <div>
             <Icon>
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+                <Search width="20" height="20" />
             </Icon>
             <Input type="search"
                 value={ props.value }
@@ -95,9 +98,9 @@ const Search = memo((props) => {
     )
 })
 
-Search.displayName = "Search"
+Root.displayName = "Search"
 
-Search.propTypes = {
+Root.propTypes = {
     /** It is called every time there is a change */
     onChange: PropTypes.func,
 
@@ -111,10 +114,10 @@ Search.propTypes = {
     value: PropTypes.string
 }
 
-Search.defaultProps = {
+Root.defaultProps = {
     onChange: null,
     onEnter: null,
     placeholder: "Search"
 }
 
-export default Search
+export default Root

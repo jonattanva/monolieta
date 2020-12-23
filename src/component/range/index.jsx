@@ -12,6 +12,7 @@ const Input = styled.input`
     &[type=range] {
         appearance: none;
         background-color: #6200ee;
+        background-color: var(--color-primary, #6200ee);
         margin: 8px 0;
         outline: none;
         width: 100%;
@@ -32,6 +33,7 @@ const Input = styled.input`
     &[type=range]::-webkit-slider-thumb {
         appearance: none;
         background-color: #6200ee;
+        background-color: var(--color-primary, #6200ee);
         border-radius: 50%;
         cursor: pointer;
         height: 14px;

@@ -5,6 +5,7 @@ import useScroll from '../../hook/scroll.jsx'
 
 import {
     memo,
+    useRef,
     useMemo,
     useCallback
 } from 'react'
@@ -60,6 +61,7 @@ const Picture = styled.div`
 
     ${({ selected }) => selected && `
         background-color: #6200ee;
+        background-color: var(--color-primary, #6200ee);
     `}
 `
 
@@ -72,6 +74,7 @@ const Cover = styled.img`
 
 const Label = styled.div`
     color: hsl(219, 13%, 66%);
+    color: var(--color-font-variant, hsl(219, 13%, 66%));
     cursor: default;
     font-family: Roboto, sans-serif;
     font-size: .875rem;
@@ -84,7 +87,8 @@ const Label = styled.div`
 `
 
 const Explorer = memo((props) => {
-    const [ scrollRef, scrollPosition ] = useScroll()
+    const scrollRef = useRef()
+    const scrollPosition = useScroll(scrollRef)
 
     const width = useMemo(() => {
         return props.image.width + (props.image.margin * 2)

@@ -1,12 +1,10 @@
 import {
-    useRef,
     useState,
     useEffect,
     useCallback
 } from 'react'
 
-export default () => {
-    const scrollRef = useRef()
+export default (scrollRef) => {
     const [ value, setValue ] = useState()
 
     const onScroll = useCallback((event) => {
@@ -33,7 +31,7 @@ export default () => {
                 }
             })
         })
-    }, [ setValue ])
+    }, [ scrollRef, setValue ])
 
     useEffect(() => {
         const scroll = scrollRef.current
@@ -51,7 +49,7 @@ export default () => {
             window.removeEventListener('resize', onGlobalScroll)
             scroll.removeEventListener('scroll', onScroll)
         }
-    }, [ onGlobalScroll, onScroll, setValue ])
+    }, [ scrollRef, onGlobalScroll, onScroll, setValue ])
 
-    return [ scrollRef, value ]
+    return value
 }

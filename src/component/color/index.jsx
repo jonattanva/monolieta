@@ -31,6 +31,7 @@ const Picker = styled.div`
 
         & > .pcr-interaction .pcr-save {
             background-color: #6200ee;
+            background-color: var(--color-primary, #6200ee);
         }
     }
 `
@@ -159,7 +160,7 @@ Color.propTypes = {
 }
 
 Color.defaultProps = {
-    color: '#42445a',
+    color: '#6200ee',
     onChangeColorHandle: null,
     position: null
 }

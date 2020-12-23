@@ -2,10 +2,14 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import Range from '../range/index.jsx'
+import Plus from '../icon/plus/index.jsx'
+import Last from '../icon/last/index.jsx'
+import Next from '../icon/next/index.jsx'
+import Minus from '../icon/minus/index.jsx'
+import Expand from '../icon/expand/index.jsx'
 
 import {
     Button,
-    Icon,
     Item,
     Separator
 } from '../common.jsx'
@@ -19,8 +23,10 @@ import {
 const Root = styled.div`
     align-items: center;
     background-color: hsl(220, 13%, 15%);
+    background-color: var(--color-primary-dark, hsl(220, 13%, 15%));
     box-sizing: border-box;
     color: hsl(219, 13%, 66%);
+    color: var(--color-font-variant, hsl(219, 13%, 66%));
     cursor: default;
     display: flex;
     flex-wrap: nowrap;
@@ -115,31 +121,23 @@ const Status = memo((props) => {
                 }
                 <Item>
                     <Button disabled={ props.navigation.number < 1 } onClick={ onLastHandle } role="button">
-                        <Icon width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                        </Icon>
+                        <Last width="20" height="20" />
                     </Button>
                 </Item>
                 <Item>
                     <Button disabled={ props.navigation.number + 1 >= props.navigation.total } onClick={ onNextHandle } role="button">
-                        <Icon width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                        </Icon>
+                        <Next width="20" height="20" />
                     </Button>
                 </Item>
                 <Separator />
                 <Item>
                     <Button onClick={ onResetHandle } role="button" title="Reset zoom">
-                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                        </svg>
+                        <Expand width="20" height="20" />
                     </Button>
                 </Item>
                 <Item>
                     <Button onClick={ onZoomOutHandle } role="button" title="Zoom out">
-                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 12H6" />
-                        </svg>
+                        <Minus width="20" height="20" />
                     </Button>
                 </Item>
                 <Item>
@@ -148,9 +146,7 @@ const Status = memo((props) => {
                 </Item>
                 <Item>
                     <Button onClick={ onZoomInHandle } role="button" title="Zoom in">
-                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
+                        <Plus width="20" height="20" />
                     </Button>
                 </Item>
                 <Item>{ percent }</Item>

@@ -4,10 +4,12 @@ export const Button = styled.div`
     align-items: center;
     background-color: transparent;
     border-color: hsl(219, 13%, 66%);
+    border-color: var(--color-font-variant, hsl(219, 13%, 66%));
     border-radius: 4px;
     border-style: solid;
     border-width: 1px;
     color: hsl(219, 13%, 66%);
+    color: var(--color-font-variant, hsl(219, 13%, 66%));
     cursor: pointer;
     display: flex;
     height: 24px;
@@ -29,10 +31,6 @@ export const Button = styled.div`
     }
 `
 
-export const Icon = styled.svg`
-    outline: none;
-`
-
 export const Item = styled.div`
     align-items: center;
     align-self: center;
@@ -50,9 +48,23 @@ export const Separator = styled.div`
     width: 1px;
 `
 
+export const Message = styled.div`
+    align-items: center;
+    color: hsl(0, 0%, 90%);
+    color: var(--color-font, hsl(0, 0%, 90%));
+    display: flex;
+    flex-direction: column;
+    font-family: Roboto, sans-serif;
+    font-size: .875rem;
+    height: 100%;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+`
+
 export default {
     Button,
-    Icon,
     Item,
+    Message,
     Separator
 }
