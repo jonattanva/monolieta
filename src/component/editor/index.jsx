@@ -1,20 +1,35 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import Panel from '../panel/index.jsx'
 import Button from '../button/index.jsx'
-import Canvas from '../canvas/index.jsx'
 import Status from '../status/index.jsx'
-import Classes from '../classes/index.jsx'
 
-import { Message } from '../common.jsx'
+import { Message, Empty } from '../common.jsx'
 
 import {
     memo,
+    lazy,
     useMemo,
     useState,
+    Suspense,
     useCallback
 } from 'react'
+
+const Canvas = lazy(() => (
+    import('../canvas/index.jsx')
+))
+
+const Panel = lazy(() => (
+    import('../panel/index.jsx')
+))
+
+const Classes = lazy(() => (
+    import('../classes/index.jsx')
+))
+
+const Group = lazy(() => (
+    import('../group/index.jsx')
+))
 
 const Root = styled.div`
     align-content: flex-start;
@@ -149,16 +164,23 @@ const Separator = styled.div`
 `
 
 const Editor = memo((props) => {
-    const [ isClass, setClass ] = useState(true)
+    const [ isClass, setClass ] = useState(false)
+    const [ isObject, setObject ] = useState(true)
     const [ isProject, setProject ] = useState(true)
-
-    const onSelectedClass = useCallback(() => {
-        setClass(value => !value)
-    }, [ setClass ])
 
     const onSelectedProject = useCallback(() => {
         setProject(value => !value)
     }, [ setProject ])
+
+    const onSelectedClass = useCallback(() => {
+        setObject(false)
+        setClass(value => !value)
+    }, [ setClass, setObject ])
+
+    const onSelectedObject = useCallback(() => {
+        setClass(false)
+        setObject(value => !value)
+    }, [ setObject, setClass ])
 
     const isEmptyDataSource = useMemo(() => (
         props.dataSource.length === 0
@@ -177,22 +199,26 @@ const Editor = memo((props) => {
                         </Left>
                     </Control>
                     {
-                        isProject && <Panel title="Explorer" onHideHandle={ onSelectedProject }>
-                            {
-                                isEmptyDataSource && <Message>
-                                    <Separator>You have not yet opened a folder</Separator>
-                                    <Button onClick={ props.onOpenFolder }>Open folder</Button>
-                                </Message>
-                            }
-                        </Panel>
+                        isProject && <Suspense fallback={ <Empty /> }>
+                            <Panel title="Explorer" onHideHandle={ onSelectedProject }>
+                                {
+                                    isEmptyDataSource && <Message>
+                                        <Separator>You have not yet opened a folder</Separator>
+                                        <Button onClick={ props.onOpenFolder }>Open folder</Button>
+                                    </Message>
+                                }
+                            </Panel>
+                        </Suspense>
                     }
                 </Sidebar>
                 <Body>
-                    <Canvas />
+                    <Suspense fallback={ <Empty /> }>
+                        <Canvas />
+                    </Suspense>
                 </Body>
                 <Reverse>
                     <Control>
-                        <Right role="button">
+                        <Right onClick={ onSelectedObject } role="button" active={ isObject }>
                             <Icon viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
                                 <path fillRule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clipRule="evenodd" />
@@ -207,9 +233,18 @@ const Editor = memo((props) => {
                         </Right>
                     </Control>
                     {
-                        isClass && <Panel title="Classes" onHideHandle={ onSelectedClass }>
-                            <Classes />
-                        </Panel>
+                        isClass && <Suspense fallback={ <Empty /> } >
+                            <Panel title="Classes" onHideHandle={ onSelectedClass }>
+                                <Classes />
+                            </Panel>
+                        </Suspense>
+                    }
+                    {
+                        isObject && <Suspense fallback={ <Empty /> } >
+                            <Panel title="Object" onHideHandle={ onSelectedObject }>
+                                <Group />
+                            </Panel>
+                        </Suspense>
                     }
                 </Reverse>
             </Container>

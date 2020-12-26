@@ -62,8 +62,13 @@ export const Message = styled.div`
     width: 100%;
 `
 
+export const Empty = styled.div`
+    display: none;
+`
+
 export default {
     Button,
+    Empty,
     Item,
     Message,
     Separator

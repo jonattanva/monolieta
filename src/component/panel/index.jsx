@@ -15,8 +15,8 @@ const Root = styled.div`
     flex-wrap: nowrap;
     height: 100%;
     justify-content: flex-start;
-    min-width: 300px;
-    width: 300px;
+    min-width: ${({ $width }) => `${$width}px`};;
+    width: ${({ $width }) => `${$width}px`};
 `
 
 const Body = styled.div`
@@ -25,7 +25,7 @@ const Body = styled.div`
 `
 
 const Panel = memo((props) => (
-    <Root>
+    <Root $width={ props.width }>
         <Title onHideHandle={ props.onHideHandle }>
             { props.title }
         </Title>
@@ -45,12 +45,15 @@ Panel.propTypes = {
     children: PropTypes.node,
 
     /** Called when hide button is pressed */
-    onHideHandle: PropTypes.func
+    onHideHandle: PropTypes.func,
+
+    width: PropTypes.number
 }
 
 Panel.defaultProps = {
     title: '',
-    onHideHandle: null
+    onHideHandle: null,
+    width: 300
 }
 
 export default Panel

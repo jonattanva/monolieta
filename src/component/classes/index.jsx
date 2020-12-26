@@ -3,26 +3,35 @@ import styled from 'styled-components'
 
 import {
     Button,
+    Empty,
     Message
 } from '../common.jsx'
 
 import Text from '../text/index.jsx'
-import Color from '../color/index.jsx'
 import Search from '../search/index.jsx'
 import Plus from '../icon/plus/index.jsx'
-import Virtual from '../virtual/index.jsx'
 
 import {
     memo,
+    lazy,
     useMemo,
+    Suspense,
     Fragment
 } from 'react'
+
+const Virtual = lazy(() => (
+    import('../virtual/index.jsx')
+))
+
+const Color = lazy(() => (
+    import('../color/index.jsx')
+))
 
 const Header = styled.div`
     background-color: transparent;
     box-sizing: border-box;
     height: 90px;
-    padding: 8px 16px;
+    padding: 8px;
     width: 100%;
 `
 
@@ -40,7 +49,7 @@ const Row = styled.div`
     flex-direction: row;
     height: 50px;
     justify-content: center;
-    padding: 8px 16px;
+    padding: 8px;
     width: 100%;
 `
 
@@ -76,18 +85,20 @@ const Classes = memo((props) => {
                 {
                     isEmptyDataSource ? <Message>
                         <div>Your class list is empty</div>
-                    </Message> : <Virtual size={{ width: 300, height: 50 }}>
-                        {
-                            props.dataSource.map((value) => (
-                                <Row key={ value.id }>
-                                    <Picker style={{ background: value.color }}>
-                                        <Color />
-                                    </Picker>
-                                    <Text placeholder="Enter class name" value={ value.name } />
-                                </Row>
-                            ))
-                        }
-                    </Virtual>
+                    </Message> : <Suspense fallback={ <Empty /> }>
+                        <Virtual size={{ width: 300, height: 50 }}>
+                            {
+                                props.dataSource.map((value) => (
+                                    <Row key={ value.id }>
+                                        <Picker style={{ background: value.color }}>
+                                            <Color />
+                                        </Picker>
+                                        <Text placeholder="Enter class name" value={ value.name } />
+                                    </Row>
+                                ))
+                            }
+                        </Virtual>
+                    </Suspense>
                 }
             </Body>
         </Fragment>
