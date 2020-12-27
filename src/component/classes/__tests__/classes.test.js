@@ -7,7 +7,7 @@ import {
 
 describe('<Classes />', function () {
 
-    it('empty project', function() {
+    it('empty classes', function() {
         render(
             <Classes />
         )
