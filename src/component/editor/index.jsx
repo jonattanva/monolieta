@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import Action from '../action/index.jsx'
 import Button from '../button/index.jsx'
 import Status from '../status/index.jsx'
 
@@ -165,7 +166,7 @@ const Separator = styled.div`
 
 const Editor = memo((props) => {
     const [ isClass, setClass ] = useState(false)
-    const [ isObject, setObject ] = useState(true)
+    const [ isObject, setObject ] = useState(false)
     const [ isProject, setProject ] = useState(true)
 
     const onSelectedProject = useCallback(() => {
@@ -188,6 +189,7 @@ const Editor = memo((props) => {
 
     return (
         <Root>
+            <Action />
             <Container>
                 <Sidebar>
                     <Control>
