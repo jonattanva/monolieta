@@ -16,7 +16,7 @@ export const Button = styled.div`
     justify-content: center;
     outline: none;
     text-align: center;
-    transition: color .3s ease-in-out, border-color .3s ease-in-out;
+    transition: color .3s ease-in-out, border-color .3s ease-in-out, border-color .3s ease-in-out;
     width: 24px;
 
     &[disabled] {

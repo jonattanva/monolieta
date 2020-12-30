@@ -34,6 +34,6 @@ module.exports = (_, argv) => {
 				loader: "babel-loader",
 				exclude: /node_modules/
 			}]
-		}
+        }
 	}
 }

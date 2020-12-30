@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
         --color-font-variant: hsl(219, 13%, 66%);
         --color-primary-dark: hsl(220, 13%, 15%);
         --color-primary-dark-variant: hsl(220, 13%, 25%);
+        --color-highlight: hsl(220, 13%, 20%);
     }
 `
 

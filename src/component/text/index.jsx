@@ -41,13 +41,13 @@ Text.propTypes = {
     placeholder: PropTypes.string,
 
     /** Element value */
-    value: PropTypes.string,
+    value: PropTypes.string
 }
 
 Text.defaultProps = {
     autofocus: false,
     onChange: null,
-    placeholder: '',
+    placeholder: ''
 }
 
 export default Text

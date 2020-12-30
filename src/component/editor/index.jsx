@@ -165,7 +165,8 @@ const Separator = styled.div`
 `
 
 const Editor = memo((props) => {
-    const [ isClass, setClass ] = useState(false)
+    const [ classes, setClasses ] = useState([])
+    const [ isClass, setClass ] = useState(true)
     const [ isObject, setObject ] = useState(false)
     const [ isProject, setProject ] = useState(true)
 
@@ -186,6 +187,16 @@ const Editor = memo((props) => {
     const isEmptyDataSource = useMemo(() => (
         props.dataSource.length === 0
     ), [ props.dataSource ])
+
+    const onClassAdded = useCallback((element) => {
+        setClasses((current) => ([
+            element, ...current
+        ]))
+    }, [ setClasses ])
+
+    const onClassRemoved = useCallback((elements) => {
+        setClasses(elements.filter((value) => !value.checked))
+    }, [ setClasses ])
 
     return (
         <Root>
@@ -237,7 +248,9 @@ const Editor = memo((props) => {
                     {
                         isClass && <Suspense fallback={ <Empty /> } >
                             <Panel title="Classes" onHideHandle={ onSelectedClass }>
-                                <Classes />
+                                <Classes onClassAdded={ onClassAdded }
+                                    onClassRemoved={ onClassRemoved }
+                                    dataSource={ classes } />
                             </Panel>
                         </Suspense>
                     }

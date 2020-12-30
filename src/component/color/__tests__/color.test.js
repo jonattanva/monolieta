@@ -13,7 +13,7 @@ describe('<Color />', function () {
             <Color />
         )
 
-        const button = screen.getByRole("button")
+        const button = screen.getByRole('button')
         fireEvent.click(button)
 
         const picker = screen.getByLabelText('color picker dialog')

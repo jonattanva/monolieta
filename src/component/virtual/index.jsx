@@ -22,7 +22,7 @@ const Root = styled.div`
 `
 
 const Viewport = styled.div`
-    height: ${({ size }) => size.totalHeight}px;
+    min-height: 100%;
     overflow: hidden;
     position: absolute;
     transform: translateZ(0);
@@ -36,6 +36,7 @@ const Body = styled.div`
     contain: content;
     display: flex;
     flex-wrap: wrap;
+    height: 100%;
     justify-content: flex-start;
     margin: 0 auto;
     padding: 0;
@@ -103,9 +104,13 @@ const Virtual = memo((props) => {
         props.children.slice(startNode, startNode + visibleNodeCount)
     ), [ props.children, startNode, visibleNodeCount ])
 
+    if (props.onResize && scrollPosition) {
+        props.onResize(scrollPosition.size)
+    }
+
     return (
         <Root ref={ scrollRef }>
-            <Viewport size={{ totalHeight }}>
+            <Viewport style={{ height: totalHeight }}>
                 <Body size={{ offsetX }} style={{ transform: `translateY(${offsetY || 0}px)` }}>
                     { visibleChildren }
                 </Body>
@@ -117,19 +122,25 @@ const Virtual = memo((props) => {
 Virtual.displayName = 'Virtual'
 
 Virtual.propTypes = {
-
+    /** Component content */
     children: PropTypes.node,
 
+    /** Item margin */
     margin: PropTypes.number,
 
+    /** Item size */
     size: PropTypes.shape({
         height: PropTypes.number,
         width: PropTypes.number
-    })
+    }).isRequired,
+
+    /** It is called every time the container is resized */
+    onResize: PropTypes.func
 }
 
 Virtual.defaultProps = {
-    margin: 0
+    margin: 0,
+    onResize: null
 }
 
 export default Virtual
