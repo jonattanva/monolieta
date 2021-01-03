@@ -2,6 +2,8 @@
 ![Code QL](https://github.com/jonattanva/eva/workflows/Code%20QL/badge.svg)
 # eva
 
+Image Annotation Tool
+
 ## Tests
 ```bash
 yarn install
