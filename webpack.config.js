@@ -11,11 +11,7 @@ module.exports = (_, argv) => {
 		output: {
             publicPath: '/',
             filename: 'main.js',
-            path: path.resolve(__dirname, `./public/main`)
-        },
-
-        devServer: {
-            contentBase: path.resolve(__dirname, './public')
+            path: path.resolve(__dirname, `./dist`)
         },
 
         cache: {
@@ -31,7 +27,7 @@ module.exports = (_, argv) => {
                 use: ['style-loader', 'css-loader']
 			}, {
 				test: /\.jsx?$/,
-				loader: "babel-loader",
+				loader: 'babel-loader',
 				exclude: /node_modules/
 			}]
         }

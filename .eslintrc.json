@@ -18,11 +18,13 @@
         "react-hooks/exhaustive-deps": "warn",
         "react-hooks/rules-of-hooks": "error",
         "react/jsx-uses-react": "off",
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "no-console": "error"
     },
     "extends": [
         "eslint:recommended",
         "plugin:jest/recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "prettier"
     ]
 }
