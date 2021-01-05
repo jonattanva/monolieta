@@ -11,7 +11,12 @@ module.exports = (_, argv) => {
 		output: {
             publicPath: '/',
             filename: 'main.js',
-            path: path.resolve(__dirname, `./dist`)
+            path: path.resolve(__dirname, `dist`)
+        },
+
+        devServer: {
+            compress: true,
+            contentBase: path.join(__dirname, 'public')
         },
 
         cache: {

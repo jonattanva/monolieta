@@ -1,6 +1,8 @@
-import {Fragment} from 'react';
-import ReactDOM from 'react-dom';
-import {createGlobalStyle} from 'styled-components';
+import { Fragment } from 'react'
+import ReactDOM from 'react-dom'
+import { createGlobalStyle } from 'styled-components'
+
+import Rect from './view/component/rect/index.jsx'
 
 const GlobalStyle = createGlobalStyle`
     :root {
@@ -13,11 +15,25 @@ const GlobalStyle = createGlobalStyle`
         --color-primary-dark-variant: hsl(220, 13%, 25%);
         --color-highlight: hsl(220, 13%, 20%);
     }
-`;
+`
+
+const dataSource = [
+    {
+        key: '1',
+        x: 100,
+        y: 100,
+        width: 300,
+        height: 300,
+        color: '#6200ee'
+    }
+]
 
 ReactDOM.render(
     <Fragment>
         <GlobalStyle />
+        <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">
+            <Rect dataSource={ dataSource } />
+        </svg>
     </Fragment>,
     document.getElementById('main')
-);
+)

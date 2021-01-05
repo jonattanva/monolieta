@@ -1,54 +1,54 @@
-import {useState, useEffect, useCallback} from 'react';
+import { useState, useEffect, useCallback } from 'react'
 
 export default (scrollRef) => {
-    const [value, setValue] = useState();
+    const [value, setValue] = useState()
 
     const onScroll = useCallback(
         (event) => {
             requestAnimationFrame(() => {
-                const scroll = event.target;
+                const scroll = event.target
                 setValue({
                     scrollTop: scroll.scrollTop,
                     size: {
                         width: scroll.offsetWidth,
-                        height: scroll.offsetHeight,
-                    },
-                });
-            });
+                        height: scroll.offsetHeight
+                    }
+                })
+            })
         },
         [setValue]
-    );
+    )
 
     const onGlobalScroll = useCallback(() => {
         requestAnimationFrame(() => {
-            const scroll = scrollRef.current;
+            const scroll = scrollRef.current
             setValue({
                 scrollTop: scroll.scrollTop,
                 size: {
                     width: scroll.offsetWidth,
-                    height: scroll.offsetHeight,
-                },
-            });
-        });
-    }, [scrollRef, setValue]);
+                    height: scroll.offsetHeight
+                }
+            })
+        })
+    }, [scrollRef, setValue])
 
     useEffect(() => {
-        const scroll = scrollRef.current;
+        const scroll = scrollRef.current
         setValue({
             scrollTop: scroll.scrollTop,
             size: {
                 width: scroll.offsetWidth,
-                height: scroll.offsetHeight,
-            },
-        });
+                height: scroll.offsetHeight
+            }
+        })
 
-        window.addEventListener('resize', onGlobalScroll);
-        scroll.addEventListener('scroll', onScroll);
+        window.addEventListener('resize', onGlobalScroll)
+        scroll.addEventListener('scroll', onScroll)
         return () => {
-            window.removeEventListener('resize', onGlobalScroll);
-            scroll.removeEventListener('scroll', onScroll);
-        };
-    }, [scrollRef, onGlobalScroll, onScroll, setValue]);
+            window.removeEventListener('resize', onGlobalScroll)
+            scroll.removeEventListener('scroll', onScroll)
+        }
+    }, [scrollRef, onGlobalScroll, onScroll, setValue])
 
-    return value;
-};
+    return value
+}

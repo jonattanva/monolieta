@@ -1,29 +1,27 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-
-import {memo, useRef, Fragment} from 'react';
-
-import Button from '../button/index.jsx';
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import Button from '../button/index.jsx'
+import { memo, useRef, Fragment } from 'react'
 
 const Input = styled.input`
     display: none;
-`;
+`
 
 const File = memo((props) => {
-    const fileInputRef = useRef();
+    const fileInputRef = useRef()
 
     const onOpenFile = () => {
         if (fileInputRef.current) {
-            fileInputRef.current.click();
+            fileInputRef.current.click()
         }
-    };
+    }
 
     const onFilesAdded = (event) => {
         if (props.onFilesAdded) {
-            const files = Array.from(event.target.files);
-            props.onFilesAdded(files);
+            const files = Array.from(event.target.files)
+            props.onFilesAdded(files)
         }
-    };
+    }
 
     return (
         <Fragment>
@@ -37,10 +35,10 @@ const File = memo((props) => {
                 onChange={onFilesAdded}
             />
         </Fragment>
-    );
-});
+    )
+})
 
-File.displayName = 'File';
+File.displayName = 'File'
 
 File.propTypes = {
     /** File type specifier */
@@ -50,13 +48,13 @@ File.propTypes = {
     children: PropTypes.string,
 
     /** Notify that a file has been included */
-    onFilesAdded: PropTypes.func,
-};
+    onFilesAdded: PropTypes.func
+}
 
 File.defaultProps = {
     accept: '.jpg,.jpeg,.png,.webp,.gif,.bmp,.ico',
     children: 'Browse files',
-    onFilesAdded: null,
-};
+    onFilesAdded: null
+}
 
-export default File;
+export default File

@@ -1,4 +1,7 @@
 const presets = [
+    ["@babel/preset-flow", {
+        "all": true
+    }],
     ["@babel/preset-env", {
         debug: false,
         targets: {

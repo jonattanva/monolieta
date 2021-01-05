@@ -1,6 +1,6 @@
-import {memo} from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { memo } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 const Input = styled.input`
     background-color: hsl(220, 13%, 15%);
@@ -18,7 +18,7 @@ const Input = styled.input`
     outline: none;
     padding: 6px 12px;
     width: 100%;
-`;
+`
 
 const Text = memo((props) => (
     <Input
@@ -28,9 +28,9 @@ const Text = memo((props) => (
         autoFocus={props.autofocus}
         placeholder={props.placeholder}
     />
-));
+))
 
-Text.displayName = 'Text';
+Text.displayName = 'Text'
 
 Text.propTypes = {
     /** Focus automatically */
@@ -43,13 +43,13 @@ Text.propTypes = {
     placeholder: PropTypes.string,
 
     /** Element value */
-    value: PropTypes.string,
-};
+    value: PropTypes.string
+}
 
 Text.defaultProps = {
     autofocus: false,
     onChange: null,
-    placeholder: '',
-};
+    placeholder: ''
+}
 
-export default Text;
+export default Text

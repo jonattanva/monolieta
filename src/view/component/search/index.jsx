@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-import Search from '../icon/search/index.jsx';
+import Search from '../icon/search/index.jsx'
 
-import {memo, useRef, Fragment, useCallback} from 'react';
+import { memo, useRef, Fragment, useCallback } from 'react'
 
 const Icon = styled.div`
     background: transparent;
@@ -13,7 +13,7 @@ const Icon = styled.div`
     display: flex;
     padding: 9px;
     position: absolute;
-`;
+`
 
 const Input = styled.input`
     background-color: hsl(220, 13%, 15%);
@@ -49,42 +49,42 @@ const Input = styled.input`
         pointer-events: none;
         width: 14px;
     }
-`;
+`
 
 const Root = memo((props) => {
-    const beforeRef = useRef(null);
+    const beforeRef = useRef(null)
 
     const onChange = useCallback(
         (event) => {
             if (event.target.value === '') {
-                beforeRef.current = null;
+                beforeRef.current = null
             }
 
             if (props.onChange) {
-                props.onChange(event);
+                props.onChange(event)
             }
         },
         [props]
-    );
+    )
 
     const onEnter = useCallback(
         (event) => {
             if (props.onEnter && event.keyCode === 13) {
-                const before = beforeRef.current;
-                const value = event.target.value.trim();
+                const before = beforeRef.current
+                const value = event.target.value.trim()
 
                 if (value === '' && before === null) {
-                    return;
+                    return
                 }
 
                 if (value !== before) {
-                    props.onEnter(value);
-                    beforeRef.current = value;
+                    props.onEnter(value)
+                    beforeRef.current = value
                 }
             }
         },
         [props]
-    );
+    )
 
     return (
         <Fragment>
@@ -99,10 +99,10 @@ const Root = memo((props) => {
                 placeholder={props.placeholder}
             />
         </Fragment>
-    );
-});
+    )
+})
 
-Root.displayName = 'Search';
+Root.displayName = 'Search'
 
 Root.propTypes = {
     /** It is called every time there is a change */
@@ -115,13 +115,13 @@ Root.propTypes = {
     placeholder: PropTypes.string,
 
     /** Element value */
-    value: PropTypes.string,
-};
+    value: PropTypes.string
+}
 
 Root.defaultProps = {
     onChange: null,
     onEnter: null,
-    placeholder: 'Search',
-};
+    placeholder: 'Search'
+}
 
-export default Root;
+export default Root

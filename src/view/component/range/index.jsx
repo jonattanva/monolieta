@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-import {memo, useMemo} from 'react';
+import { memo, useMemo } from 'react'
 
 const Input = styled.input`
     &[type='range'] {
@@ -37,20 +37,20 @@ const Input = styled.input`
         margin-top: -5px;
         width: 14px;
     }
-`;
+`
 
 const Range = memo((props) => {
     const onChange = (event) => {
         if (props.onChange) {
-            const value = Number(event.target.value);
-            props.onChange(value);
+            const value = Number(event.target.value)
+            props.onChange(value)
         }
-    };
+    }
 
     const nivel = useMemo(
         () => ((props.value - props.min) / (props.max - props.min)) * 100,
         [props.value, props.min, props.max]
-    );
+    )
 
     return (
         <Input
@@ -62,13 +62,13 @@ const Range = memo((props) => {
             value={props.value}
             onChange={onChange}
             style={{
-                backgroundImage: `linear-gradient(to right, #6200ee ${nivel}%, #f5f5f5 0)`,
+                backgroundImage: `linear-gradient(to right, #6200ee ${nivel}%, #f5f5f5 0)`
             }}
         />
-    );
-});
+    )
+})
 
-Range.displayName = 'Range';
+Range.displayName = 'Range'
 
 Range.propTypes = {
     /** Minimum value */
@@ -84,15 +84,15 @@ Range.propTypes = {
     step: PropTypes.number,
 
     /** Initial value */
-    value: PropTypes.number,
-};
+    value: PropTypes.number
+}
 
 Range.defaultProps = {
     max: 100,
     min: 0,
     onChange: null,
     step: 1,
-    value: 0,
-};
+    value: 0
+}
 
-export default Range;
+export default Range

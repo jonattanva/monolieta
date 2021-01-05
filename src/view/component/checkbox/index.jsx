@@ -1,6 +1,6 @@
-import {memo} from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { memo } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 const Body = styled.div`
     box-sizing: content-box;
@@ -21,7 +21,7 @@ const Body = styled.div`
         border-radius: 50%;
         cursor: pointer;
     }
-`;
+`
 
 const Input = styled.input`
     cursor: inherit;
@@ -35,7 +35,7 @@ const Input = styled.input`
     top: 0;
     white-space: nowrap;
     width: 40px;
-`;
+`
 
 const Background = styled.div`
     align-items: center;
@@ -58,7 +58,7 @@ const Background = styled.div`
     white-space: nowrap;
     width: 18px;
 
-    ${({$checked}) =>
+    ${({ $checked }) =>
         $checked &&
         `
         background-color: #6200ee;
@@ -66,7 +66,7 @@ const Background = styled.div`
         border-color: #6200ee;
         border-color: var(--color-primary, #6200ee);
     `}
-`;
+`
 
 const Icon = styled.svg`
     bottom: 0;
@@ -82,7 +82,7 @@ const Icon = styled.svg`
     top: 0;
     white-space: nowrap;
     width: 100%;
-`;
+`
 
 const Path = styled.path`
     color: transparent;
@@ -95,20 +95,20 @@ const Path = styled.path`
     stroke: currentColor;
     white-space: nowrap;
 
-    ${({$checked}) =>
+    ${({ $checked }) =>
         $checked &&
         `
         color: hsla(0,0%,100%,.90);
         color: var(--color-font, hsla(0,0%,100%,.90));
     `}
-`;
+`
 
 const Checkbox = memo((props) => {
     const onChange = (event) => {
         if (props.onChange) {
-            props.onChange(event, props.row);
+            props.onChange(event, props.row)
         }
-    };
+    }
 
     return (
         <Body data-checked={props.checked} onClick={onChange} role="input">
@@ -128,10 +128,10 @@ const Checkbox = memo((props) => {
                 </Icon>
             </Background>
         </Body>
-    );
-});
+    )
+})
 
-Checkbox.displayName = 'Checkbox';
+Checkbox.displayName = 'Checkbox'
 
 Checkbox.propTypes = {
     /** Checkbox status */
@@ -144,13 +144,13 @@ Checkbox.propTypes = {
     onChange: PropTypes.func,
 
     /** Sequential keyboard navigation */
-    tabIndex: PropTypes.number,
-};
+    tabIndex: PropTypes.number
+}
 
 Checkbox.defaultProps = {
     checked: false,
     onChange: null,
-    tabIndex: 0,
-};
+    tabIndex: 0
+}
 
-export default Checkbox;
+export default Checkbox

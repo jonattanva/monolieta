@@ -1,9 +1,7 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-
-import useScroll from './hook/scroll.jsx';
-
-import {memo, useRef, useMemo} from 'react';
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import useScroll from './hook/scroll.jsx'
+import { memo, useRef, useMemo } from 'react'
 
 const Root = styled.div`
     align-items: stretch;
@@ -15,7 +13,7 @@ const Root = styled.div`
     transform: translateZ(0);
     width: 100%;
     will-change: scroll-position;
-`;
+`
 
 const Viewport = styled.div`
     min-height: 100%;
@@ -24,7 +22,7 @@ const Viewport = styled.div`
     transform: translateZ(0);
     width: 100%;
     will-change: transform;
-`;
+`
 
 const Body = styled.div`
     align-content: flex-start;
@@ -36,94 +34,94 @@ const Body = styled.div`
     justify-content: flex-start;
     margin: 0 auto;
     padding: 0;
-    width: calc(100% - ${({size}) => size.offsetX}px);
+    width: calc(100% - ${({ size }) => size.offsetX}px);
     will-change: transform;
-`;
+`
 
 const Virtual = memo((props) => {
-    const scrollRef = useRef();
-    const scrollPosition = useScroll(scrollRef);
+    const scrollRef = useRef()
+    const scrollPosition = useScroll(scrollRef)
 
     const total = useMemo(() => {
-        return props.children.length;
-    }, [props.children.length]);
+        return props.children.length
+    }, [props.children.length])
 
     const width = useMemo(() => {
-        return props.size.width + props.margin * 2;
-    }, [props.size, props.margin]);
+        return props.size.width + props.margin * 2
+    }, [props.size, props.margin])
 
     const height = useMemo(() => {
-        return props.size.height + props.margin * 2;
-    }, [props.size, props.margin]);
+        return props.size.height + props.margin * 2
+    }, [props.size, props.margin])
 
     const columns = useMemo(() => {
         if (!scrollPosition) {
-            return 0;
+            return 0
         }
-        return Math.trunc(scrollPosition.size.width / width);
-    }, [width, scrollPosition]);
+        return Math.trunc(scrollPosition.size.width / width)
+    }, [width, scrollPosition])
 
     const rows = useMemo(() => {
         if (columns === 0) {
-            return 0;
+            return 0
         }
 
-        let rows = total / columns;
+        let rows = total / columns
         if (rows % 1 !== 0) {
-            rows = Math.trunc(rows + 1);
+            rows = Math.trunc(rows + 1)
         }
 
-        return rows;
-    }, [columns, total]);
+        return rows
+    }, [columns, total])
 
     const totalHeight = useMemo(() => {
-        return rows * height;
-    }, [rows, height]);
+        return rows * height
+    }, [rows, height])
 
     const totalWidth = useMemo(() => {
-        return columns * width;
-    }, [columns, width]);
+        return columns * width
+    }, [columns, width])
 
     const offsetX = useMemo(() => {
         return scrollRef.current
             ? scrollRef.current.offsetWidth - totalWidth
-            : 0;
-    }, [scrollRef, totalWidth]);
+            : 0
+    }, [scrollRef, totalWidth])
 
-    const scrollTop = scrollPosition ? scrollPosition.scrollTop : 0;
-    let startNode = Math.floor(scrollTop / height);
-    startNode = Math.max(0, startNode);
+    const scrollTop = scrollPosition ? scrollPosition.scrollTop : 0
+    let startNode = Math.floor(scrollTop / height)
+    startNode = Math.max(0, startNode)
 
-    const scrollHeight = scrollPosition ? scrollPosition.size.height : 0;
-    let visibleNodeCount = Math.ceil(scrollHeight / height) + 2;
-    visibleNodeCount = Math.min(rows - startNode, visibleNodeCount) * columns;
+    const scrollHeight = scrollPosition ? scrollPosition.size.height : 0
+    let visibleNodeCount = Math.ceil(scrollHeight / height) + 2
+    visibleNodeCount = Math.min(rows - startNode, visibleNodeCount) * columns
 
-    const offsetY = startNode * height;
-    startNode = startNode * columns;
+    const offsetY = startNode * height
+    startNode = startNode * columns
 
     const visibleChildren = useMemo(
         () => props.children.slice(startNode, startNode + visibleNodeCount),
         [props.children, startNode, visibleNodeCount]
-    );
+    )
 
     if (props.onResize && scrollPosition) {
-        props.onResize(scrollPosition.size);
+        props.onResize(scrollPosition.size)
     }
 
     return (
         <Root ref={scrollRef}>
-            <Viewport style={{height: totalHeight}}>
+            <Viewport style={{ height: totalHeight }}>
                 <Body
-                    size={{offsetX}}
-                    style={{transform: `translateY(${offsetY || 0}px)`}}>
+                    size={{ offsetX }}
+                    style={{ transform: `translateY(${offsetY || 0}px)` }}>
                     {visibleChildren}
                 </Body>
             </Viewport>
         </Root>
-    );
-});
+    )
+})
 
-Virtual.displayName = 'Virtual';
+Virtual.displayName = 'Virtual'
 
 Virtual.propTypes = {
     /** Component content */
@@ -135,16 +133,16 @@ Virtual.propTypes = {
     /** Item size */
     size: PropTypes.shape({
         height: PropTypes.number,
-        width: PropTypes.number,
+        width: PropTypes.number
     }).isRequired,
 
     /** It is called every time the container is resized */
-    onResize: PropTypes.func,
-};
+    onResize: PropTypes.func
+}
 
 Virtual.defaultProps = {
     margin: 0,
-    onResize: null,
-};
+    onResize: null
+}
 
-export default Virtual;
+export default Virtual

@@ -1,19 +1,18 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { memo, useRef, useState, Fragment, useEffect, useCallback } from 'react'
 
-import '@simonwep/pickr/dist/themes/nano.min.css';
-import Pickr from '@simonwep/pickr';
-
-import {memo, useRef, useState, Fragment, useEffect, useCallback} from 'react';
+import '@simonwep/pickr/dist/themes/nano.min.css'
+import Pickr from '@simonwep/pickr'
 
 const Button = styled.div`
     height: 100%;
     width: 100%;
-`;
+`
 
 const Picker = styled.div`
     bottom: auto;
-    display: ${({show}) => (show ? 'block' : 'none')};
+    display: ${({ show }) => (show ? 'block' : 'none')};
     margin: 0;
     position: absolute;
     right: auto;
@@ -28,7 +27,7 @@ const Picker = styled.div`
             background-color: var(--color-primary, #6200ee);
         }
     }
-`;
+`
 
 const picker = (ref, color = '#42445a') => ({
     el: ref.current,
@@ -50,30 +49,30 @@ const picker = (ref, color = '#42445a') => ({
         '#8bc34a',
         '#cddc39',
         '#ffeb3b',
-        '#ffc107',
+        '#ffc107'
     ],
     components: {
         hue: true,
         preview: true,
         interaction: {
             input: true,
-            save: true,
-        },
-    },
-});
+            save: true
+        }
+    }
+})
 
 const Color = memo((props) => {
-    const colorRef = useRef();
-    const pickrRef = useRef();
+    const colorRef = useRef()
+    const pickrRef = useRef()
 
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        pickrRef.current = Pickr.create(picker(colorRef));
+        pickrRef.current = Pickr.create(picker(colorRef))
         return () => {
-            pickrRef.current.destroy();
-        };
-    }, []);
+            pickrRef.current.destroy()
+        }
+    }, [])
 
     const init = useCallback(
         (instance) => {
@@ -82,54 +81,54 @@ const Color = memo((props) => {
                     .getColor()
                     .toHEXA()
                     .toString()
-                    .toUpperCase();
+                    .toUpperCase()
 
                 if (props.color.toUpperCase() !== current) {
-                    instance.setColor(props.color, true);
+                    instance.setColor(props.color, true)
                 }
             }
         },
         [props.color]
-    );
+    )
 
     const hide = useCallback(() => {
-        setOpen(false);
-    }, [setOpen]);
+        setOpen(false)
+    }, [setOpen])
 
     const save = useCallback(
         (color, instance) => {
             if (props.onSavedColor && color) {
-                const current = color.toHEXA().toString().toUpperCase();
-                props.onSavedColor(current);
+                const current = color.toHEXA().toString().toUpperCase()
+                props.onSavedColor(current)
             }
-            instance.hide();
+            instance.hide()
         },
         [props]
-    );
+    )
 
     useEffect(() => {
         if (!pickrRef.current) {
-            return;
+            return
         }
 
-        pickrRef.current.on('init', init);
-        pickrRef.current.on('hide', hide);
-        pickrRef.current.on('save', save);
+        pickrRef.current.on('init', init)
+        pickrRef.current.on('hide', hide)
+        pickrRef.current.on('save', save)
 
         return () => {
-            pickrRef.current.off('init', init);
-            pickrRef.current.off('hide', hide);
-            pickrRef.current.off('save', save);
-        };
-    }, [init, hide, save]);
+            pickrRef.current.off('init', init)
+            pickrRef.current.off('hide', hide)
+            pickrRef.current.off('save', save)
+        }
+    }, [init, hide, save])
 
     const onOpenHandle = useCallback((event) => {
-        event.preventDefault();
-        event.stopPropagation();
+        event.preventDefault()
+        event.stopPropagation()
 
-        pickrRef.current.show();
-        setOpen(true);
-    }, []);
+        pickrRef.current.show()
+        setOpen(true)
+    }, [])
 
     return (
         <Fragment>
@@ -138,10 +137,10 @@ const Color = memo((props) => {
                 <div ref={colorRef}></div>
             </Picker>
         </Fragment>
-    );
-});
+    )
+})
 
-Color.displayName = 'Color';
+Color.displayName = 'Color'
 
 Color.propTypes = {
     /** Default color */
@@ -153,14 +152,14 @@ Color.propTypes = {
     /** Position color picker */
     position: PropTypes.shape({
         top: PropTypes.number,
-        left: PropTypes.number,
-    }),
-};
+        left: PropTypes.number
+    })
+}
 
 Color.defaultProps = {
     color: '#6200ee',
     onSavedColor: null,
-    position: null,
-};
+    position: null
+}
 
-export default Color;
+export default Color
