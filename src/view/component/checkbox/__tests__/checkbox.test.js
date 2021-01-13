@@ -1,4 +1,4 @@
-import Checkbox from '../index.jsx'
+import Checkbox from '..'
 import { render, screen, fireEvent } from '@testing-library/react'
 
 describe('<Checkbox />', function () {

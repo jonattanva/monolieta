@@ -1,5 +1,5 @@
-import { memo } from 'react'
-import PropTypes from 'prop-types'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
 
 const Body = styled.div`
@@ -37,6 +37,7 @@ const Input = styled.input`
     width: 40px;
 `
 
+// prettier-ignore
 const Background = styled.div`
     align-items: center;
     background-color: transparent;
@@ -58,9 +59,7 @@ const Background = styled.div`
     white-space: nowrap;
     width: 18px;
 
-    ${({ $checked }) =>
-        $checked &&
-        `
+    ${({ $checked }) => $checked && `
         background-color: #6200ee;
         background-color: var(--color-primary, #6200ee);
         border-color: #6200ee;
@@ -84,6 +83,7 @@ const Icon = styled.svg`
     width: 100%;
 `
 
+// prettier-ignore
 const Path = styled.path`
     color: transparent;
     cursor: pointer;
@@ -95,28 +95,27 @@ const Path = styled.path`
     stroke: currentColor;
     white-space: nowrap;
 
-    ${({ $checked }) =>
-        $checked &&
-        `
+    ${({ $checked }) => $checked && `
         color: hsla(0,0%,100%,.90);
         color: var(--color-font, hsla(0,0%,100%,.90));
     `}
 `
 
-const Checkbox = memo((props) => {
+type PropsType = {
+    checked: boolean,
+    onChange?: (Event) => void
+}
+
+const Checkbox = (props: PropsType): React.Node => {
     const onChange = (event) => {
         if (props.onChange) {
-            props.onChange(event, props.row)
+            props.onChange(event)
         }
     }
 
     return (
         <Body data-checked={props.checked} onClick={onChange} role="input">
-            <Input
-                type="checkbox"
-                tabIndex={props.tabIndex}
-                defaultChecked={props.checked}
-            />
+            <Input type="checkbox" defaultChecked={props.checked} />
             <Background $checked={props.checked}>
                 <Icon viewBox="0 0 24 24">
                     <Path
@@ -129,28 +128,14 @@ const Checkbox = memo((props) => {
             </Background>
         </Body>
     )
-})
-
-Checkbox.displayName = 'Checkbox'
-
-Checkbox.propTypes = {
-    /** Checkbox status */
-    checked: PropTypes.bool,
-
-    /** Current item index */
-    row: PropTypes.number,
-
-    /** Gets called when the users click */
-    onChange: PropTypes.func,
-
-    /** Sequential keyboard navigation */
-    tabIndex: PropTypes.number
 }
 
 Checkbox.defaultProps = {
     checked: false,
-    onChange: null,
-    tabIndex: 0
+    onChange: null
 }
 
-export default Checkbox
+export default (React.memo<PropsType>(Checkbox): React.AbstractComponent<
+    PropsType,
+    mixed
+>)

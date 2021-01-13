@@ -1,4 +1,4 @@
-import Button from '../index.jsx'
+import Button from '..'
 import { render, screen, fireEvent } from '@testing-library/react'
 
 describe('<Button />', function () {

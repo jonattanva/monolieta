@@ -1,8 +1,9 @@
-import { Fragment } from 'react'
+// @flow
+import * as React from 'react'
 import ReactDOM from 'react-dom'
 import { createGlobalStyle } from 'styled-components'
 
-import Rect from './view/component/rect/index.jsx'
+import Rect from './view/component/rect/index.jsx' // TODO: REMOVE LINE!
 
 const GlobalStyle = createGlobalStyle`
     :root {
@@ -17,23 +18,43 @@ const GlobalStyle = createGlobalStyle`
     }
 `
 
-const dataSource = [
-    {
-        key: '1',
+const Mock = (): React.Node => {
+    const [value, setValue] = React.useState({
         x: 100,
         y: 100,
-        width: 300,
-        height: 300,
-        color: '#6200ee'
+        width: 100,
+        height: 100
+    })
+
+    const onResize = (x, y, width, height) => {
+        setValue({
+            x,
+            y,
+            width,
+            height
+        })
     }
-]
+
+    const onDrag = (x, y) => {
+        setValue((current) => ({
+            ...current,
+            x: current.x + x,
+            y: current.y + y
+        }))
+    }
+
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">
+            <Rect {...value} onResize={onResize} onDrag={onDrag} />
+        </svg>
+    )
+}
 
 ReactDOM.render(
-    <Fragment>
+    <React.Fragment>
         <GlobalStyle />
-        <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">
-            <Rect dataSource={ dataSource } />
-        </svg>
-    </Fragment>,
+        <Mock />
+    </React.Fragment>,
     document.getElementById('main')
 )
+// <Rect x={ 400 } y={ 100 } width={ -100 } height={ 100 } />

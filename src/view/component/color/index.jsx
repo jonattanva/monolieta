@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
-import { memo, useRef, useState, Fragment, useEffect, useCallback } from 'react'
 
 import '@simonwep/pickr/dist/themes/nano.min.css'
 import Pickr from '@simonwep/pickr'
@@ -29,7 +29,7 @@ const Picker = styled.div`
     }
 `
 
-const picker = (ref, color = '#42445a') => ({
+const picker = (ref: any, color: string = '#42445a') => ({
     el: ref.current,
     theme: 'nano',
     default: color,
@@ -61,20 +61,25 @@ const picker = (ref, color = '#42445a') => ({
     }
 })
 
-const Color = memo((props) => {
-    const colorRef = useRef()
-    const pickrRef = useRef()
+type PropsType = {
+    color: string,
+    onSavedColor: (string) => void
+}
 
-    const [open, setOpen] = useState(false)
+const Color = (props: PropsType): React.Node => {
+    const colorRef = React.useRef()
+    const pickrRef: any = React.useRef()
 
-    useEffect(() => {
+    const [open, setOpen] = React.useState(false)
+
+    React.useEffect(() => {
         pickrRef.current = Pickr.create(picker(colorRef))
         return () => {
             pickrRef.current.destroy()
         }
     }, [])
 
-    const init = useCallback(
+    const init = React.useCallback(
         (instance) => {
             if (props.color && props.color !== '') {
                 const current = instance
@@ -91,11 +96,11 @@ const Color = memo((props) => {
         [props.color]
     )
 
-    const hide = useCallback(() => {
+    const hide = React.useCallback(() => {
         setOpen(false)
     }, [setOpen])
 
-    const save = useCallback(
+    const save = React.useCallback(
         (color, instance) => {
             if (props.onSavedColor && color) {
                 const current = color.toHEXA().toString().toUpperCase()
@@ -106,7 +111,7 @@ const Color = memo((props) => {
         [props]
     )
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (!pickrRef.current) {
             return
         }
@@ -122,7 +127,7 @@ const Color = memo((props) => {
         }
     }, [init, hide, save])
 
-    const onOpenHandle = useCallback((event) => {
+    const onOpenHandle = React.useCallback((event) => {
         event.preventDefault()
         event.stopPropagation()
 
@@ -131,35 +136,19 @@ const Color = memo((props) => {
     }, [])
 
     return (
-        <Fragment>
+        <React.Fragment>
             <Button onClick={onOpenHandle} role="button" />
-            <Picker show={open} style={props.position}>
+            <Picker show={open}>
                 <div ref={colorRef}></div>
             </Picker>
-        </Fragment>
+        </React.Fragment>
     )
-})
+}
 
 Color.displayName = 'Color'
 
-Color.propTypes = {
-    /** Default color */
-    color: PropTypes.string,
-
-    /** Notify that the color has been changed */
-    onSavedColor: PropTypes.func,
-
-    /** Position color picker */
-    position: PropTypes.shape({
-        top: PropTypes.number,
-        left: PropTypes.number
-    })
-}
-
 Color.defaultProps = {
-    color: '#6200ee',
-    onSavedColor: null,
-    position: null
+    color: '#6200ee'
 }
 
 export default Color

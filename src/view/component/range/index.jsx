@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
-
-import { memo, useMemo } from 'react'
 
 const Input = styled.input`
     &[type='range'] {
@@ -39,18 +38,28 @@ const Input = styled.input`
     }
 `
 
-const Range = memo((props) => {
-    const onChange = (event) => {
-        if (props.onChange) {
-            const value = Number(event.target.value)
-            props.onChange(value)
-        }
-    }
+type PropsType = {
+    max: number,
+    min: number,
+    onChange: (number) => void,
+    step: number,
+    value: number
+}
 
-    const nivel = useMemo(
-        () => ((props.value - props.min) / (props.max - props.min)) * 100,
-        [props.value, props.min, props.max]
+const Range = (props: PropsType): React.Node => {
+    const onChange = React.useCallback(
+        (event) => {
+            if (props.onChange) {
+                const value = Number(event.target.value)
+                props.onChange(value)
+            }
+        },
+        [props]
     )
+
+    const nivel = React.useMemo(() => {
+        return ((props.value - props.min) / (props.max - props.min)) * 100
+    }, [props.value, props.min, props.max])
 
     return (
         <Input
@@ -66,26 +75,9 @@ const Range = memo((props) => {
             }}
         />
     )
-})
+}
 
 Range.displayName = 'Range'
-
-Range.propTypes = {
-    /** Minimum value */
-    min: PropTypes.number,
-
-    /** Maximum value */
-    max: PropTypes.number,
-
-    /** Report the value change */
-    onChange: PropTypes.func,
-
-    /** Step value */
-    step: PropTypes.number,
-
-    /** Initial value */
-    value: PropTypes.number
-}
 
 Range.defaultProps = {
     max: 100,
@@ -95,4 +87,7 @@ Range.defaultProps = {
     value: 0
 }
 
-export default Range
+export default (React.memo<PropsType>(Range): React.AbstractComponent<
+    PropsType,
+    mixed
+>)

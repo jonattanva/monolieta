@@ -10,23 +10,18 @@ describe('<Search />', function () {
 
     it('search (Enter)', function () {
         const onEnter = jest.fn()
-        render(<Search onEnter={onEnter} value="mock" />)
+        render(<Search onEnter={onEnter} />)
 
         const input = screen.getByPlaceholderText('Search')
-        fireEvent.keyDown(input, { key: 'Enter', keyCode: 13 })
+        fireEvent.keyDown(input, {
+            key: 'Enter',
+            keyCode: 13,
+            target: {
+                value: 'mock'
+            }
+        })
 
         expect(onEnter).toHaveBeenCalledTimes(1)
-        expect(onEnter.mock.calls[0][0]).toEqual('mock')
-    })
-
-    it('search (Change)', function () {
-        const onChange = jest.fn()
-        render(<Search onChange={onChange} />)
-
-        const input = screen.getByPlaceholderText('Search')
-        fireEvent.change(input, { target: { value: 'mock' } })
-
-        expect(onChange).toHaveBeenCalledTimes(1)
-        expect(onChange.mock.calls[0][0].target.value).toEqual('mock')
+        expect(onEnter.mock.calls[0][0].target.value).toEqual('mock')
     })
 })

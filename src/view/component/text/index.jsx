@@ -1,5 +1,5 @@
-import { memo } from 'react'
-import PropTypes from 'prop-types'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
 
 const Input = styled.input`
@@ -20,36 +20,27 @@ const Input = styled.input`
     width: 100%;
 `
 
-const Text = memo((props) => (
+type PropsType = {
+    onChange?: (Event) => void,
+    placeholder?: string,
+    value?: string
+}
+
+const Text = (props: PropsType): React.Node => (
     <Input
         type="text"
         value={props.value}
         onChange={props.onChange}
-        autoFocus={props.autofocus}
         placeholder={props.placeholder}
     />
-))
-
-Text.displayName = 'Text'
-
-Text.propTypes = {
-    /** Focus automatically */
-    autofocus: PropTypes.bool,
-
-    /** It is called every time there is a change */
-    onChange: PropTypes.func,
-
-    /** Sample value */
-    placeholder: PropTypes.string,
-
-    /** Element value */
-    value: PropTypes.string
-}
+)
 
 Text.defaultProps = {
-    autofocus: false,
     onChange: null,
     placeholder: ''
 }
 
-export default Text
+export default (React.memo<PropsType>(Text): React.AbstractComponent<
+    PropsType,
+    mixed
+>)

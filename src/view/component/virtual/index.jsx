@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
 import useScroll from './hook/scroll.jsx'
-import { memo, useRef, useMemo } from 'react'
 
 const Root = styled.div`
     align-items: stretch;
@@ -38,30 +38,41 @@ const Body = styled.div`
     will-change: transform;
 `
 
-const Virtual = memo((props) => {
-    const scrollRef = useRef()
+type Size = {
+    height: number,
+    width: number
+}
+
+type PropsType = {
+    children: React.ChildrenArray<any>,
+    margin: number,
+    size: Size
+}
+
+const Virtual = (props: PropsType): React.Node => {
+    const scrollRef = React.useRef()
     const scrollPosition = useScroll(scrollRef)
 
-    const total = useMemo(() => {
+    const total = React.useMemo(() => {
         return props.children.length
     }, [props.children.length])
 
-    const width = useMemo(() => {
+    const width = React.useMemo(() => {
         return props.size.width + props.margin * 2
     }, [props.size, props.margin])
 
-    const height = useMemo(() => {
+    const height = React.useMemo(() => {
         return props.size.height + props.margin * 2
     }, [props.size, props.margin])
 
-    const columns = useMemo(() => {
+    const columns = React.useMemo(() => {
         if (!scrollPosition) {
             return 0
         }
         return Math.trunc(scrollPosition.size.width / width)
     }, [width, scrollPosition])
 
-    const rows = useMemo(() => {
+    const rows = React.useMemo(() => {
         if (columns === 0) {
             return 0
         }
@@ -74,15 +85,15 @@ const Virtual = memo((props) => {
         return rows
     }, [columns, total])
 
-    const totalHeight = useMemo(() => {
+    const totalHeight = React.useMemo(() => {
         return rows * height
     }, [rows, height])
 
-    const totalWidth = useMemo(() => {
+    const totalWidth = React.useMemo(() => {
         return columns * width
     }, [columns, width])
 
-    const offsetX = useMemo(() => {
+    const offsetX = React.useMemo(() => {
         return scrollRef.current
             ? scrollRef.current.offsetWidth - totalWidth
             : 0
@@ -99,14 +110,9 @@ const Virtual = memo((props) => {
     const offsetY = startNode * height
     startNode = startNode * columns
 
-    const visibleChildren = useMemo(
-        () => props.children.slice(startNode, startNode + visibleNodeCount),
-        [props.children, startNode, visibleNodeCount]
-    )
-
-    if (props.onResize && scrollPosition) {
-        props.onResize(scrollPosition.size)
-    }
+    const visibleChildren = React.useMemo(() => {
+        return props.children.slice(startNode, startNode + visibleNodeCount)
+    }, [props.children, startNode, visibleNodeCount])
 
     return (
         <Root ref={scrollRef}>
@@ -119,30 +125,15 @@ const Virtual = memo((props) => {
             </Viewport>
         </Root>
     )
-})
+}
 
 Virtual.displayName = 'Virtual'
 
-Virtual.propTypes = {
-    /** Component content */
-    children: PropTypes.node,
-
-    /** Item margin */
-    margin: PropTypes.number,
-
-    /** Item size */
-    size: PropTypes.shape({
-        height: PropTypes.number,
-        width: PropTypes.number
-    }).isRequired,
-
-    /** It is called every time the container is resized */
-    onResize: PropTypes.func
-}
-
 Virtual.defaultProps = {
-    margin: 0,
-    onResize: null
+    margin: 0
 }
 
-export default Virtual
+export default (React.memo<PropsType>(Virtual): React.AbstractComponent<
+    PropsType,
+    mixed
+>)

@@ -1,30 +1,39 @@
-import PropTypes from 'prop-types'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
 import Button from '../button/index.jsx'
-import { memo, useRef, Fragment } from 'react'
 
 const Input = styled.input`
     display: none;
 `
 
-const File = memo((props) => {
-    const fileInputRef = useRef()
+type PropsType = {
+    accept: string,
+    children: string,
+    onFilesAdded: (Array<typeof File>) => void
+}
 
-    const onOpenFile = () => {
+const File = (props: PropsType): React.Node => {
+    const fileInputRef = React.useRef()
+
+    const onOpenFile = React.useCallback(() => {
         if (fileInputRef.current) {
             fileInputRef.current.click()
         }
-    }
+    }, [])
 
-    const onFilesAdded = (event) => {
-        if (props.onFilesAdded) {
-            const files = Array.from(event.target.files)
-            props.onFilesAdded(files)
-        }
-    }
+    const onFilesAdded = React.useCallback(
+        (event) => {
+            if (props.onFilesAdded) {
+                const files = Array.from(event.target.files)
+                props.onFilesAdded(files)
+            }
+        },
+        [props]
+    )
 
     return (
-        <Fragment>
+        <React.Fragment>
             <Button onClick={onOpenFile}>{props.children}</Button>
             <Input
                 type="file"
@@ -34,22 +43,11 @@ const File = memo((props) => {
                 accept={props.accept}
                 onChange={onFilesAdded}
             />
-        </Fragment>
+        </React.Fragment>
     )
-})
+}
 
 File.displayName = 'File'
-
-File.propTypes = {
-    /** File type specifier */
-    accept: PropTypes.string,
-
-    /** Button title */
-    children: PropTypes.string,
-
-    /** Notify that a file has been included */
-    onFilesAdded: PropTypes.func
-}
 
 File.defaultProps = {
     accept: '.jpg,.jpeg,.png,.webp,.gif,.bmp,.ico',
@@ -57,4 +55,7 @@ File.defaultProps = {
     onFilesAdded: null
 }
 
-export default File
+export default (React.memo<PropsType>(File): React.AbstractComponent<
+    PropsType,
+    mixed
+>)

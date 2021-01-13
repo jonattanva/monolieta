@@ -1,9 +1,7 @@
-import PropTypes from 'prop-types'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
-
 import Search from '../icon/search/index.jsx'
-
-import { memo, useRef, Fragment, useCallback } from 'react'
 
 const Icon = styled.div`
     background: transparent;
@@ -51,77 +49,43 @@ const Input = styled.input`
     }
 `
 
-const Root = memo((props) => {
-    const beforeRef = useRef(null)
+type PropsType = {
+    onEnter?: (Event) => void,
+    placeholder?: string
+}
 
-    const onChange = useCallback(
-        (event) => {
-            if (event.target.value === '') {
-                beforeRef.current = null
-            }
-
-            if (props.onChange) {
-                props.onChange(event)
-            }
-        },
-        [props]
-    )
-
-    const onEnter = useCallback(
+const Root = (props: PropsType): React.Node => {
+    const onEnter = React.useCallback(
         (event) => {
             if (props.onEnter && event.keyCode === 13) {
-                const before = beforeRef.current
-                const value = event.target.value.trim()
-
-                if (value === '' && before === null) {
-                    return
-                }
-
-                if (value !== before) {
-                    props.onEnter(value)
-                    beforeRef.current = value
-                }
+                props.onEnter(event)
             }
         },
         [props]
     )
 
     return (
-        <Fragment>
+        <React.Fragment>
             <Icon>
                 <Search width="20" height="20" />
             </Icon>
             <Input
                 type="search"
-                value={props.value}
                 onKeyDown={onEnter}
-                onChange={onChange}
                 placeholder={props.placeholder}
             />
-        </Fragment>
+        </React.Fragment>
     )
-})
+}
 
 Root.displayName = 'Search'
 
-Root.propTypes = {
-    /** It is called every time there is a change */
-    onChange: PropTypes.func,
-
-    /** It is called every time the enter key is pressed */
-    onEnter: PropTypes.func,
-
-    /** Sample value */
-    placeholder: PropTypes.string,
-
-    /** Element value */
-    value: PropTypes.string
-}
-
 Root.defaultProps = {
-    onChange: null,
     onEnter: null,
     placeholder: 'Search'
 }
 
-export default Root
+export default (React.memo<PropsType>(Root): React.AbstractComponent<
+    PropsType,
+    mixed
+>)

@@ -1,9 +1,12 @@
-import { useState, useEffect, useCallback } from 'react'
+// @flow
+import * as React from 'react'
 
-export default (scrollRef) => {
-    const [value, setValue] = useState()
+export default (
+    scrollRef: any
+): null | { scrollTop: number, size: { width: number, height: number } } => {
+    const [value, setValue] = React.useState(null)
 
-    const onScroll = useCallback(
+    const onScroll = React.useCallback(
         (event) => {
             requestAnimationFrame(() => {
                 const scroll = event.target
@@ -19,7 +22,7 @@ export default (scrollRef) => {
         [setValue]
     )
 
-    const onGlobalScroll = useCallback(() => {
+    const onGlobalScroll = React.useCallback(() => {
         requestAnimationFrame(() => {
             const scroll = scrollRef.current
             setValue({
@@ -32,7 +35,7 @@ export default (scrollRef) => {
         })
     }, [scrollRef, setValue])
 
-    useEffect(() => {
+    React.useEffect(() => {
         const scroll = scrollRef.current
         setValue({
             scrollTop: scroll.scrollTop,
@@ -42,11 +45,12 @@ export default (scrollRef) => {
             }
         })
 
-        window.addEventListener('resize', onGlobalScroll)
         scroll.addEventListener('scroll', onScroll)
+        window.addEventListener('resize', onGlobalScroll)
+
         return () => {
-            window.removeEventListener('resize', onGlobalScroll)
             scroll.removeEventListener('scroll', onScroll)
+            window.removeEventListener('resize', onGlobalScroll)
         }
     }, [scrollRef, onGlobalScroll, onScroll, setValue])
 

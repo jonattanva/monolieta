@@ -1,5 +1,5 @@
-import { memo } from 'react'
-import PropTypes from 'prop-types'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
 
 const Root = styled.div`
@@ -33,24 +33,18 @@ const Root = styled.div`
     }
 `
 
-const Button = memo((props) => (
+type PropsType = {
+    children: React.Node,
+    onClick?: (Event) => void
+}
+
+const Button = (props: PropsType): React.Node => (
     <Root onClick={props.onClick} role="button">
         {props.children}
     </Root>
-))
+)
 
-Button.displayName = 'Button'
-
-Button.propTypes = {
-    /** Button title */
-    children: PropTypes.string.isRequired,
-
-    /** Gets called when the users click */
-    onClick: PropTypes.func
-}
-
-Button.defaultProps = {
-    onClick: null
-}
-
-export default Button
+export default (React.memo<PropsType>(Button): React.AbstractComponent<
+    PropsType,
+    mixed
+>)
