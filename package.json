@@ -54,6 +54,7 @@
     "jest": {
         "coverageReporters": [
             "html",
+            "lcov",
             "text-summary"
         ],
         "moduleNameMapper": {
