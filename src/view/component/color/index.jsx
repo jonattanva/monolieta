@@ -66,7 +66,7 @@ type PropsType = {
     onSavedColor: (string) => void
 }
 
-const Color = (props: PropsType): React.Node => {
+const Root = (props: PropsType): React.Node => {
     const colorRef = React.useRef()
     const pickrRef: any = React.useRef()
 
@@ -145,10 +145,13 @@ const Color = (props: PropsType): React.Node => {
     )
 }
 
-Color.displayName = 'Color'
+Root.displayName = 'Color'
 
-Color.defaultProps = {
+Root.defaultProps = {
     color: '#6200ee'
 }
 
-export default Color
+export default (React.memo<PropsType>(Root): React.AbstractComponent<
+    PropsType,
+    mixed
+>)

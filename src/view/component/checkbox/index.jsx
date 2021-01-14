@@ -106,8 +106,8 @@ type PropsType = {
     onChange?: (Event) => void
 }
 
-const Checkbox = (props: PropsType): React.Node => {
-    const onChange = (event) => {
+const Root = (props: PropsType): React.Node => {
+    const onChange = (event: any) => {
         if (props.onChange) {
             props.onChange(event)
         }
@@ -130,12 +130,14 @@ const Checkbox = (props: PropsType): React.Node => {
     )
 }
 
-Checkbox.defaultProps = {
+Root.displayName = 'Checkbox'
+
+Root.defaultProps = {
     checked: false,
     onChange: null
 }
 
-export default (React.memo<PropsType>(Checkbox): React.AbstractComponent<
+export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,
     mixed
 >)

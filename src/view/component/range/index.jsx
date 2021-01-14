@@ -46,7 +46,7 @@ type PropsType = {
     value: number
 }
 
-const Range = (props: PropsType): React.Node => {
+const Root = (props: PropsType): React.Node => {
     const onChange = React.useCallback(
         (event) => {
             if (props.onChange) {
@@ -77,9 +77,9 @@ const Range = (props: PropsType): React.Node => {
     )
 }
 
-Range.displayName = 'Range'
+Root.displayName = 'Range'
 
-Range.defaultProps = {
+Root.defaultProps = {
     max: 100,
     min: 0,
     onChange: null,
@@ -87,7 +87,7 @@ Range.defaultProps = {
     value: 0
 }
 
-export default (React.memo<PropsType>(Range): React.AbstractComponent<
+export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,
     mixed
 >)

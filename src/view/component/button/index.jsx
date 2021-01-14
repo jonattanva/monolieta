@@ -2,7 +2,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-const Root = styled.div`
+const Button = styled.div`
     align-items: center;
     background-color: #6200ee;
     background-color: var(--color-primary, #6200ee);
@@ -38,13 +38,15 @@ type PropsType = {
     onClick?: (Event) => void
 }
 
-const Button = (props: PropsType): React.Node => (
-    <Root onClick={props.onClick} role="button">
+const Root = (props: PropsType): React.Node => (
+    <Button onClick={props.onClick} role="button">
         {props.children}
-    </Root>
+    </Button>
 )
 
-export default (React.memo<PropsType>(Button): React.AbstractComponent<
+Root.displayName = 'Button'
+
+export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,
     mixed
 >)

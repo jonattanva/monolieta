@@ -67,7 +67,7 @@ const Root = (props: PropsType): React.Node => {
     return (
         <React.Fragment>
             <Icon>
-                <Search width="20" height="20" />
+                <Search width={20} height={20} />
             </Icon>
             <Input
                 type="search"

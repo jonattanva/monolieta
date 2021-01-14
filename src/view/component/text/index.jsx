@@ -26,7 +26,7 @@ type PropsType = {
     value?: string
 }
 
-const Text = (props: PropsType): React.Node => (
+const Root = (props: PropsType): React.Node => (
     <Input
         type="text"
         value={props.value}
@@ -35,12 +35,14 @@ const Text = (props: PropsType): React.Node => (
     />
 )
 
-Text.defaultProps = {
+Root.displayName = 'Text'
+
+Root.defaultProps = {
     onChange: null,
     placeholder: ''
 }
 
-export default (React.memo<PropsType>(Text): React.AbstractComponent<
+export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,
     mixed
 >)

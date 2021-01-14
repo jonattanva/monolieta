@@ -9,6 +9,7 @@ const Rect = styled.rect`
     stroke-opacity: 0.7;
     stroke-width: 2px;
     stroke: #15ff0d;
+    stroke: var(--color-secondary, #15ff0d);
     vector-effect: non-scaling-stroke;
 
     ${({ isCorner }) => isCorner && `
@@ -20,6 +21,7 @@ const Rect = styled.rect`
 
 const Corner = styled.circle`
     fill: #6200ee;
+    fill: var(--color-primary, #6200ee);
     opacity: 1;
     stroke-width: 20;
     vector-effect: non-scaling-stroke;
@@ -208,6 +210,8 @@ const Root = (props: PropsType): React.Node => {
                 startY: clientY
             }
 
+            setCorner(true)
+
             document.addEventListener('mouseup', onRestart)
             document.addEventListener('mousemove', handleDrag)
         },
@@ -220,6 +224,7 @@ const Root = (props: PropsType): React.Node => {
             if (document.body) {
                 document.body.style.cursor = event.target.style.cursor
             }
+
             const { clientX, clientY } = event
             const type = event.target.dataset.type
             clientRef.current = {
@@ -227,6 +232,8 @@ const Root = (props: PropsType): React.Node => {
                 startX: clientX,
                 startY: clientY
             }
+
+            setCorner(true)
 
             document.addEventListener('mouseup', onRestart)
             document.addEventListener('mousemove', handleResize)
@@ -295,9 +302,9 @@ const Root = (props: PropsType): React.Node => {
 
                     <use
                         xlinkHref="#corner"
-                        data-type="s-resize"
-                        style={{ cursor: 'ns-resize' }}
-                        x={props.x + props.width / 2}
+                        data-type="se-resize"
+                        style={{ cursor: 'nwse-resize' }}
+                        x={props.x + props.width}
                         y={props.y + props.height}
                         role="corner"
                         onMouseDown={onResize}
@@ -305,9 +312,9 @@ const Root = (props: PropsType): React.Node => {
 
                     <use
                         xlinkHref="#corner"
-                        data-type="se-resize"
-                        style={{ cursor: 'nwse-resize' }}
-                        x={props.x + props.width}
+                        data-type="s-resize"
+                        style={{ cursor: 'ns-resize' }}
+                        x={props.x + props.width / 2}
                         y={props.y + props.height}
                         role="corner"
                         onMouseDown={onResize}

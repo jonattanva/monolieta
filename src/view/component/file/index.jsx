@@ -13,7 +13,7 @@ type PropsType = {
     onFilesAdded: (Array<typeof File>) => void
 }
 
-const File = (props: PropsType): React.Node => {
+const Root = (props: PropsType): React.Node => {
     const fileInputRef = React.useRef()
 
     const onOpenFile = React.useCallback(() => {
@@ -47,15 +47,15 @@ const File = (props: PropsType): React.Node => {
     )
 }
 
-File.displayName = 'File'
+Root.displayName = 'File'
 
-File.defaultProps = {
+Root.defaultProps = {
     accept: '.jpg,.jpeg,.png,.webp,.gif,.bmp,.ico',
     children: 'Browse files',
     onFilesAdded: null
 }
 
-export default (React.memo<PropsType>(File): React.AbstractComponent<
+export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,
     mixed
 >)
