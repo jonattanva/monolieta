@@ -2,13 +2,14 @@
 import * as React from 'react'
 
 type PropsType = {
-    width: number,
-    height: number
+    width?: number,
+    height?: number
 }
 
 const Root = (props: PropsType): React.Node => (
     <svg
         fill="none"
+        role="icon"
         viewBox="0 0 24 24"
         stroke="currentColor"
         width={props.width}

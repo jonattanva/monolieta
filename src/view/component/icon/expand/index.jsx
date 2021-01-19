@@ -9,7 +9,6 @@ type PropsType = {
 
 const Root = (props: PropsType): React.Node => (
     <svg
-        xmlns="http://www.w3.org/2000/svg"
         role="icon"
         fill="none"
         width={props.width}

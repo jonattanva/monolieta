@@ -2,14 +2,15 @@
 import * as React from 'react'
 
 type PropsType = {
+    open?: boolean,
     width?: number,
     height?: number
 }
 
 const Root = (props: PropsType): React.Node => (
     <svg
-        fill="none"
         role="icon"
+        fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
         width={props.width}
@@ -18,14 +19,19 @@ const Root = (props: PropsType): React.Node => (
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            d={
+                props.open
+                    ? 'M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z'
+                    : 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'
+            }
         />
     </svg>
 )
 
-Root.displayName = 'Search'
+Root.displayName = 'Lock'
 
 Root.defaultProps = {
+    open: false,
     width: 24,
     height: 24
 }
