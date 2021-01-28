@@ -39,14 +39,16 @@ const Input = styled.input`
 `
 
 type PropsType = {
-    max: number,
-    min: number,
+    max?: number,
+    min?: number,
     onChange: (number) => void,
-    step: number,
+    step?: number,
     value: number
 }
 
 const Root = (props: PropsType): React.Node => {
+    const { max = 100, min = 0, step = 1, value = 0 } = props
+
     const onChange = React.useCallback(
         (event) => {
             if (props.onChange) {
@@ -58,17 +60,17 @@ const Root = (props: PropsType): React.Node => {
     )
 
     const nivel = React.useMemo(() => {
-        return ((props.value - props.min) / (props.max - props.min)) * 100
-    }, [props.value, props.min, props.max])
+        return ((value - min) / (max - min)) * 100
+    }, [value, min, max])
 
     return (
         <Input
             type="range"
             role="input"
-            min={props.min}
-            max={props.max}
-            step={props.step}
-            value={props.value}
+            min={min}
+            max={max}
+            step={step}
+            value={value}
             onChange={onChange}
             style={{
                 backgroundImage: `linear-gradient(to right, #6200ee ${nivel}%, #f5f5f5 0)`
@@ -78,14 +80,6 @@ const Root = (props: PropsType): React.Node => {
 }
 
 Root.displayName = 'Range'
-
-Root.defaultProps = {
-    max: 100,
-    min: 0,
-    onChange: null,
-    step: 1,
-    value: 0
-}
 
 export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,

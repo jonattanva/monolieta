@@ -1,4 +1,6 @@
+//@flow
 import Checkbox from '..'
+import * as React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 
 describe('<Checkbox />', function () {
@@ -7,13 +9,18 @@ describe('<Checkbox />', function () {
         render(<Checkbox onChange={onChange} />)
 
         const input = screen.getByRole('input')
-        fireEvent.click(input)
+        fireEvent.click(input, {
+            target: {
+                checked: true
+            }
+        })
 
         expect(onChange).toHaveBeenCalledTimes(1)
+        expect(onChange.mock.calls[0][0]).toBeTruthy()
     })
 
     it('checked', function () {
-        render(<Checkbox checked={true} />)
+        render(<Checkbox checked={true} onChange={() => {}} />)
 
         let input = screen.getByRole('input')
         expect(input.dataset.checked).toBeTruthy()

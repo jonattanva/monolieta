@@ -10,7 +10,11 @@ export default (keys: Array<string>): Array<string> => {
     const [keyPressed, setKeyPressed] = React.useState([])
 
     const downHandler = React.useCallback(
-        ({ key }) => {
+        ({ key, repeat }) => {
+            if (repeat) {
+                return
+            }
+
             setKeyPressed((previous) => {
                 if (keys.includes(key) && !previous.includes(key)) {
                     return [...previous, key]
@@ -23,11 +27,17 @@ export default (keys: Array<string>): Array<string> => {
 
     const upHandler = React.useCallback(
         ({ key }) => {
+            if (!keys.includes(key)) {
+                return
+            }
+
             setKeyPressed((previous) => {
-                if (keys.includes(key)) {
-                    return previous.filter((value) => value !== key)
-                }
-                return previous
+                return previous.filter((value) => {
+                    if (specialKeys.includes(key)) {
+                        return false
+                    }
+                    return value !== key
+                })
             })
         },
         [keys, setKeyPressed]
@@ -44,3 +54,14 @@ export default (keys: Array<string>): Array<string> => {
 
     return keyPressed
 }
+
+const specialKeys = [
+    'Alt',
+    'Backspace',
+    'CapsLock',
+    'Control',
+    'Escape',
+    'Meta',
+    'Shift',
+    'Tab'
+]

@@ -1,14 +1,14 @@
-import Label from '..'
+import Clazz from '..'
 import { render, screen, fireEvent } from '@testing-library/react'
 
-describe('<Label />', function () {
+describe('<Clazz />', function () {
     it('select checkbox', function () {
         const props = {
             id: '2',
             onSelectedClass: jest.fn()
         }
 
-        render(<Label {...props} />)
+        render(<Clazz {...props} />)
 
         const button = screen.getByRole('input')
         fireEvent.click(button, {
@@ -25,7 +25,7 @@ describe('<Label />', function () {
     it('class name', function () {
         const onSelectedName = jest.fn()
 
-        render(<Label id="4" onSelectedName={onSelectedName} />)
+        render(<Clazz id="4" onSelectedName={onSelectedName} />)
 
         const input = screen.getByPlaceholderText('Enter class name')
         fireEvent.change(input, { target: { value: 'Bird' } })
@@ -36,9 +36,10 @@ describe('<Label />', function () {
     })
 
     it('instances', function () {
-        const { rerender } = render(<Label />)
+        const { rerender } = render(<Clazz info={true} />)
         expect(screen.getByText(/0/i)).toBeDefined()
-        rerender(<Label instances={3} />)
+
+        rerender(<Clazz instances={3} info={true} />)
         expect(screen.getByText(/3/i)).toBeDefined()
     })
 })

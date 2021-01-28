@@ -1,9 +1,11 @@
-import Search from '../index.jsx'
+//@flow
+import Search from '..'
+import * as React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 
 describe('<Search />', function () {
     it('placeholder', function () {
-        render(<Search placeholder="My placeholder" />)
+        render(<Search placeholder="My placeholder" onEnter={() => {}} />)
 
         expect(screen.getByPlaceholderText('My placeholder')).toBeDefined()
     })
@@ -22,6 +24,6 @@ describe('<Search />', function () {
         })
 
         expect(onEnter).toHaveBeenCalledTimes(1)
-        expect(onEnter.mock.calls[0][0].target.value).toEqual('mock')
+        expect(onEnter.mock.calls[0][0]).toEqual('mock')
     })
 })

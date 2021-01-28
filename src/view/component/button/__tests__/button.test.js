@@ -1,12 +1,12 @@
+//@flow
 import Button from '..'
+import * as React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 
 describe('<Button />', function () {
     it('name', function () {
-        const title = 'My button'
-        render(<Button>{title}</Button>)
-
-        expect(screen.getByText(title)).toBeDefined()
+        render(<Button onClick={() => {}}>Example</Button>)
+        expect(screen.getByText('Example')).toBeDefined()
     })
 
     it('click', function () {

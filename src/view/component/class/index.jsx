@@ -1,12 +1,12 @@
 // @flow
 import * as React from 'react'
 import styled from 'styled-components'
-import Text from '../text/index.jsx'
-import Empty from '../empty/index.jsx'
-import Checkbox from '../checkbox/index.jsx'
+import Text from 'component/text'
+import Empty from 'component/empty'
+import Checkbox from 'component/checkbox'
 
 const Color = React.lazy(() => {
-    return import('../color/index.jsx')
+    return import('component/color')
 })
 
 const Body = styled.div`
@@ -54,29 +54,39 @@ type PropsType = {
     color: string,
     checked: boolean,
     instances?: number,
+    info?: boolean,
     onSavedColor: (string, string) => void,
     onSelectedClass: (string, boolean) => void,
     onSelectedName: (string, string) => void
 }
 
 const Root = (props: PropsType): React.Node => {
-    const onSelectedClass = (event: any) => {
-        if (props.onSelectedClass) {
-            props.onSelectedClass(props.id, event.target.checked)
-        }
-    }
+    const onSelectedClass = React.useCallback(
+        (checked: boolean) => {
+            if (props.onSelectedClass) {
+                props.onSelectedClass(props.id, checked)
+            }
+        },
+        [props]
+    )
 
-    const onSavedColor = (color: string) => {
-        if (props.onSavedColor) {
-            props.onSavedColor(props.id, color)
-        }
-    }
+    const onSavedColor = React.useCallback(
+        (color: string) => {
+            if (props.onSavedColor) {
+                props.onSavedColor(props.id, color)
+            }
+        },
+        [props]
+    )
 
-    const onSelectedName = (event: any) => {
-        if (props.onSelectedName) {
-            props.onSelectedName(props.id, event.target.value)
-        }
-    }
+    const onSelectedName = React.useCallback(
+        (value: string) => {
+            if (props.onSelectedName) {
+                props.onSelectedName(props.id, value)
+            }
+        },
+        [props]
+    )
 
     return (
         <Body>
@@ -91,7 +101,7 @@ const Root = (props: PropsType): React.Node => {
                 onChange={onSelectedName}
                 value={props.name}
             />
-            <Item>{props.instances}</Item>
+            {props.info && <Item>{props.instances}</Item>}
         </Body>
     )
 }
@@ -99,6 +109,7 @@ const Root = (props: PropsType): React.Node => {
 Root.displayName = 'Class'
 
 Root.defaultProps = {
+    info: false,
     instances: 0
 }
 

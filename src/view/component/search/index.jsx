@@ -15,7 +15,7 @@ const Icon = styled.div`
 
 const Input = styled.input`
     background-color: hsl(220, 13%, 15%);
-    background-color: var(--color-primary-dark, hsl(220, 13%, 15%));
+    background-color: var(--color-primary-panel, hsl(220, 13%, 15%));
     border-radius: 4px;
     border-color: transparent;
     border-style: solid;
@@ -50,7 +50,7 @@ const Input = styled.input`
 `
 
 type PropsType = {
-    onEnter?: (Event) => void,
+    onEnter: (string) => void,
     placeholder?: string
 }
 
@@ -58,7 +58,7 @@ const Root = (props: PropsType): React.Node => {
     const onEnter = React.useCallback(
         (event) => {
             if (props.onEnter && event.keyCode === 13) {
-                props.onEnter(event)
+                props.onEnter(event.target.value)
             }
         },
         [props]
@@ -81,7 +81,6 @@ const Root = (props: PropsType): React.Node => {
 Root.displayName = 'Search'
 
 Root.defaultProps = {
-    onEnter: null,
     placeholder: 'Search'
 }
 

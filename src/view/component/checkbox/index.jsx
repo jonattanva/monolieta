@@ -17,7 +17,7 @@ const Body = styled.div`
 
     &:hover {
         background-color: hsl(220, 13%, 20%);
-        background-color: var(--color-highlight, hsl(220, 13%, 20%));
+        background-color: var(--color-secondary-panel, hsl(220, 13%, 20%));
         border-radius: 50%;
         cursor: pointer;
     }
@@ -69,8 +69,8 @@ const Background = styled.div`
 
 const Icon = styled.svg`
     bottom: 0;
-    color: hsla(0, 0%, 100%, 0.9);
-    color: var(--color-font, hsla(0, 0%, 100%, 0.9));
+    color: hsl(0, 0%, 90%);
+    color: var(--color-font: hsl(0, 0%, 90%));
     cursor: pointer;
     left: 0;
     line-height: 0;
@@ -96,22 +96,25 @@ const Path = styled.path`
     white-space: nowrap;
 
     ${({ $checked }) => $checked && `
-        color: hsla(0,0%,100%,.90);
-        color: var(--color-font, hsla(0,0%,100%,.90));
+        color: hsl(0, 0%, 90%);
+        color: var(--color-font: hsl(0, 0%, 90%));
     `}
 `
 
 type PropsType = {
-    checked: boolean,
-    onChange?: (Event) => void
+    checked?: boolean,
+    onChange: (boolean) => void
 }
 
 const Root = (props: PropsType): React.Node => {
-    const onChange = (event: any) => {
-        if (props.onChange) {
-            props.onChange(event)
-        }
-    }
+    const onChange = React.useCallback(
+        (event) => {
+            if (props.onChange) {
+                props.onChange(event.target.checked)
+            }
+        },
+        [props]
+    )
 
     return (
         <Body data-checked={props.checked} onClick={onChange} role="input">
@@ -133,8 +136,7 @@ const Root = (props: PropsType): React.Node => {
 Root.displayName = 'Checkbox'
 
 Root.defaultProps = {
-    checked: false,
-    onChange: null
+    checked: false
 }
 
 export default (React.memo<PropsType>(Root): React.AbstractComponent<

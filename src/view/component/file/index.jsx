@@ -1,16 +1,11 @@
 // @flow
 import * as React from 'react'
-import styled from 'styled-components'
 import Button from '../button/index.jsx'
 
-const Input = styled.input`
-    display: none;
-`
-
 type PropsType = {
-    accept: string,
+    accept?: string,
     children: string,
-    onFilesAdded: (Array<typeof File>) => void
+    onFilesAdded: (Array<File>) => void
 }
 
 const Root = (props: PropsType): React.Node => {
@@ -35,13 +30,16 @@ const Root = (props: PropsType): React.Node => {
     return (
         <React.Fragment>
             <Button onClick={onOpenFile}>{props.children}</Button>
-            <Input
+            <input
                 type="file"
-                data-testid="file"
-                multiple="multiple"
+                role="input"
                 ref={fileInputRef}
+                multiple="multiple"
+                directory="directory"
                 accept={props.accept}
                 onChange={onFilesAdded}
+                style={{ display: 'none' }}
+                webkitdirectory="webkitdirectory"
             />
         </React.Fragment>
     )
@@ -50,9 +48,8 @@ const Root = (props: PropsType): React.Node => {
 Root.displayName = 'File'
 
 Root.defaultProps = {
-    accept: '.jpg,.jpeg,.png,.webp,.gif,.bmp,.ico',
-    children: 'Browse files',
-    onFilesAdded: null
+    accept: '.jpg,.jpeg,.png,.webp',
+    children: 'Browse files'
 }
 
 export default (React.memo<PropsType>(Root): React.AbstractComponent<

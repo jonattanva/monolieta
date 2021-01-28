@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 import styled from 'styled-components'
-import useScroll from './hook/scroll.jsx'
+import useScroll from 'component/virtual/hook/scroll.jsx'
 
 const Root = styled.div`
     align-items: stretch;
@@ -38,15 +38,11 @@ const Body = styled.div`
     will-change: transform;
 `
 
-type Size = {
-    height: number,
-    width: number
-}
-
 type PropsType = {
     children: React.ChildrenArray<any>,
+    height: number,
     margin: number,
-    size: Size
+    width: number
 }
 
 const Virtual = (props: PropsType): React.Node => {
@@ -58,12 +54,12 @@ const Virtual = (props: PropsType): React.Node => {
     }, [props.children.length])
 
     const width = React.useMemo(() => {
-        return props.size.width + props.margin * 2
-    }, [props.size, props.margin])
+        return props.width + props.margin * 2
+    }, [props.width, props.margin])
 
     const height = React.useMemo(() => {
-        return props.size.height + props.margin * 2
-    }, [props.size, props.margin])
+        return props.height + props.margin * 2
+    }, [props.height, props.margin])
 
     const columns = React.useMemo(() => {
         if (!scrollPosition) {
@@ -130,7 +126,10 @@ const Virtual = (props: PropsType): React.Node => {
 Virtual.displayName = 'Virtual'
 
 Virtual.defaultProps = {
-    margin: 0
+    children: [],
+    height: 120,
+    margin: 0,
+    width: 120
 }
 
 export default (React.memo<PropsType>(Virtual): React.AbstractComponent<

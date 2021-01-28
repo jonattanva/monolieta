@@ -8,8 +8,8 @@ const Button = styled.div`
     background-color: var(--color-primary, #6200ee);
     border-radius: 4px;
     box-sizing: border-box;
-    color: hsla(0, 0%, 100%, 0.9);
-    color: var(--color-font, hsla(0, 0%, 100%, 0.9));
+    color: hsl(0, 0%, 90%);
+    color: var(--color-font: hsl(0, 0%, 90%));
     cursor: pointer;
     display: inline-flex;
     font-family: Roboto, sans-serif;
@@ -35,11 +35,12 @@ const Button = styled.div`
 
 type PropsType = {
     children: React.Node,
-    onClick?: (Event) => void
+    className?: string,
+    onClick: (Event) => void
 }
 
 const Root = (props: PropsType): React.Node => (
-    <Button onClick={props.onClick} role="button">
+    <Button className={props.className} onClick={props.onClick} role="button">
         {props.children}
     </Button>
 )

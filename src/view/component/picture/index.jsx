@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import useKey, { areKeysPressed } from '../../hook/key.jsx'
+import useKey, { areKeysPressed } from 'hook/key'
 import styled, { css, keyframes } from 'styled-components'
 
 const loading = keyframes`
@@ -18,7 +18,11 @@ const loading = keyframes`
 // prettier-ignore
 const Cover = styled.div`
     animation: ${({ complete }) =>
-        !complete ? css`${loading} 10s ease infinite` : 'none'};
+        !complete
+            ? css`
+                  ${loading} 10s ease infinite
+              `
+            : 'none'};
 
     background: linear-gradient(
         90deg,
@@ -30,18 +34,19 @@ const Cover = styled.div`
 
     background: linear-gradient(
         90deg,
-        var(--color-primary-dark: hsl(220, 13%, 15%)),
-        var(--color-highlight: hsl(220, 13%, 20%)),
-        var(--color-primary-dark: hsl(220, 13%, 15%)),
-        var(--color-highlight: hsl(220, 13%, 20%))
+        var(--color-primary-panel: hsl(220, 13%, 15%)),
+        var(--color-secondary-panel: hsl(220, 13%, 20%)),
+        var(--color-primary-panel: hsl(220, 13%, 15%)),
+        var(--color-secondary-panel: hsl(220, 13%, 20%))
     );
 
     background-size: 400% 400%;
-
-    ${({ selected }) => selected && `
-        background: #6200ee;
-        background: var(--color-primary, #6200ee);
-    `}
+    ${({ selected }) =>
+        selected &&
+        css`
+            background: #6200ee;
+            background: var(--color-primary, #6200ee);
+        `}
 `
 
 // prettier-ignore
@@ -61,56 +66,100 @@ const Image = styled.img`
 `
 
 type PropsType = {
-    image: string,
+    id: string,
+    image: File,
     width?: number,
+    margin?: number,
     height?: number,
-    selected: boolean,
-    onUploadedImage: () => void,
-    onDeletedImage: () => void,
-    onSelectedImage: (boolean) => void
+    selected?: boolean,
+    onDeletedImage?: (string) => void,
+    onProgress?: (string, number) => void,
+    onSelectedImage?: (string) => void,
+    onUploadedImage?: (string) => void
 }
 
+const shortcutDelete = ['Meta', 'Backspace']
+
 const Root = (props: PropsType): React.Node => {
-    const keys = React.useMemo(() => ['Meta', 'Backspace'], [])
-    const keysPressed = useKey(keys)
+    const imageRef = React.useRef<null | HTMLImageElement>(null)
 
-    React.useEffect(() => {
-        if (!props.onDeletedImage || !props.selected) {
-            return
-        }
-
-        if (areKeysPressed(keys, keysPressed)) {
-            props.onDeletedImage()
-        }
-    }, [keys, props, keysPressed])
-
+    const keysPressed = useKey(shortcutDelete)
     const [isComplete, setComplete] = React.useState(false)
 
-    const onLoadComplete = React.useCallback(() => {
-        setComplete(true)
-        if (props.onUploadedImage) {
-            props.onUploadedImage()
+    const onLoad = React.useCallback(
+        (event: any) => {
+            const result = event.target.result
+            if (result) {
+                setComplete(true)
+                if (imageRef.current) {
+                    imageRef.current.src = result
+                }
+            }
+
+            if (props.onUploadedImage) {
+                props.onUploadedImage(props.id)
+            }
+        },
+        [props]
+    )
+
+    const onProgress = React.useCallback(
+        (event: any) => {
+            if (!props.onProgress) {
+                return
+            }
+
+            if (event.loaded && event.total) {
+                const percent = (event.loaded / event.total) * 100
+                props.onProgress(props.id, percent)
+            }
+        },
+        [props]
+    )
+
+    React.useEffect(() => {
+        const reader = new FileReader()
+        reader.addEventListener('load', onLoad)
+        reader.addEventListener('progress', onProgress)
+        reader.readAsDataURL(props.image)
+
+        return () => {
+            reader.removeEventListener('load', onLoad)
+            reader.removeEventListener('progress', onProgress)
         }
-    }, [props, setComplete])
+    }, [props.image, onLoad, onProgress])
 
     const onSelectedImage = React.useCallback(() => {
         if (props.onSelectedImage) {
-            props.onSelectedImage(!props.selected)
+            props.onSelectedImage(props.id)
         }
     }, [props])
+
+    React.useEffect(() => {
+        if (!props.onDeletedImage) {
+            return
+        }
+
+        if (props.selected && areKeysPressed(shortcutDelete, keysPressed)) {
+            props.onDeletedImage(props.id)
+        }
+    }, [props, keysPressed])
 
     return (
         <Cover
             role="cover"
             complete={isComplete}
             selected={props.selected}
-            style={{ width: props.width, height: props.height }}>
+            style={{
+                height: props.height,
+                margin: props.margin,
+                width: props.width
+            }}>
             <Image
                 onClick={onSelectedImage}
                 selected={props.selected}
-                onLoad={onLoadComplete}
                 complete={isComplete}
-                src={props.image}
+                ref={imageRef}
                 loading="lazy"
                 role="image"
             />
@@ -121,9 +170,10 @@ const Root = (props: PropsType): React.Node => {
 Root.displayName = 'Picture'
 
 Root.defaultProps = {
+    height: 120,
+    margin: 4,
     selected: false,
-    width: 120,
-    height: 120
+    width: 120
 }
 
 export default (React.memo<PropsType>(Root): React.AbstractComponent<
