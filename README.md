@@ -4,6 +4,13 @@
 
 Image Annotation Tool
 
+## Keyboard Shortcuts
+| Functionality                      | Context  | Mac | Windows          |
+|:-----------------------------------|:--------:|:---:|:----------------:|
+| New project                        | Editor   | <kbd>⇧</kbd> + <kbd>⌃</kbd> + <kbd>N</kbd> | <kbd>Shift</kbd> + <kbd>Ctrl</kbd> + <kbd>N</kbd> |
+| Open project                       | Editor   | <kbd>⌃</kbd> + <kbd>o</kbd> | <kbd>Ctrl</kbd> + <kbd>o</kbd> |
+
+
 ## Tests
 ```bash
 yarn install

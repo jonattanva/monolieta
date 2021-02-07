@@ -11,9 +11,10 @@ unclear-type=warn
 untyped-type-import=error
 
 [options]
-module.name_mapper='^component\(.*\)$' -> '<PROJECT_ROOT>/src/view/component/\1'
-module.name_mapper='^hook\(.*\)$' -> '<PROJECT_ROOT>/src/view/hook/\1'
-module.name_mapper='^utils\(.*\)$' -> '<PROJECT_ROOT>/src/utils/\1'
-module.name_mapper='^workspace\(.*\)$' -> '<PROJECT_ROOT>/src/view/workspace/\1'
+module.name_mapper='^component\(.*\)$' -> '<PROJECT_ROOT>/src/component/\1'
+module.name_mapper='^hook\(.*\)$' -> '<PROJECT_ROOT>/src/hook/\1'
+module.name_mapper='^library\(.*\)$' -> '<PROJECT_ROOT>/src/library/\1'
+module.name_mapper='^workspace\(.*\)$' -> '<PROJECT_ROOT>/src/workspace/\1'
+react.runtime=automatic
 
 [strict]

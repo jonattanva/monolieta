@@ -1,10 +1,17 @@
+const fs = require('fs')
 const path = require('path')
+const SizePlugin = require('size-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const HtmlPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = (_, argv) => {
     return {
         mode: argv.mode,
 
         entry: ['./src/application.jsx'],
+
+        devtool: argv.mode !== 'production' && 'eval-source-map',
 
         output: {
             publicPath: '/',
@@ -16,10 +23,10 @@ module.exports = (_, argv) => {
             mainFiles: ['index'],
             extensions: ['.js', '.jsx', '.json'],
             alias: {
-                component: path.resolve(__dirname, './src/view/component'),
-                hook: path.resolve(__dirname, './src/view/hook'),
-                utils: path.resolve(__dirname, './src/utils'),
-                workspace: path.resolve(__dirname, './src/view/workspace')
+                component: path.resolve(__dirname, './src/component'),
+                hook: path.resolve(__dirname, './src/hook'),
+                library: path.resolve(__dirname, './src/library'),
+                workspace: path.resolve(__dirname, './src/workspace')
             }
         },
 
@@ -42,15 +49,43 @@ module.exports = (_, argv) => {
         module: {
             rules: [
                 {
+                    test: /\.html$/i,
+                    loader: 'html-loader',
+                    options: {
+                        minimize: true
+                    },
+                    exclude: /node_modules/
+                },
+                {
                     test: /\.css$/i,
                     use: ['style-loader', 'css-loader']
                 },
                 {
-                    test: /\.jsx?$/,
+                    test: /\.(jsx|js)$/i,
                     loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true
+                    },
                     exclude: /node_modules/
                 }
             ]
-        }
+        },
+
+        plugins: [
+            new CopyPlugin({
+                patterns: [
+                    {
+                        from: './public/font',
+                        to: './font'
+                    }
+                ]
+            }),
+            new HtmlPlugin({
+                template: './public/index.html',
+                filename: './index.html'
+            }),
+            new CleanWebpackPlugin()/*,
+            new SizePlugin()*/
+        ]
     }
 }
