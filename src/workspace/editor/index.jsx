@@ -67,57 +67,23 @@ const Root = (): React.Node => {
     const { project, dispatch } = React.useContext(Context)
 
     const [message, setMessage] = React.useState('')
-    const [isManager, setManager] = React.useState(false)
+    const [isProjectManager, setProjectManager] = React.useState(false)
 
     const onHideMessage = React.useCallback(() => {
         setMessage('')
     }, [setMessage])
 
-    const onOpenProject = React.useCallback(() => {
-        /*
-        import('browser-fs-access').then(async ({ fileOpen }) => {
-            const blob = await fileOpen({
-                mimeTypes: ['application/json'],
-                extensions: ['.eva']
-            })
-
-            const reader = new FileReader()
-            reader.addEventListener('load', (event: any) => {
-                const workspace = JSON.parse(event.target.result)
-                if (!workspace || !workspace.project) {
-                    setMessage('Could not read the configuration file')
-                    return
-                }
-
-                dispatch({
-                    type: '/start',
-                    project: workspace.project
-                })
-            })
-            reader.readAsText(blob)
-        })
-        */
-    }, [setMessage, dispatch])
+    const onOpenProject = React.useCallback(() => {}, [])
 
     const onNewProject = React.useCallback(() => {
-        setManager(true)
-    }, [setManager])
+        setProjectManager(true)
+    }, [setProjectManager])
 
     const onCancelManager = React.useCallback(() => {
-        setManager(false)
-    }, [setManager])
+        setProjectManager(false)
+    }, [setProjectManager])
 
-    const onNewFile = React.useCallback(() => {
-        /*
-        import('browser-fs-access').then(async ({ directoryOpen }) => {
-            const blobs = await directoryOpen({
-                recursive: true
-            })
-
-            console.log(blobs)
-        })
-        */
-    }, [])
+    const onNewFile = React.useCallback(() => {}, [])
 
     return (
         <Editor>
@@ -131,7 +97,7 @@ const Root = (): React.Node => {
             </Sidebar>
             <Body>
                 <React.Suspense fallback={<Empty />}>
-                    {isManager && (
+                    {isProjectManager && (
                         <Manager
                             onCancelManager={onCancelManager}
                             onProjectCreated={onCancelManager}

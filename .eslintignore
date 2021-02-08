@@ -1,4 +1,6 @@
 /coverage
+/cypress/plugins
+/cypress/support
 /flow-typed
 /node_modules
 /public

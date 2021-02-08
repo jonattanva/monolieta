@@ -423,12 +423,12 @@ const Root = (props: PropsType): React.Node => {
                     <Medium>
                         <Separator>
                             <Label>Name project</Label>
-                            <Text {...name} autofocus={true} />
+                            <Text {...name} autofocus={true} cy="name" />
                         </Separator>
                     </Medium>
                     <Small>
                         <Label>Project ID</Label>
-                        <Text {...id} readonly={true} />
+                        <Text {...id} readonly={true} cy="id" />
                     </Small>
                     {isNameRequired && (
                         <Warning>The project name is required</Warning>
@@ -494,7 +494,9 @@ const Root = (props: PropsType): React.Node => {
                     <Separator>
                         <Simple onClick={props.onCancelManager}>Cancel</Simple>
                     </Separator>
-                    <Button onClick={onSave}>Create</Button>
+                    <Button onClick={onSave} cy="create">
+                        Create
+                    </Button>
                 </Interaction>
             </Body>
         </Project>

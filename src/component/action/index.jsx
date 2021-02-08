@@ -25,11 +25,12 @@ const Action = styled.div`
 `
 type PropsType = {
     children: React.Node,
-    onClick: (Event) => void
+    onClick: (Event) => void,
+    cy?: string
 }
 
 const Root = (props: PropsType): React.Node => (
-    <Action onClick={props.onClick} role="button">
+    <Action onClick={props.onClick} role="button" data-cy={props.cy}>
         {props.children}
     </Action>
 )

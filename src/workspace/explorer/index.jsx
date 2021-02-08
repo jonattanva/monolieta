@@ -104,6 +104,16 @@ const Root = (props: PropsType): React.Node => {
     const { project } = React.useContext(Context)
 
     const [isOption, setOption] = React.useState(false)
+    const [isNewFileDisabled] = React.useState(true)
+
+    const onNewFile = React.useCallback(
+        (event) => {
+            if (!isNewFileDisabled && props.onNewFile) {
+                props.onNewFile(event)
+            }
+        },
+        [isNewFileDisabled, props]
+    )
 
     const onOptionHandle = React.useCallback(() => {
         setOption((previous) => !previous)
@@ -111,7 +121,7 @@ const Root = (props: PropsType): React.Node => {
 
     const onOutsideHandle = React.useCallback(() => {
         setOption(false)
-    }, [])
+    }, [setOption])
 
     const size = React.useMemo(() => {
         return { width: 120, height: 120 }
@@ -145,9 +155,9 @@ const Root = (props: PropsType): React.Node => {
                             <React.Suspense fallback={<Empty />}>
                                 <Dropdown onOutside={onOutsideHandle}>
                                     <Item
-                                        onClick={props.onNewFile}
+                                        onClick={onNewFile}
                                         role="button"
-                                        disabled={true}>
+                                        disabled={isNewFileDisabled}>
                                         New File
                                     </Item>
                                     <Divider />

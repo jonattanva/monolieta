@@ -36,12 +36,17 @@ export const saveFile = async (blob: Blob, options: Option = {}) => {
     ).default(blob, options)
 }
 
+export const openFile = async () => {
+
+}
+
 export const openDirectory = async (
     recursive: boolean = false,
     type: Array<string> = []
 ): Promise<Array<File>> => {
-    return await (isDirectoryPicker
-        ? await import('./future/open.js')
-        : await import('./legacy/open.js')
+    return (
+        await (isDirectoryPicker
+            ? import('./future/directory.js')
+            : import('./legacy/directory.js'))
     ).default(recursive, type)
 }

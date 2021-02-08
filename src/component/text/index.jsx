@@ -29,7 +29,8 @@ type PropsType = {
     onChange: (string) => void,
     placeholder?: string,
     readonly?: boolean,
-    value: string
+    value: string,
+    cy?: string
 }
 
 const Root = (props: PropsType): React.Node => {
@@ -52,6 +53,7 @@ const Root = (props: PropsType): React.Node => {
             readOnly={readonly}
             autoFocus={autofocus}
             placeholder={placeholder}
+            data-cy={props.cy}
         />
     )
 }

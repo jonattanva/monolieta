@@ -15,18 +15,18 @@ export default async (
                     return false
                 }
 
-                if (
-                    !recursive &&
+                if (!recursive) {
                     //$FlowFixMe[prop-missing]
-                    file.webkitRelativePath.split('/').length > 2
-                ) {
-                    return false
+                    if (file.webkitRelativePath.split('/').length > 2) {
+                        return true
+                    }
                 }
 
                 return true
             })
             resolve(files)
         })
+
         input.click()
     })
 }

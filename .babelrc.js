@@ -16,7 +16,10 @@ const plugins = [
     ]
 ]
 
-module.exports = {
-    presets,
-    plugins
+module.exports = function (api) {
+    api.cache(true)
+    return {
+        presets,
+        plugins
+    }
 }
