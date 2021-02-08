@@ -3,7 +3,16 @@ import * as React from 'react'
 
 type Project = {
     key: string,
-    name: string
+    name: string,
+    resources: Array<{
+        id: string,
+        file: File
+    }>,
+    classes: Array<{
+        id: string,
+        name: string,
+        color: string
+    }>
 }
 
 type Action = {
@@ -27,7 +36,9 @@ export const Context: React.Context<{
 
 const defaultValue = {
     key: '',
-    name: ''
+    name: '',
+    resources: [],
+    classes: []
 }
 
 const Root = (props: PropsType) => {
@@ -36,7 +47,9 @@ const Root = (props: PropsType) => {
             case '/start': {
                 return {
                     key: action.project.key,
-                    name: action.project.name
+                    name: action.project.name,
+                    resources: action.project.resources,
+                    classes: action.project.classes
                 }
             }
             default: {

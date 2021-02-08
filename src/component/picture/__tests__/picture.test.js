@@ -3,7 +3,6 @@ import Picture from '..'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 describe('<Picture />', function () {
-    /*
     it('select', function () {
         const onSelectedImage = jest.fn()
         const file = new window.File(['(⌐□_□)'], 'chucknorris.png', {
@@ -53,5 +52,4 @@ describe('<Picture />', function () {
             { timeout: 1000 }
         )
     })
-    */
 })

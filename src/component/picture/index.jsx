@@ -74,6 +74,7 @@ type PropsType = {
     margin?: number,
     height?: number,
     selected?: boolean,
+    onUploadedImage?: (string) => void,
     onDeletedImage?: (string) => void,
     onSelectedImage?: (string) => void
 }
@@ -90,6 +91,9 @@ const Root = (props: PropsType): React.Node => {
 
             if (isSubscribed) {
                 setComplete(true)
+                if (props.onUploadedImage) {
+                    props.onUploadedImage(props.id)
+                }
             }
 
             if (imageRef.current) {

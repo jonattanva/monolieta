@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react'
 import styled from 'styled-components'
-import Explorer from 'workspace/explorer'
 import Empty from 'component/empty'
+import Explorer from 'workspace/explorer'
 import { Context } from 'component/session'
 
 const Manager = React.lazy(() => {

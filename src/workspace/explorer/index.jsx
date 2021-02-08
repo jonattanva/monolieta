@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Empty from 'component/empty'
 import Action from 'component/action'
 import Folder from 'component/icon/folder'
+import { Context } from 'component/session'
 
 const Dropdown = React.lazy(() => {
     return import('component/dropdown')
@@ -93,7 +94,6 @@ const Message = styled.div`
 `
 
 type PropsType = {
-    files?: Array<File>,
     onNewProject?: (Event) => void,
     onOpenProject?: (Event) => void,
     onNewFile?: (Event) => void,
@@ -101,7 +101,8 @@ type PropsType = {
 }
 
 const Root = (props: PropsType): React.Node => {
-    const { files = [] } = props
+    const { project } = React.useContext(Context)
+
     const [isOption, setOption] = React.useState(false)
 
     const onOptionHandle = React.useCallback(() => {
@@ -117,12 +118,20 @@ const Root = (props: PropsType): React.Node => {
     }, [])
 
     const isEmpty = React.useMemo(() => {
-        return files.length === 0
-    }, [files])
+        return project.resources.length === 0
+    }, [project.resources])
 
     const visibleChildren = React.useMemo(
-        () => files.map((file, index) => <Picture {...size} key={index} />),
-        [size, files]
+        () =>
+            project.resources.map((resource) => (
+                <Picture
+                    {...size}
+                    key={resource.id}
+                    id={resource.id}
+                    image={resource.file}
+                />
+            )),
+        [size, project.resources]
     )
 
     return (

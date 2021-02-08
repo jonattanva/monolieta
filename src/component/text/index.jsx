@@ -18,16 +18,23 @@ const Input = styled.input`
     outline: none;
     padding: 6px 12px;
     width: 100%;
+
+    &[readonly] {
+        cursor: default;
+    }
 `
 
 type PropsType = {
     autofocus?: boolean,
     onChange: (string) => void,
     placeholder?: string,
+    readonly?: boolean,
     value: string
 }
 
 const Root = (props: PropsType): React.Node => {
+    const { readonly = false, placeholder = '', autofocus = false } = props
+
     const onChange = React.useCallback(
         (event) => {
             if (props.onChange) {
@@ -42,18 +49,14 @@ const Root = (props: PropsType): React.Node => {
             type="text"
             value={props.value}
             onChange={onChange}
-            autoFocus={props.autofocus}
-            placeholder={props.placeholder}
+            readOnly={readonly}
+            autoFocus={autofocus}
+            placeholder={placeholder}
         />
     )
 }
 
 Root.displayName = 'Text'
-
-Root.defaultProps = {
-    autofocus: false,
-    placeholder: ''
-}
 
 export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,

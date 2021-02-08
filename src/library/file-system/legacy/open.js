@@ -7,6 +7,7 @@ export default async (
         const isFilter = types.length > 0
         const input = document.createElement('input')
         input.type = 'file'
+        //$FlowFixMe[prop-missing]
         input.webkitdirectory = true
         input.addEventListener('change', () => {
             let files = Array.from(input.files).filter((file) => {
@@ -16,6 +17,7 @@ export default async (
 
                 if (
                     !recursive &&
+                    //$FlowFixMe[prop-missing]
                     file.webkitRelativePath.split('/').length > 2
                 ) {
                     return false
