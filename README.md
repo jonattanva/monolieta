@@ -1,8 +1,8 @@
 [![Main](https://github.com/jonattanva/eva/workflows/Main/badge.svg)](https://github.com/jonattanva/eva/actions)
 [![Coverage Status](https://coveralls.io/repos/github/jonattanva/eva/badge.svg?branch=main)](https://coveralls.io/github/jonattanva/eva?branch=main)
-# eva
+# Monolieta
 
-Image Annotation Tool
+Resource Annotation Tool
 
 ## Keyboard Shortcuts
 | Functionality                      | Context  | Mac | Windows          |
