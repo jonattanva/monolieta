@@ -70,6 +70,7 @@ export const Shortcut: React.ComponentType<{}> = styled.div`
     font-family: Roboto, sans-serif;
     font-size: 0.875rem;
     font-weight: 400;
+    letter-spacing: 1.75px;
 `
 
 type PropsType = {

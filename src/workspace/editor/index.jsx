@@ -1,9 +1,11 @@
 // @flow
 import * as React from 'react'
+import { nanoid } from 'nanoid'
 import styled from 'styled-components'
 import Empty from 'component/empty'
 import Explorer from 'workspace/explorer'
 import { Context } from 'component/session'
+import { openDirectory, readFile } from 'library/file-system'
 
 const Manager = React.lazy(() => {
     return import('workspace/manager')
@@ -73,7 +75,55 @@ const Root = (): React.Node => {
         setMessage('')
     }, [setMessage])
 
-    const onOpenProject = React.useCallback(() => {}, [])
+    const onOpenProject = React.useCallback(async () => {
+        // eslint-disable-next-line no-console
+        console.time('Open project')
+
+        const files = await openDirectory(true, [
+            'image/gif',
+            'image/bmp',
+            'image/jpeg',
+            'image/png',
+            'image/webp',
+            'application/json'
+        ])
+
+        const setting = files.find((file) => file.type === 'application/json')
+        if (!setting) {
+            setMessage('The workspace configuration file was not found')
+            return
+        }
+
+        const workspace = JSON.parse(await readFile(setting))
+        if (!workspace || !workspace.project || !workspace.project.key) {
+            return
+        }
+
+        const resources = files
+            .filter((file) => file.type !== 'application/json')
+            .map((file) => {
+                const current = workspace.resources.find(
+                    (resource) => resource.name === file.name
+                )
+
+                return {
+                    id: current ? current.id : nanoid(),
+                    file: file
+                }
+            })
+
+        dispatch({
+            type: '/start',
+            project: {
+                ...workspace.project,
+                resources: resources,
+                classes: workspace.classes
+            }
+        })
+
+        // eslint-disable-next-line no-console
+        console.timeEnd('Open project')
+    }, [dispatch])
 
     const onNewProject = React.useCallback(() => {
         setProjectManager(true)

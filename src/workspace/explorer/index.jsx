@@ -22,6 +22,12 @@ const Divider = React.lazy(() => {
     }))
 })
 
+const Shortcut = React.lazy(() => {
+    return import('component/dropdown').then((module) => ({
+        default: module.Shortcut
+    }))
+})
+
 const Picture = React.lazy(() => {
     return import('component/picture')
 })
@@ -95,7 +101,7 @@ const Message = styled.div`
 
 type PropsType = {
     onNewProject?: (Event) => void,
-    onOpenProject?: (Event) => void,
+    onOpenProject?: (Event) => void | Promise<void>,
     onNewFile?: (Event) => void,
     project: string
 }
@@ -104,7 +110,13 @@ const Root = (props: PropsType): React.Node => {
     const { project } = React.useContext(Context)
 
     const [isOption, setOption] = React.useState(false)
-    const [isNewFileDisabled] = React.useState(true)
+    const [isNewFileDisabled, setNewFileDisabled] = React.useState(true)
+
+    React.useEffect(() => {
+        if (project.key) {
+            setNewFileDisabled(false)
+        }
+    }, [project.key, setNewFileDisabled])
 
     const onNewFile = React.useCallback(
         (event) => {
@@ -165,11 +177,13 @@ const Root = (props: PropsType): React.Node => {
                                         onClick={props.onNewProject}
                                         role="button">
                                         New Project
+                                        <Shortcut>⇧⌃N</Shortcut>
                                     </Item>
                                     <Item
                                         onClick={props.onOpenProject}
                                         role="button">
                                         Open Project
+                                        <Shortcut>⌃O</Shortcut>
                                     </Item>
                                 </Dropdown>
                             </React.Suspense>

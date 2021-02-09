@@ -51,7 +51,16 @@ const Small = styled.div`
     max-width: 41.66667%;
 `
 
+const Division = styled.div`
+    border-bottom: 1px solid hsl(220, 13%, 25%);
+    border-bottom: 1px solid var(--color-secondary-light, hsl(220, 13%, 25%));
+    padding-bottom: 16px;
+    width: 100%;
+`
+
 const Title = styled.div`
+    border-bottom: 1px solid hsl(220, 13%, 25%);
+    border-bottom: 1px solid var(--color-secondary-light, hsl(220, 13%, 25%));
     color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     cursor: default;
@@ -59,6 +68,7 @@ const Title = styled.div`
     font-size: 1.25em;
     font-weight: 500;
     margin-bottom: 16px;
+    padding-bottom: 8px;
     user-select: none;
     width: 100%;
 `
@@ -85,6 +95,15 @@ const Label = styled.div`
     user-select: none;
     white-space: nowrap;
     width: 100%;
+`
+
+const Required = styled(Label)`
+    &:after {
+        color: #e60013;
+        color: var(--color-red, #e60013);
+        content: '*';
+        padding-left: 4px;
+    }
 `
 
 const Optional = styled.div`
@@ -369,6 +388,9 @@ const Root = (props: PropsType): React.Node => {
     }, [classes, onSavedColor, onSelectedClass, onSelectedName])
 
     const onSave = React.useCallback(async () => {
+        // eslint-disable-next-line no-console
+        console.time('Save project')
+
         if (!name.value) {
             setNameRequired(true)
             return
@@ -379,8 +401,12 @@ const Root = (props: PropsType): React.Node => {
                 key: id.value,
                 name: name.value
             },
+            resources: resources.map((resource) => ({
+                id: resource.id,
+                name: resource.file.name
+            })),
             classes: classes
-                .filter((clazz) => clazz.name !== '')
+                .filter((clazz) => clazz.name.trim() !== '')
                 .map((clazz) => ({
                     id: clazz.id,
                     name: clazz.name,
@@ -413,6 +439,9 @@ const Root = (props: PropsType): React.Node => {
         if (props.onProjectCreated) {
             props.onProjectCreated()
         }
+
+        // eslint-disable-next-line no-console
+        console.timeEnd('Save project')
     }, [id.value, name.value, resources, classes, dispatch, props])
 
     return (
@@ -422,17 +451,18 @@ const Root = (props: PropsType): React.Node => {
                 <Row>
                     <Medium>
                         <Separator>
-                            <Label>Name project</Label>
-                            <Text {...name} autofocus={true} cy="name" />
+                            <Required>Name project</Required>
+                            <Text {...name} autofocus={true} />
                         </Separator>
                     </Medium>
                     <Small>
                         <Label>Project ID</Label>
-                        <Text {...id} readonly={true} cy="id" />
+                        <Text {...id} readonly={true} />
                     </Small>
                     {isNameRequired && (
                         <Warning>The project name is required</Warning>
                     )}
+                    <Division />
                 </Row>
                 <Row>
                     <Block>
@@ -462,6 +492,7 @@ const Root = (props: PropsType): React.Node => {
                             </React.Suspense>
                         )}
                     </Viewport>
+                    <Division />
                 </Row>
                 <Row>
                     <Block>
@@ -489,13 +520,14 @@ const Root = (props: PropsType): React.Node => {
                             </React.Suspense>
                         )}
                     </Scroll>
+                    <Division />
                 </Row>
                 <Interaction>
                     <Separator>
                         <Simple onClick={props.onCancelManager}>Cancel</Simple>
                     </Separator>
                     <Button onClick={onSave} cy="create">
-                        Create
+                        Create project
                     </Button>
                 </Interaction>
             </Body>

@@ -13,6 +13,17 @@ const prepare = async (
 
         if (entry.kind === 'file') {
             const file = await entry.getFile()
+            if (!file.type) {
+                const extension = file.name.split('.').pop()
+                if (extension === 'eva') {
+                    Object.defineProperty(file, 'type', {
+                        configurable: true,
+                        enumerable: true,
+                        get: () => 'application/json'
+                    })
+                }
+            }
+
             if (isFilter && !options.types.includes(file.type)) {
                 continue
             }

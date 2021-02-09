@@ -7,6 +7,9 @@ export const isSaveFilePicker: boolean = (() =>
 export const isDirectoryPicker: boolean = (() =>
     'showDirectoryPicker' in window)()
 
+export const isOpenFilePicker: boolean = (() =>
+    'showOpenFilePicker' in window)()
+
 export const readFile = async (blob: Blob): Promise<string> => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader()
@@ -34,10 +37,6 @@ export const saveFile = async (blob: Blob, options: Option = {}) => {
         ? await import('./future/save.js')
         : await import('./legacy/save.js')
     ).default(blob, options)
-}
-
-export const openFile = async () => {
-
 }
 
 export const openDirectory = async (
