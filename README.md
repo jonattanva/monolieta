@@ -1,5 +1,5 @@
 [![Main](https://github.com/jonattanva/eva/workflows/Main/badge.svg)](https://github.com/jonattanva/eva/actions)
-[![Coverage Status](https://coveralls.io/repos/github/jonattanva/eva/badge.svg?branch=main)](https://coveralls.io/github/jonattanva/eva?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/jonattanva/monolieta/badge.svg?branch=main)](https://coveralls.io/github/jonattanva/monolieta?branch=main)
 # Monolieta
 
 Resource Annotation Tool
@@ -9,6 +9,7 @@ Resource Annotation Tool
 |:-----------------------------------|:--------:|:---:|:----------------:|
 | New project                        | Editor   | <kbd>⇧</kbd> + <kbd>⌃</kbd> + <kbd>N</kbd> | <kbd>Shift</kbd> + <kbd>Ctrl</kbd> + <kbd>N</kbd> |
 | Open project                       | Editor   | <kbd>⌃</kbd> + <kbd>o</kbd> | <kbd>Ctrl</kbd> + <kbd>o</kbd> |
+| Class manager                      | Editor   | <kbd>⌃</kbd> + <kbd>C</kbd> | <kbd>Ctrl</kbd> + <kbd>C</kbd> |
 
 
 ## Tests
