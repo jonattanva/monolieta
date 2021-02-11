@@ -5,12 +5,14 @@ import styled from 'styled-components'
 import Text from 'component/text'
 import useInput from 'hook/input'
 import Empty from 'component/empty'
+import support from 'library/support'
 import Button from 'component/button'
 import Action from 'component/action'
 import Trash from 'component/icon/trash'
 import { random } from 'component/color'
 import { Context } from 'component/session'
-import { saveFile, openDirectory } from 'library/file-system'
+import { saveFile, directory } from 'library/file-system'
+import type { Image } from '../../type.js'
 
 const Clazz = React.lazy(() => {
     return import('component/class')
@@ -228,20 +230,18 @@ const Root = (props: PropsType): React.Node => {
 
     const onUploadResources = React.useCallback(async () => {
         resourcesRef.current = {}
-        const files = await openDirectory(true, [
-            'image/gif',
-            'image/bmp',
-            'image/jpeg',
-            'image/png',
-            'image/webp'
-        ])
-
         setResources(
-            files.map((file) => ({
-                id: nanoid(),
-                file: file,
-                selected: false
-            }))
+            await directory<Image>((file: File) => {
+                if (!support.includes(file.type)) {
+                    return null
+                }
+
+                return {
+                    id: nanoid(),
+                    file,
+                    selected: false
+                }
+            })
         )
     }, [setResources])
 
@@ -388,9 +388,6 @@ const Root = (props: PropsType): React.Node => {
     }, [classes, onSavedColor, onSelectedClass, onSelectedName])
 
     const onSave = React.useCallback(async () => {
-        // eslint-disable-next-line no-console
-        console.time('Save project')
-
         if (!name.value) {
             setNameRequired(true)
             return
@@ -401,10 +398,6 @@ const Root = (props: PropsType): React.Node => {
                 key: id.value,
                 name: name.value
             },
-            resources: resources.map((resource) => ({
-                id: resource.id,
-                name: resource.file.name
-            })),
             classes: classes
                 .filter((clazz) => clazz.name.trim() !== '')
                 .map((clazz) => ({
@@ -439,9 +432,6 @@ const Root = (props: PropsType): React.Node => {
         if (props.onProjectCreated) {
             props.onProjectCreated()
         }
-
-        // eslint-disable-next-line no-console
-        console.timeEnd('Save project')
     }, [id.value, name.value, resources, classes, dispatch, props])
 
     return (

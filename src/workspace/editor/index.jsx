@@ -3,9 +3,10 @@ import * as React from 'react'
 import { nanoid } from 'nanoid'
 import styled from 'styled-components'
 import Empty from 'component/empty'
+import support from 'library/support'
 import Explorer from 'workspace/explorer'
 import { Context } from 'component/session'
-import { openDirectory, readFile } from 'library/file-system'
+import { directory, readFile } from 'library/file-system'
 
 const Manager = React.lazy(() => {
     return import('workspace/manager')
@@ -65,6 +66,14 @@ const Body = styled.div`
     width: 100%;
 `
 
+const read = async (file) => {
+    try {
+        return JSON.parse(await readFile(file))
+    } catch {
+        return null
+    }
+}
+
 const Root = (): React.Node => {
     const { project, dispatch } = React.useContext(Context)
 
@@ -76,53 +85,42 @@ const Root = (): React.Node => {
     }, [setMessage])
 
     const onOpenProject = React.useCallback(async () => {
-        // eslint-disable-next-line no-console
-        console.time('Open project')
-
-        const files = await openDirectory(true, [
-            'image/gif',
-            'image/bmp',
-            'image/jpeg',
-            'image/png',
-            'image/webp',
-            'application/json'
-        ])
-
-        const setting = files.find((file) => file.type === 'application/json')
-        if (!setting) {
-            setMessage('The workspace configuration file was not found')
-            return
-        }
-
-        const workspace = JSON.parse(await readFile(setting))
-        if (!workspace || !workspace.project || !workspace.project.key) {
-            return
-        }
-
-        const resources = files
-            .filter((file) => file.type !== 'application/json')
-            .map((file) => {
-                const current = workspace.resources.find(
-                    (resource) => resource.name === file.name
-                )
-
-                return {
-                    id: current ? current.id : nanoid(),
-                    file: file
+        let setting = null
+        const files = await directory((file: File) => {
+            if (!support.includes(file.type)) {
+                const extension = file.name.split('.').pop()
+                if (extension === 'eva') {
+                    setting = file
                 }
-            })
+                return null
+            }
+
+            return {
+                id: nanoid(),
+                file,
+                selected: false
+            }
+        })
+
+        if (!setting) {
+            setMessage('Project configuration file not found')
+            return
+        }
+
+        const workspace = await read(setting)
+        if (!workspace) {
+            setMessage('Project configuration file not found')
+            return
+        }
 
         dispatch({
             type: '/start',
             project: {
                 ...workspace.project,
-                resources: resources,
+                resources: files,
                 classes: workspace.classes
             }
         })
-
-        // eslint-disable-next-line no-console
-        console.timeEnd('Open project')
     }, [dispatch])
 
     const onNewProject = React.useCallback(() => {

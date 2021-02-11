@@ -1,32 +1,30 @@
 //@flow
-export default async (
-    recursive: boolean,
-    types: Array<string>
-): Promise<Array<File>> => {
+export default async <T>(
+    reviver: (File: File) => null | T,
+    recursive: boolean = true
+): Promise<Array<T>> => {
     return new Promise((resolve) => {
-        const isFilter = types.length > 0
         const input = document.createElement('input')
         input.type = 'file'
         //$FlowFixMe[prop-missing]
         input.webkitdirectory = true
         input.addEventListener('change', () => {
-            let files = Array.from(input.files).filter((file) => {
-                if (isFilter && !types.includes(file.type)) {
-                    return false
-                }
-
+            const files = []
+            Array.from(input.files).forEach((file) => {
                 if (!recursive) {
                     //$FlowFixMe[prop-missing]
                     if (file.webkitRelativePath.split('/').length > 2) {
-                        return true
+                        return
                     }
                 }
 
-                return true
+                const result = reviver(file)
+                if (result) {
+                    files.push(result)
+                }
             })
             resolve(files)
         })
-
         input.click()
     })
 }
