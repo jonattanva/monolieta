@@ -2,7 +2,7 @@
 import * as React from 'react'
 
 export default (callback: () => void, delay: ?number) => {
-    const ref = React.useRef<(() => void) | null>(null)
+    const ref = React.useRef(null)
 
     React.useEffect(() => {
         ref.current = callback

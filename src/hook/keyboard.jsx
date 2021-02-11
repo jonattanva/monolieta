@@ -4,7 +4,11 @@ import * as React from 'react'
 export const areKeysPressed = (
     keys: Array<string> = [],
     keysPressed: Array<string> = []
-): boolean => keys.every((value) => keysPressed.includes(value))
+): boolean => {
+    return keys.every((value) => {
+        return keysPressed.includes(value)
+    })
+}
 
 export default (keys: Array<string>): Array<string> => {
     const [keyPressed, setKeyPressed] = React.useState([])

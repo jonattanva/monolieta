@@ -17,7 +17,7 @@ const Body = styled.div`
 
     &:hover {
         background-color: hsl(220, 13%, 20%);
-        background-color: var(--color-secondary-panel, hsl(220, 13%, 20%));
+        background-color: var(--color-secondary-dark, hsl(220, 13%, 20%));
         border-radius: 50%;
         cursor: pointer;
     }
@@ -41,8 +41,8 @@ const Input = styled.input`
 const Background = styled.div`
     align-items: center;
     background-color: transparent;
-    border-color: hsl(219, 13%, 66%);
-    border-color: var(--color-font-variant, hsl(219, 13%, 66%));
+    border-color: hsl(220, 13%, 65%);
+    border-color: var(--color-font-light, hsl(220, 13%, 65%));
     border-radius: 4px;
     border-style: solid;
     border-width: 2px;
@@ -59,7 +59,9 @@ const Background = styled.div`
     white-space: nowrap;
     width: 18px;
 
-    ${({ $checked }) => $checked && `
+    ${({ $checked }) =>
+        $checked &&
+        `
         background-color: #6200ee;
         background-color: var(--color-primary, #6200ee);
         border-color: #6200ee;

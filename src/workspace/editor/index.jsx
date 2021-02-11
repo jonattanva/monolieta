@@ -3,8 +3,9 @@ import * as React from 'react'
 import { nanoid } from 'nanoid'
 import styled from 'styled-components'
 import Empty from 'component/empty'
-import support from 'library/support'
+import support from 'util/support'
 import Explorer from 'workspace/explorer'
+import Navigation from 'workspace/navigation'
 import { Context } from 'component/session'
 import { directory, readFile } from 'library/file-system'
 
@@ -153,6 +154,7 @@ const Root = (): React.Node => {
                     )}
                 </React.Suspense>
             </Body>
+            <Navigation />
             {message && (
                 <React.Suspense fallback={<Empty />}>
                     <Snackbar delay={5000} onClose={onHideMessage}>

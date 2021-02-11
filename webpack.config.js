@@ -26,6 +26,7 @@ module.exports = (_, argv) => {
                 component: path.resolve(__dirname, './src/component'),
                 hook: path.resolve(__dirname, './src/hook'),
                 library: path.resolve(__dirname, './src/library'),
+                util: path.resolve(__dirname, './src/util'),
                 workspace: path.resolve(__dirname, './src/workspace')
             }
         },
@@ -80,11 +81,19 @@ module.exports = (_, argv) => {
                     }
                 ]
             }),
+            new CopyPlugin({
+                patterns: [
+                    {
+                        from: './public/image',
+                        to: './image'
+                    }
+                ]
+            }),
             new HtmlPlugin({
                 template: './public/index.html',
                 filename: './index.html'
             }),
-            new CleanWebpackPlugin()/*,
+            new CleanWebpackPlugin() /*,
             new SizePlugin()*/
         ]
     }

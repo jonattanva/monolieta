@@ -5,14 +5,14 @@ import styled from 'styled-components'
 import Text from 'component/text'
 import useInput from 'hook/input'
 import Empty from 'component/empty'
-import support from 'library/support'
+import support from 'util/support'
 import Button from 'component/button'
 import Action from 'component/action'
 import Trash from 'component/icon/trash'
 import { random } from 'component/color'
 import { Context } from 'component/session'
 import { saveFile, directory } from 'library/file-system'
-import type { Image } from '../../type.js'
+import type { Image } from 'util/type'
 
 const Clazz = React.lazy(() => {
     return import('component/class')
@@ -516,9 +516,7 @@ const Root = (props: PropsType): React.Node => {
                     <Separator>
                         <Simple onClick={props.onCancelManager}>Cancel</Simple>
                     </Separator>
-                    <Button onClick={onSave} cy="create">
-                        Create project
-                    </Button>
+                    <Button onClick={onSave}>Create project</Button>
                 </Interaction>
             </Body>
         </Project>

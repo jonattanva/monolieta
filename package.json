@@ -4,6 +4,7 @@
     "license": "GPL-3.0",
     "scripts": {
         "build:web": "webpack --mode=production",
+        "clean:cache": "rm -R ./node_modules/.cache",
         "cypress": "node ./node_modules/.bin/cypress open",
         "prettier": "prettier --write src/",
         "start:web": "webpack serve --mode=development",
@@ -29,7 +30,7 @@
         "@babel/preset-env": "~7.12.13",
         "@babel/preset-flow": "~7.12.13",
         "@babel/preset-react": "~7.12.13",
-        "@babel/runtime-corejs3": "~7.12.12",
+        "@babel/runtime-corejs3": "~7.12.13",
         "@testing-library/react": "~11.2.5",
         "babel-jest": "~26.6.3",
         "babel-loader": "~8.2.2",
@@ -84,6 +85,7 @@
             "^\\hook(.*)$": "<rootDir>/src/hook$1",
             "^\\library(.*)$": "<rootDir>/src/library/$1/index",
             "component/(.*)": "<rootDir>/src/component/$1/index.jsx",
+            "util/(.*)$": "<rootDir>/src/util$1",
             "workspace/(.*)": "<rootDir>/src/workspace/$1/index.jsx"
         }
     }
