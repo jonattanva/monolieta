@@ -1,7 +1,7 @@
 // @flow
 import ReactDOM from 'react-dom'
-import Editor from 'workspace/editor'
 import Session from 'component/session'
+import Editor from 'view/editor'
 
 ReactDOM.render(
     <Session>

@@ -3,14 +3,26 @@ import * as React from 'react'
 import styled from 'styled-components'
 import Search from 'component/icon/search'
 
+const Container = styled.div`
+    box-sizing: border-box;
+    color: hsl(0, 0%, 90%);
+    color: var(--color-font, hsl(0, 0%, 90%));
+    font-family: Roboto, sans-serif;
+    font-size: 0.875rem;
+    width: 100%;
+`
+
 const Icon = styled.div`
+    align-items: center;
     background: transparent;
     box-sizing: border-box;
     color: hsl(220, 13%, 65%);
     color: var(--color-font-light, hsl(220, 13%, 65%));
     display: flex;
-    padding: 9px;
+    height: 32px;
+    justify-content: center;
     position: absolute;
+    width: 32px;
 `
 
 const Input = styled.input`
@@ -25,9 +37,9 @@ const Input = styled.input`
     color: var(--color-font, hsl(0, 0%, 90%));
     font-family: Roboto, sans-serif;
     font-size: 0.875rem;
-    height: 38px;
+    height: 32px;
     outline: none;
-    padding: 6px 12px 6px 36px;
+    padding: 6px 6px 6px 36px;
     width: 100%;
 
     &:focus::-webkit-search-cancel-button {
@@ -50,39 +62,37 @@ const Input = styled.input`
 `
 
 type PropsType = {
-    onEnter: (string) => void,
+    onChange?: (string) => void,
     placeholder?: string
 }
 
 const Root = (props: PropsType): React.Node => {
-    const onEnter = React.useCallback(
+    const { placeholder = 'Search' } = props
+
+    const onChange = React.useCallback(
         (event) => {
-            if (props.onEnter && event.keyCode === 13) {
-                props.onEnter(event.target.value)
+            if (props.onChange) {
+                props.onChange(event.target.value)
             }
         },
         [props]
     )
 
     return (
-        <React.Fragment>
+        <Container>
             <Icon>
                 <Search width={20} height={20} />
             </Icon>
             <Input
                 type="search"
-                onKeyDown={onEnter}
-                placeholder={props.placeholder}
+                onChange={onChange}
+                placeholder={placeholder}
             />
-        </React.Fragment>
+        </Container>
     )
 }
 
 Root.displayName = 'Search'
-
-Root.defaultProps = {
-    placeholder: 'Search'
-}
 
 export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,

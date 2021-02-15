@@ -15,7 +15,7 @@ const Button = styled.div`
     font-family: Roboto, sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
-    height: 36px;
+    height: 32px;
     justify-content: center;
     line-height: 18px;
     min-width: 64px;

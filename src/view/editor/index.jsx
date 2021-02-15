@@ -4,13 +4,19 @@ import { nanoid } from 'nanoid'
 import styled from 'styled-components'
 import Empty from 'component/empty'
 import support from 'util/support'
-import Explorer from 'workspace/explorer'
-import Navigation from 'workspace/navigation'
+import Explorer from 'view/explorer'
+import Label from 'component/icon/label'
+import Github from 'component/icon/github'
 import { Context } from 'component/session'
-import { directory, readFile } from 'library/file-system'
+import Navigation, { Access } from 'component/navigation'
+import { directory, readJson } from 'library/file-system'
+
+const Classes = React.lazy(() => {
+    return import('view/classes')
+})
 
 const Manager = React.lazy(() => {
-    return import('workspace/manager')
+    return import('view/manager')
 })
 
 const Snackbar = React.lazy(() => {
@@ -67,19 +73,12 @@ const Body = styled.div`
     width: 100%;
 `
 
-const read = async (file) => {
-    try {
-        return JSON.parse(await readFile(file))
-    } catch {
-        return null
-    }
-}
-
 const Root = (): React.Node => {
     const { project, dispatch } = React.useContext(Context)
 
     const [message, setMessage] = React.useState('')
-    const [isProjectManager, setProjectManager] = React.useState(false)
+    const [isShowLabel, setShowLabel] = React.useState(false)
+    const [isProjectManager, setProjectManager] = React.useState(true)
 
     const onHideMessage = React.useCallback(() => {
         setMessage('')
@@ -108,7 +107,7 @@ const Root = (): React.Node => {
             return
         }
 
-        const workspace = await read(setting)
+        const workspace = await readJson(setting)
         if (!workspace) {
             setMessage('Project configuration file not found')
             return
@@ -134,6 +133,10 @@ const Root = (): React.Node => {
 
     const onNewFile = React.useCallback(() => {}, [])
 
+    const onShowLabel = React.useCallback(() => {
+        setShowLabel((previous) => !previous)
+    }, [])
+
     return (
         <Editor>
             <Sidebar>
@@ -141,7 +144,7 @@ const Root = (): React.Node => {
                     onNewFile={onNewFile}
                     onNewProject={onNewProject}
                     onOpenProject={onOpenProject}
-                    project={project.name}
+                    project={project}
                 />
             </Sidebar>
             <Body>
@@ -154,7 +157,21 @@ const Root = (): React.Node => {
                     )}
                 </React.Suspense>
             </Body>
-            <Navigation />
+            {!isProjectManager && (
+                <Navigation>
+                    <Access>
+                        <Label onClick={onShowLabel} />
+                        {isShowLabel && (
+                            <React.Suspense fallback={<Empty />}>
+                                <Classes onOutside={onShowLabel} />
+                            </React.Suspense>
+                        )}
+                    </Access>
+                    <Access>
+                        <Github url="https://github.com/jonattanva/monolieta" />
+                    </Access>
+                </Navigation>
+            )}
             {message && (
                 <React.Suspense fallback={<Empty />}>
                     <Snackbar delay={5000} onClose={onHideMessage}>

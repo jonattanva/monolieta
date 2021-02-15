@@ -69,17 +69,19 @@ const Image = styled.img`
 
 type PropsType = {
     id: string,
-    image: File,
+    file: File,
+    selected?: boolean,
     width?: number,
     margin?: number,
     height?: number,
-    selected?: boolean,
     onUploadedImage?: (string) => void,
     onDeletedImage?: (string) => void,
     onSelectedImage?: (string) => void
 }
 
 const Root = (props: PropsType): React.Node => {
+    const { height = 120, margin = 4, width = 120, selected = false } = props
+
     const imageRef = React.useRef<null | HTMLImageElement>(null)
     const [isComplete, setComplete] = React.useState(false)
 
@@ -87,7 +89,7 @@ const Root = (props: PropsType): React.Node => {
         let isSubscribed = true
 
         const read = async () => {
-            const image = await readImage(props.image)
+            const image = await readImage(props.file)
 
             if (isSubscribed) {
                 setComplete(true)
@@ -118,15 +120,11 @@ const Root = (props: PropsType): React.Node => {
         <Cover
             role="cover"
             complete={isComplete}
-            selected={props.selected}
-            style={{
-                height: props.height,
-                margin: props.margin,
-                width: props.width
-            }}>
+            selected={selected}
+            style={{ height, margin, width }}>
             <Image
                 onClick={onSelectedImage}
-                selected={props.selected}
+                selected={selected}
                 complete={isComplete}
                 ref={imageRef}
                 loading="lazy"
@@ -137,13 +135,6 @@ const Root = (props: PropsType): React.Node => {
 }
 
 Root.displayName = 'Picture'
-
-Root.defaultProps = {
-    height: 120,
-    margin: 4,
-    selected: false,
-    width: 120
-}
 
 export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,

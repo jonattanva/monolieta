@@ -1,31 +1,13 @@
 // @flow
+import * as Monolieta from 'Monolieta'
 import * as React from 'react'
 import styled from 'styled-components'
 import Empty from 'component/empty'
 import Action from 'component/action'
 import Folder from 'component/icon/folder'
-import { Context } from 'component/session'
 
-const Dropdown = React.lazy(() => {
-    return import('component/dropdown')
-})
-
-const Item = React.lazy(() => {
-    return import('component/dropdown').then((module) => ({
-        default: module.Item
-    }))
-})
-
-const Divider = React.lazy(() => {
-    return import('component/dropdown').then((module) => ({
-        default: module.Divider
-    }))
-})
-
-const Shortcut = React.lazy(() => {
-    return import('component/dropdown').then((module) => ({
-        default: module.Shortcut
-    }))
+const Option = React.lazy(() => {
+    return import('view/option')
 })
 
 const Picture = React.lazy(() => {
@@ -103,20 +85,20 @@ type PropsType = {
     onNewProject?: (Event) => void,
     onOpenProject?: (Event) => void | Promise<void>,
     onNewFile?: (Event) => void,
-    project: string
+    project: Monolieta.Project
 }
 
 const Root = (props: PropsType): React.Node => {
-    const { project } = React.useContext(Context)
+    const { key = '', name = '', resources = [] } = props.project
 
     const [isOption, setOption] = React.useState(false)
     const [isNewFileDisabled, setNewFileDisabled] = React.useState(true)
 
     React.useEffect(() => {
-        if (project.key) {
+        if (key) {
             setNewFileDisabled(false)
         }
-    }, [project.key, setNewFileDisabled])
+    }, [key, setNewFileDisabled])
 
     const onNewFile = React.useCallback(
         (event) => {
@@ -131,7 +113,7 @@ const Root = (props: PropsType): React.Node => {
         setOption((previous) => !previous)
     }, [setOption])
 
-    const onOutsideHandle = React.useCallback(() => {
+    const onOutside = React.useCallback(() => {
         setOption(false)
     }, [setOption])
 
@@ -140,20 +122,21 @@ const Root = (props: PropsType): React.Node => {
     }, [])
 
     const isEmpty = React.useMemo(() => {
-        return project.resources.length === 0
-    }, [project.resources])
+        return resources.length === 0
+    }, [resources])
 
     const visibleChildren = React.useMemo(
         () =>
-            project.resources.map((resource) => (
+            resources.map((resource) => (
                 <Picture
-                    {...size}
                     key={resource.id}
                     id={resource.id}
-                    image={resource.file}
+                    file={resource.file}
+                    selected={resource.selected}
+                    {...size}
                 />
             )),
-        [size, project.resources]
+        [size, resources]
     )
 
     return (
@@ -165,32 +148,18 @@ const Root = (props: PropsType): React.Node => {
                         <Folder />
                         {isOption && (
                             <React.Suspense fallback={<Empty />}>
-                                <Dropdown onOutside={onOutsideHandle}>
-                                    <Item
-                                        onClick={onNewFile}
-                                        role="button"
-                                        disabled={isNewFileDisabled}>
-                                        New File
-                                    </Item>
-                                    <Divider />
-                                    <Item
-                                        onClick={props.onNewProject}
-                                        role="button">
-                                        New Project
-                                        <Shortcut>⇧⌃N</Shortcut>
-                                    </Item>
-                                    <Item
-                                        onClick={props.onOpenProject}
-                                        role="button">
-                                        Open Project
-                                        <Shortcut>⌃O</Shortcut>
-                                    </Item>
-                                </Dropdown>
+                                <Option
+                                    onOutside={onOutside}
+                                    onNewFile={onNewFile}
+                                    onNewProject={props.onNewProject}
+                                    onOpenProject={props.onOpenProject}
+                                    isNewFileDisabled={isNewFileDisabled}
+                                />
                             </React.Suspense>
                         )}
                     </Action>
                 </Panel>
-                <Name>{props.project}</Name>
+                <Name>{name}</Name>
             </Header>
             <Body>
                 {isEmpty ? (

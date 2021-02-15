@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react'
-import type { Input } from 'util/type'
+import * as Monolieta from 'Monolieta'
 
-export default (initial: string = ''): Input => {
+export default (initial: string = ''): Monolieta.Input => {
     const [value, setValue] = React.useState(initial)
 
     const onChange = React.useCallback(

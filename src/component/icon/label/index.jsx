@@ -3,7 +3,8 @@ import * as React from 'react'
 
 type PropsType = {
     width?: number,
-    height?: number
+    height?: number,
+    onClick?: (Event) => void
 }
 
 const Root = (props: PropsType): React.Node => (
@@ -13,7 +14,8 @@ const Root = (props: PropsType): React.Node => (
         viewBox="0 0 24 24"
         stroke="currentColor"
         width={props.width}
-        height={props.height}>
+        height={props.height}
+        onClick={props.onClick}>
         <path
             strokeLinecap="round"
             strokeLinejoin="round"

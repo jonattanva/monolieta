@@ -14,7 +14,7 @@ const Input = styled.input`
     color: var(--color-font, hsl(0, 0%, 90%));
     font-family: Roboto, sans-serif;
     font-size: 0.875rem;
-    min-height: 38px;
+    min-height: 32px;
     outline: none;
     padding: 6px 12px;
     width: 100%;

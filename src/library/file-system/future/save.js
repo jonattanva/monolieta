@@ -1,7 +1,7 @@
 //@flow
-import type { Option } from '../type'
+import * as Monolieta from 'Monolieta'
 
-export default async (blob: Blob, options: Option) => {
+export default async (blob: Blob, options: Monolieta.Option) => {
     const accept = {}
     const { description = '', extensions = [] } = options
 

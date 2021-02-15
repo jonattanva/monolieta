@@ -15,7 +15,7 @@ module.name_mapper='^component\(.*\)$' -> '<PROJECT_ROOT>/src/component/\1'
 module.name_mapper='^hook\(.*\)$' -> '<PROJECT_ROOT>/src/hook/\1'
 module.name_mapper='^library\(.*\)$' -> '<PROJECT_ROOT>/src/library/\1'
 module.name_mapper='^util\(.*\)$' -> '<PROJECT_ROOT>/src/util/\1'
-module.name_mapper='^workspace\(.*\)$' -> '<PROJECT_ROOT>/src/workspace/\1'
+module.name_mapper='^view\(.*\)$' -> '<PROJECT_ROOT>/src/view/\1'
 react.runtime=automatic
 
 [strict]

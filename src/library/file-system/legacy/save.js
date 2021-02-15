@@ -1,7 +1,10 @@
 //@flow
-import type { Option } from '../type'
+import * as Monolieta from 'Monolieta'
 
-export default async (blob: Blob, { filename = 'Untitled' }: Option) => {
+export default async (
+    blob: Blob,
+    { filename = 'Untitled' }: Monolieta.Option
+) => {
     const a = document.createElement('a')
     a.download = filename
     a.href = URL.createObjectURL(blob)

@@ -1,30 +1,30 @@
 // @flow
+import * as Monolieta from 'Monolieta'
 import * as React from 'react'
-import { nanoid } from 'nanoid'
 import styled from 'styled-components'
+import { nanoid } from 'nanoid'
 import Text from 'component/text'
 import useInput from 'hook/input'
-import Empty from 'component/empty'
+import Action from 'component/action'
 import support from 'util/support'
 import Button from 'component/button'
-import Action from 'component/action'
 import Trash from 'component/icon/trash'
 import { random } from 'component/color'
 import { Context } from 'component/session'
 import { saveFile, directory } from 'library/file-system'
-import type { Image } from 'util/type'
+import Virtual from 'component/virtual'
+import Picture from 'component/picture'
+import Label from 'component/label'
 
-const Clazz = React.lazy(() => {
-    return import('component/class')
-})
+const Medium = styled.div`
+    flex: 0 0 58.33333%;
+    max-width: 58.33333%;
+`
 
-const Picture = React.lazy(() => {
-    return import('component/picture')
-})
-
-const Virtual = React.lazy(() => {
-    return import('component/virtual')
-})
+const Small = styled.div`
+    flex: 0 0 41.66667%;
+    max-width: 41.66667%;
+`
 
 const Project = styled.div`
     background-color: hsl(220, 13%, 20%);
@@ -41,23 +41,6 @@ const Body = styled.div`
     margin: 0 auto;
     width: 50%;
     will-change: transform;
-`
-
-const Medium = styled.div`
-    flex: 0 0 58.33333%;
-    max-width: 58.33333%;
-`
-
-const Small = styled.div`
-    flex: 0 0 41.66667%;
-    max-width: 41.66667%;
-`
-
-const Division = styled.div`
-    border-bottom: 1px solid hsl(220, 13%, 25%);
-    border-bottom: 1px solid var(--color-secondary-light, hsl(220, 13%, 25%));
-    padding-bottom: 16px;
-    width: 100%;
 `
 
 const Title = styled.div`
@@ -83,7 +66,56 @@ const Row = styled.div`
     width: 100%;
 `
 
-const Label = styled.div`
+const Group = styled.div`
+    align-items: center;
+    box-sizing: border-box;
+    cursor: default;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    width: 100%;
+`
+
+const Scroll = styled.div`
+    height: 200px;
+    margin: 8px 0;
+    overflow: auto;
+    width: 100%;
+`
+
+const Interaction = styled(Row)`
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+`
+
+const Separator = styled.div`
+    margin-right: 8px;
+`
+
+const Message = styled.div`
+    align-items: center;
+    color: hsl(219, 13%, 65%);
+    color: var(--color-font-light, hsl(219, 13%, 65%));
+    display: flex;
+    flex-direction: column;
+    font-family: Roboto, sans-serif;
+    font-size: 0.875rem;
+    justify-content: center;
+    min-height: 200px;
+    text-align: center;
+    width: 100%;
+`
+
+const Grid = styled.div`
+    box-sizing: border-box;
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+`
+
+const Summary = styled.div`
     align-items: center;
     color: hsl(219, 13%, 65%);
     color: var(--color-font-light, hsl(219, 13%, 65%));
@@ -99,7 +131,7 @@ const Label = styled.div`
     width: 100%;
 `
 
-const Required = styled(Label)`
+const Required = styled(Summary)`
     &:after {
         color: #e60013;
         color: var(--color-red, #e60013);
@@ -121,18 +153,10 @@ const Optional = styled.div`
     width: 100%;
 `
 
-const Warning = styled.div`
-    color: #e60013;
-    color: var(--color-red, #e60013);
-    font-family: Roboto, sans-serif;
-    font-size: 0.875rem;
-`
-
-const Interaction = styled(Row)`
+const Control = styled.div`
     align-items: center;
     display: flex;
     justify-content: flex-end;
-    width: 100%;
 `
 
 const Simple = styled(Button)`
@@ -145,64 +169,29 @@ const Simple = styled(Button)`
     }
 `
 
-const Separator = styled.div`
-    margin-right: 8px;
+const Division = styled.div`
+    border-bottom: 1px solid hsl(220, 13%, 25%);
+    border-bottom: 1px solid var(--color-secondary-light, hsl(220, 13%, 25%));
+    padding-bottom: 16px;
+    width: 100%;
 `
 
 const Viewport = styled.div`
-    background-color: transparent;
     height: 200px;
     margin: 8px 0;
     width: 100%;
 `
 
-const Block = styled.div`
-    align-items: center;
-    box-sizing: border-box;
-    cursor: default;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    width: 100%;
-`
-
-const Control = styled.div`
-    align-items: center;
-    display: flex;
-    justify-content: flex-end;
-`
-
-const Message = styled.div`
-    align-items: center;
-    color: hsl(219, 13%, 65%);
-    color: var(--color-font-light, hsl(219, 13%, 65%));
-    display: flex;
-    flex-direction: column;
+const Warning = styled.div`
+    color: #e60013;
+    color: var(--color-red, #e60013);
     font-family: Roboto, sans-serif;
     font-size: 0.875rem;
-    justify-content: center;
-    min-height: 200px;
-    text-align: center;
-    width: 100%;
-`
-
-const Scroll = styled.div`
-    height: 200px;
-    margin: 8px 0;
-    overflow: auto;
-    width: 100%;
-`
-
-const Grid = styled.div`
-    box-sizing: border-box;
-    display: grid;
-    gap: 8px;
-    grid-template-columns: repeat(2, 1fr);
 `
 
 type PropsType = {
-    onCancelManager: () => void,
-    onProjectCreated: () => void
+    onCancelManager?: (Event) => void,
+    onProjectCreated?: (Event) => void
 }
 
 const Root = (props: PropsType): React.Node => {
@@ -212,9 +201,11 @@ const Root = (props: PropsType): React.Node => {
     const resourcesRef = React.useRef({})
     const { dispatch } = React.useContext(Context)
 
-    const [classes, setClasses] = React.useState([])
-    const [resources, setResources] = React.useState([])
     const [isNameRequired, setNameRequired] = React.useState(false)
+    const [classes, setClasses] = React.useState<Array<Monolieta.Label>>([])
+    const [resources, setResources] = React.useState<Array<Monolieta.Resource>>(
+        []
+    )
 
     const size = React.useMemo(() => {
         return { width: 130, height: 130 }
@@ -228,10 +219,88 @@ const Root = (props: PropsType): React.Node => {
         return resources.length === 0
     }, [resources])
 
+    const onNewClass = React.useCallback(() => {
+        setClasses((previous) => {
+            const id = nanoid()
+            const color = random(
+                Array.from(previous, (value) => {
+                    return value.color
+                })
+            )
+
+            return [
+                ...previous,
+                {
+                    id,
+                    name: '',
+                    color,
+                    selected: false
+                }
+            ]
+        })
+    }, [setClasses])
+
+    const onRemoveClasses = React.useCallback(() => {
+        setClasses((previous) => {
+            return previous.filter((value) => !value.selected)
+        })
+    }, [])
+
+    const onSelectedClass = React.useCallback((id, selected) => {
+        setClasses((previous) => {
+            const current = previous.find((value) => {
+                return value.id === id
+            })
+
+            if (current) {
+                current.selected = selected
+                return [...previous]
+            }
+
+            return previous
+        })
+    }, [])
+
+    const onSavedColor = React.useCallback(
+        (id, color) => {
+            setClasses((previous) => {
+                const current = previous.find((value) => {
+                    return value.id === id
+                })
+
+                if (current) {
+                    current.color = color
+                    return [...previous]
+                }
+
+                return previous
+            })
+        },
+        [setClasses]
+    )
+
+    const onSelectedName = React.useCallback(
+        (id, name) => {
+            setClasses((previous) => {
+                const current = previous.find((value) => {
+                    return value.id === id
+                })
+
+                if (current) {
+                    current.name = name
+                    return [...previous]
+                }
+
+                return previous
+            })
+        },
+        [setClasses]
+    )
+
     const onUploadResources = React.useCallback(async () => {
         resourcesRef.current = {}
         setResources(
-            await directory<Image>((file: File) => {
+            await directory<Monolieta.Resource>((file: File) => {
                 if (!support.includes(file.type)) {
                     return null
                 }
@@ -262,7 +331,7 @@ const Root = (props: PropsType): React.Node => {
         })
     }, [setResources])
 
-    const onSelectedImage = React.useCallback(
+    const onSelectedResource = React.useCallback(
         (id) => {
             setResources((previous) => {
                 const index = previous.findIndex((resource) => {
@@ -282,157 +351,86 @@ const Root = (props: PropsType): React.Node => {
         [setResources]
     )
 
-    const visibleResources = React.useMemo(
-        () =>
-            resources.map((file) => (
-                <Picture
-                    {...size}
-                    key={file.id}
-                    id={file.id}
-                    image={file.file}
-                    selected={file.selected}
-                    onSelectedImage={onSelectedImage}
-                />
-            )),
-        [resources, size, onSelectedImage]
-    )
-
-    const onNewClass = React.useCallback(() => {
-        setClasses((previous) => [
-            ...previous,
-            {
-                id: nanoid(),
-                name: '',
-                color: random(Array.from(previous, (value) => value.color)),
-                checked: false
-            }
-        ])
-    }, [setClasses])
-
-    const onSavedColor = React.useCallback(
-        (id, color) => {
-            setClasses((previous) => {
-                const clazz = previous.find((clazz) => {
-                    return clazz.id === id
-                })
-
-                if (clazz) {
-                    clazz.color = color
-                    return [...previous]
-                }
-
-                return previous
-            })
-        },
-        [setClasses]
-    )
-
-    const onSelectedClass = React.useCallback(
-        (id, checked) => {
-            setClasses((previous) => {
-                const clazz = previous.find((clazz) => {
-                    return clazz.id === id
-                })
-
-                if (clazz) {
-                    clazz.checked = checked
-                    return [...previous]
-                }
-
-                return previous
-            })
-        },
-        [setClasses]
-    )
-
-    const onSelectedName = React.useCallback(
-        (id, name) => {
-            setClasses((previous) => {
-                const clazz = previous.find((clazz) => {
-                    return clazz.id === id
-                })
-
-                if (clazz) {
-                    clazz.name = name
-                    return [...previous]
-                }
-
-                return previous
-            })
-        },
-        [setClasses]
-    )
-
-    const onRemoveClasses = React.useCallback(() => {
-        setClasses((previous) => {
-            return previous.filter((clazz) => {
-                return !clazz.checked
-            })
-        })
-    }, [])
-
     const visibleClasses = React.useMemo(() => {
-        return classes.map((clazz) => (
-            <Clazz
-                key={clazz.id}
-                id={clazz.id}
-                name={clazz.name}
-                color={clazz.color}
+        return classes.map((value) => (
+            <Label
+                key={value.id}
+                id={value.id}
+                name={value.name}
+                color={value.color}
+                selected={value.selected}
                 autoPosition={true}
-                checked={clazz.checked}
                 onSavedColor={onSavedColor}
-                onSelectedClass={onSelectedClass}
                 onSelectedName={onSelectedName}
+                onSelectedClass={onSelectedClass}
             />
         ))
     }, [classes, onSavedColor, onSelectedClass, onSelectedName])
 
-    const onSave = React.useCallback(async () => {
-        if (!name.value) {
-            setNameRequired(true)
-            return
-        }
-
-        const workspace = {
-            project: {
-                key: id.value,
-                name: name.value
-            },
-            classes: classes
-                .filter((clazz) => clazz.name.trim() !== '')
-                .map((clazz) => ({
-                    id: clazz.id,
-                    name: clazz.name,
-                    color: clazz.color
-                })),
-            version: 1
-        }
-
-        const blob = new Blob([JSON.stringify(workspace)], {
-            type: 'application/json'
+    const visibleResources = React.useMemo(() => {
+        return resources.map((resource) => {
+            return (
+                <Picture
+                    key={resource.id}
+                    id={resource.id}
+                    file={resource.file}
+                    selected={resource.selected}
+                    onSelectedImage={onSelectedResource}
+                    {...size}
+                />
+            )
         })
+    }, [resources, size, onSelectedResource])
 
-        await saveFile(blob, {
-            filename: 'workspace.eva',
-            extensions: ['.json', '.eva']
-        })
-
-        dispatch({
-            type: '/start',
-            project: {
-                ...workspace.project,
-                resources: resources.map((resource) => ({
-                    id: resource.id,
-                    file: resource.file
-                })),
-                classes: workspace.classes
+    const onSave = React.useCallback(
+        async (event) => {
+            if (!name.value) {
+                setNameRequired(true)
+                return
             }
-        })
 
-        if (props.onProjectCreated) {
-            props.onProjectCreated()
-        }
-    }, [id.value, name.value, resources, classes, dispatch, props])
+            const workspace = {
+                project: {
+                    key: id.value,
+                    name: name.value
+                },
+                classes: classes
+                    .filter((clazz) => clazz.name.trim() !== '')
+                    .map((clazz) => ({
+                        id: clazz.id,
+                        name: clazz.name,
+                        color: clazz.color
+                    })),
+                version: 1
+            }
+
+            const blob = new Blob([JSON.stringify(workspace)], {
+                type: 'application/json'
+            })
+
+            await saveFile(blob, {
+                filename: 'workspace.eva',
+                extensions: ['.json', '.eva']
+            })
+
+            dispatch({
+                type: '/start',
+                project: {
+                    ...workspace.project,
+                    resources: resources.map((resource) => ({
+                        id: resource.id,
+                        file: resource.file
+                    })),
+                    classes: workspace.classes
+                }
+            })
+
+            if (props.onProjectCreated) {
+                props.onProjectCreated(event)
+            }
+        },
+        [id.value, name.value, resources, classes, dispatch, props]
+    )
 
     return (
         <Project>
@@ -446,7 +444,7 @@ const Root = (props: PropsType): React.Node => {
                         </Separator>
                     </Medium>
                     <Small>
-                        <Label>Project ID</Label>
+                        <Summary>Project ID</Summary>
                         <Text {...id} readonly={true} />
                     </Small>
                     {isNameRequired && (
@@ -455,11 +453,11 @@ const Root = (props: PropsType): React.Node => {
                     <Division />
                 </Row>
                 <Row>
-                    <Block>
-                        <Label>
+                    <Group>
+                        <Summary>
                             Import resources for the datase
                             <Optional>(optional)</Optional>
-                        </Label>
+                        </Summary>
                         <Control>
                             <Separator>
                                 <Action onClick={onRemoveResource}>
@@ -468,28 +466,26 @@ const Root = (props: PropsType): React.Node => {
                             </Separator>
                             <Simple onClick={onUploadResources}>Upload</Simple>
                         </Control>
-                    </Block>
+                    </Group>
                     <Viewport>
                         {isEmptyResources ? (
                             <Message>
                                 No resources have been included in the dataset
                             </Message>
                         ) : (
-                            <React.Suspense fallback={<Empty />}>
-                                <Virtual {...size} margin={4}>
-                                    {visibleResources}
-                                </Virtual>
-                            </React.Suspense>
+                            <Virtual {...size} margin={4}>
+                                {visibleResources}
+                            </Virtual>
                         )}
                     </Viewport>
                     <Division />
                 </Row>
                 <Row>
-                    <Block>
-                        <Label>
+                    <Group>
+                        <Summary>
                             Import classes for the datase
                             <Optional>(optional)</Optional>
-                        </Label>
+                        </Summary>
                         <Control>
                             <Separator>
                                 <Action onClick={onRemoveClasses}>
@@ -498,16 +494,14 @@ const Root = (props: PropsType): React.Node => {
                             </Separator>
                             <Simple onClick={onNewClass}>New class</Simple>
                         </Control>
-                    </Block>
+                    </Group>
                     <Scroll>
                         {isEmptyClasses ? (
                             <Message>
                                 No classes have been included in the dataset
                             </Message>
                         ) : (
-                            <React.Suspense fallback={<Empty />}>
-                                <Grid>{visibleClasses}</Grid>
-                            </React.Suspense>
+                            <Grid>{visibleClasses}</Grid>
                         )}
                     </Scroll>
                     <Division />

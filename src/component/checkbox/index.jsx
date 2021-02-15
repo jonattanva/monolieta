@@ -109,6 +109,8 @@ type PropsType = {
 }
 
 const Root = (props: PropsType): React.Node => {
+    const { checked = false } = props
+
     const onChange = React.useCallback(
         (event) => {
             if (props.onChange) {
@@ -119,15 +121,15 @@ const Root = (props: PropsType): React.Node => {
     )
 
     return (
-        <Body data-checked={props.checked} onClick={onChange} role="input">
-            <Input type="checkbox" defaultChecked={props.checked} />
-            <Background $checked={props.checked}>
+        <Body data-checked={checked} onClick={onChange} role="input">
+            <Input type="checkbox" defaultChecked={checked} />
+            <Background $checked={checked}>
                 <Icon viewBox="0 0 24 24">
                     <Path
                         fill="none"
                         stroke="white"
                         d="M1.73,12.91 8.1,19.28 22.79,4.59"
-                        $checked={props.checked}
+                        $checked={checked}
                     />
                 </Icon>
             </Background>
@@ -136,10 +138,6 @@ const Root = (props: PropsType): React.Node => {
 }
 
 Root.displayName = 'Checkbox'
-
-Root.defaultProps = {
-    checked: false
-}
 
 export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,

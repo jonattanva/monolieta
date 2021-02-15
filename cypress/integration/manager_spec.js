@@ -6,7 +6,6 @@ describe('The project manager', () => {
         cy.title().should('equal', 'Monolieta')
     })
 
-    // eslint-disable-next-line jest/expect-expect
     it('New project!', () => {
         cy.get(selector.menu)
             .should('be.visible')

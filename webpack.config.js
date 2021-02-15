@@ -11,23 +11,24 @@ module.exports = (_, argv) => {
 
         entry: ['./src/application.jsx'],
 
-        devtool: argv.mode !== 'production' && 'eval-source-map',
-
         output: {
             publicPath: '/',
-            filename: 'main.js',
+            pathinfo: false,
+            filename: '[name].[contenthash].js',
             path: path.resolve(__dirname, `dist`)
         },
 
-        resolve: {
-            mainFiles: ['index'],
-            extensions: ['.js', '.jsx', '.json'],
-            alias: {
-                component: path.resolve(__dirname, './src/component'),
-                hook: path.resolve(__dirname, './src/hook'),
-                library: path.resolve(__dirname, './src/library'),
-                util: path.resolve(__dirname, './src/util'),
-                workspace: path.resolve(__dirname, './src/workspace')
+        optimization: {
+            moduleIds: 'deterministic',
+            runtimeChunk: 'single',
+            splitChunks: {
+                cacheGroups: {
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: 'vendors',
+                        chunks: 'all'
+                    }
+                }
             }
         },
 
@@ -55,6 +56,7 @@ module.exports = (_, argv) => {
                     options: {
                         minimize: true
                     },
+                    include: path.resolve(__dirname, 'public'),
                     exclude: /node_modules/
                 },
                 {
@@ -73,6 +75,7 @@ module.exports = (_, argv) => {
         },
 
         plugins: [
+            new CleanWebpackPlugin(),
             new CopyPlugin({
                 patterns: [
                     {
@@ -92,9 +95,21 @@ module.exports = (_, argv) => {
             new HtmlPlugin({
                 template: './public/index.html',
                 filename: './index.html'
-            }),
-            new CleanWebpackPlugin() /*,
-            new SizePlugin()*/
-        ]
+            })
+            /*, new SizePlugin()*/
+        ],
+
+        resolve: {
+            mainFiles: ['index'],
+            extensions: ['.js', '.jsx', '.json'],
+            alias: {
+                Monolieta: path.resolve(__dirname, './flow-typed/monolieta'),
+                component: path.resolve(__dirname, './src/component'),
+                hook: path.resolve(__dirname, './src/hook'),
+                library: path.resolve(__dirname, './src/library'),
+                util: path.resolve(__dirname, './src/util'),
+                view: path.resolve(__dirname, './src/view')
+            }
+        }
     }
 }

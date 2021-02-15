@@ -1,5 +1,5 @@
 //@flow
-import type { Option } from './type'
+import * as Monolieta from 'Monolieta'
 
 export const isSaveFilePicker: boolean = (() =>
     'showSaveFilePicker' in window)()
@@ -29,6 +29,17 @@ export const readImage = async (blob: Blob): Promise<string> => {
     })
 }
 
+export const readJson = async <T>(blob: Blob): Promise<T> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.addEventListener('load', (event: any) => {
+            resolve(JSON.parse(event.target.result))
+        })
+        reader.onerror = reject
+        reader.readAsText(blob)
+    })
+}
+
 export const directory = async <T>(
     reviver?: (File: File) => null | T,
     recursive?: boolean = true
@@ -46,7 +57,7 @@ export const directory = async <T>(
     }, recursive)
 }
 
-export const saveFile = async (blob: Blob, options: Option = {}) => {
+export const saveFile = async (blob: Blob, options: Monolieta.Option = {}) => {
     await (isSaveFilePicker
         ? await import('./future/save.js')
         : await import('./legacy/save.js')

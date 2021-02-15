@@ -11,9 +11,9 @@ describe('<Picture />', function () {
 
         render(
             <Picture
-                image={file}
+                id="2758b85b"
+                file={file}
                 onSelectedImage={onSelectedImage}
-                id="2758b85b-8c13-4e7d-8147-ff537278eff7"
             />
         )
 
@@ -23,9 +23,7 @@ describe('<Picture />', function () {
         fireEvent.click(image)
 
         expect(onSelectedImage).toHaveBeenCalledTimes(1)
-        expect(onSelectedImage.mock.calls[0][0]).toEqual(
-            '2758b85b-8c13-4e7d-8147-ff537278eff7'
-        )
+        expect(onSelectedImage.mock.calls[0][0]).toEqual('2758b85b')
     })
 
     it('load', async function () {
@@ -36,20 +34,15 @@ describe('<Picture />', function () {
 
         render(
             <Picture
-                image={file}
+                id="ff537278eff7"
+                file={file}
                 onUploadedImage={onUploadedImage}
-                id="2758b85b-8c13-4e7d-8147-ff537278eff7"
             />
         )
 
-        await waitFor(
-            () => {
-                expect(onUploadedImage).toHaveBeenCalledTimes(1)
-                expect(onUploadedImage.mock.calls[0][0]).toEqual(
-                    '2758b85b-8c13-4e7d-8147-ff537278eff7'
-                )
-            },
-            { timeout: 1000 }
-        )
+        await waitFor(() => {
+            expect(onUploadedImage).toHaveBeenCalledTimes(1)
+            expect(onUploadedImage.mock.calls[0][0]).toEqual('ff537278eff7')
+        })
     })
 })

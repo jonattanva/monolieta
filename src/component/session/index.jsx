@@ -1,37 +1,13 @@
 //@flow
 import * as React from 'react'
-
-type Project = {
-    key: string,
-    name: string,
-    resources: Array<{
-        id: string,
-        file: File
-    }>,
-    classes: Array<{
-        id: string,
-        name: string,
-        color: string
-    }>
-}
-
-type Action = {
-    type: '/start',
-    project: Project
-}
-
-type Dispatch = (action: Action) => void
-
-type PropsType = {
-    children: React.Node
-}
+import * as Monolieta from 'Monolieta'
 
 export const Context: React.Context<{
-    project: Project,
-    dispatch: Dispatch
+    project: Monolieta.Project,
+    dispatch: Monolieta.Dispatch
 }> = React.createContext<{
-    project: Project,
-    dispatch: Dispatch
+    project: Monolieta.Project,
+    dispatch: Monolieta.Dispatch
 }>({})
 
 const defaultValue = {
@@ -41,17 +17,36 @@ const defaultValue = {
     classes: []
 }
 
+type PropsType = {
+    children: React.Node
+}
+
 const Root = (props: PropsType) => {
     const onReducer = React.useCallback((state, action) => {
+        const {
+            key = '',
+            name = '',
+            resources = [],
+            classes = []
+        } = action.project
+
         switch (action.type) {
             case '/start': {
                 return {
-                    key: action.project.key,
-                    name: action.project.name,
-                    resources: action.project.resources,
-                    classes: action.project.classes
+                    key: key,
+                    name: name,
+                    resources: resources,
+                    classes: classes
                 }
             }
+
+            case '/class': {
+                return {
+                    ...state,
+                    classes: [...classes]
+                }
+            }
+
             default: {
                 return defaultValue
             }

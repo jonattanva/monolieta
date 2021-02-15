@@ -33,9 +33,9 @@ const Picker = styled.div`
 
 type PropsType = {
     id: string,
-    name: string,
     color: string,
-    checked: boolean,
+    name: string,
+    selected?: boolean,
     autoPosition?: boolean,
     onSavedColor: (string, string) => void,
     onSelectedClass: (string, boolean) => void,
@@ -72,7 +72,7 @@ const Root = (props: PropsType): React.Node => {
 
     return (
         <Body>
-            <Checkbox checked={props.checked} onChange={onSelectedClass} />
+            <Checkbox checked={props.selected} onChange={onSelectedClass} />
             <Picker style={{ background: props.color }}>
                 <React.Suspense fallback={<Empty />}>
                     <Color
@@ -91,11 +91,7 @@ const Root = (props: PropsType): React.Node => {
     )
 }
 
-Root.displayName = 'Class'
-
-Root.defaultProps = {
-    info: false
-}
+Root.displayName = 'Label'
 
 export default (React.memo<PropsType>(Root): React.AbstractComponent<
     PropsType,
