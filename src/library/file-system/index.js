@@ -33,7 +33,11 @@ export const readJson = async <T>(blob: Blob): Promise<T> => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader()
         reader.addEventListener('load', (event: any) => {
-            resolve(JSON.parse(event.target.result))
+            try {
+                resolve(JSON.parse(event.target.result))
+            } catch (error) {
+                reject(error)
+            }
         })
         reader.onerror = reject
         reader.readAsText(blob)

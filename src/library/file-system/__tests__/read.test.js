@@ -1,7 +1,26 @@
 //@flow
-import { readFile } from '..'
+import { readFile, readJson } from '..'
 
 describe('Read', function () {
+    it('read json', async function () {
+        await expect(
+            readJson(
+                new window.File([`Lorem ipsum dolor sit amet`], 'mock.json', {
+                    type: 'application/json'
+                })
+            )
+        ).rejects.toThrow()
+
+        const file = await readJson(
+            new window.File([`{"version":1, "name": "mock"}`], 'mock.json', {
+                type: 'application/json'
+            })
+        )
+
+        expect(file.version).toEqual(1)
+        expect(file.name).toEqual('mock')
+    })
+
     it('read file', async function () {
         const file = await readFile(
             new window.File(
