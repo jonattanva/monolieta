@@ -40,6 +40,10 @@ export const readJson = async <T>(blob: Blob): Promise<T> => {
     })
 }
 
+export const isMonolietaFile = (file: File): boolean => {
+    return file.name.split('.').pop() === 'monolieta'
+}
+
 export const directory = async <T>(
     reviver?: (File: File) => null | T,
     recursive?: boolean = true

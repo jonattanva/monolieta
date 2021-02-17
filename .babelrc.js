@@ -10,7 +10,7 @@ const plugins = [
         'babel-plugin-styled-components',
         {
             ssr: false,
-            namespace: 'eva',
+            namespace: 'monolieta',
             displayName: false
         }
     ]

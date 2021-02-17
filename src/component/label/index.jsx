@@ -72,7 +72,11 @@ const Root = (props: PropsType): React.Node => {
 
     return (
         <Body>
-            <Checkbox checked={props.selected} onChange={onSelectedClass} />
+            <Checkbox
+                tabIndex={-1}
+                checked={props.selected}
+                onChange={onSelectedClass}
+            />
             <Picker style={{ background: props.color }}>
                 <React.Suspense fallback={<Empty />}>
                     <Color
@@ -86,6 +90,7 @@ const Root = (props: PropsType): React.Node => {
                 placeholder="Enter class name"
                 onChange={onSelectedName}
                 value={props.name}
+                autofocus={true}
             />
         </Body>
     )

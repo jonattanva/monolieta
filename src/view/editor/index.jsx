@@ -2,14 +2,16 @@
 import * as React from 'react'
 import { nanoid } from 'nanoid'
 import styled from 'styled-components'
-import Empty from 'component/empty'
 import support from 'util/support'
+import Empty from 'component/empty'
 import Explorer from 'view/explorer'
+import shortcut from 'util/shortcut'
+import useKeyboard from 'hook/keyboard'
 import Label from 'component/icon/label'
 import Github from 'component/icon/github'
 import { Context } from 'component/session'
 import Navigation, { Access } from 'component/navigation'
-import { directory, readJson } from 'library/file-system'
+import { directory, readJson, isMonolietaFile } from 'library/file-system'
 
 const Classes = React.lazy(() => {
     return import('view/classes')
@@ -77,8 +79,10 @@ const Root = (): React.Node => {
     const { project, dispatch } = React.useContext(Context)
 
     const [message, setMessage] = React.useState('')
-    const [isShowLabel, setShowLabel] = React.useState(false)
-    const [isProjectManager, setProjectManager] = React.useState(true)
+    const [isClassManager, setClassManager] = React.useState(false)
+    const [isProjectManager, setProjectManager] = React.useState(false)
+
+    const isCancelKeyPressed = useKeyboard(shortcut.escape.key)
 
     const onHideMessage = React.useCallback(() => {
         setMessage('')
@@ -88,8 +92,7 @@ const Root = (): React.Node => {
         let setting = null
         const files = await directory((file: File) => {
             if (!support.includes(file.type)) {
-                const extension = file.name.split('.').pop()
-                if (extension === 'eva') {
+                if (isMonolietaFile(file)) {
                     setting = file
                 }
                 return null
@@ -123,7 +126,7 @@ const Root = (): React.Node => {
         })
     }, [dispatch])
 
-    const onNewProject = React.useCallback(() => {
+    const onProjectManager = React.useCallback(() => {
         setProjectManager(true)
     }, [setProjectManager])
 
@@ -133,16 +136,26 @@ const Root = (): React.Node => {
 
     const onNewFile = React.useCallback(() => {}, [])
 
-    const onShowLabel = React.useCallback(() => {
-        setShowLabel((previous) => !previous)
+    const onClassManager = React.useCallback(() => {
+        setClassManager((previous) => !previous)
     }, [])
+
+    if (isCancelKeyPressed) {
+        if (isClassManager) {
+            setClassManager(false)
+        }
+
+        if (isProjectManager) {
+            setProjectManager(false)
+        }
+    }
 
     return (
         <Editor>
             <Sidebar>
                 <Explorer
                     onNewFile={onNewFile}
-                    onNewProject={onNewProject}
+                    onNewProject={onProjectManager}
                     onOpenProject={onOpenProject}
                     project={project}
                 />
@@ -159,11 +172,11 @@ const Root = (): React.Node => {
             </Body>
             {!isProjectManager && (
                 <Navigation>
-                    <Access>
-                        <Label onClick={onShowLabel} />
-                        {isShowLabel && (
+                    <Access title="Classes">
+                        <Label onClick={onClassManager} />
+                        {isClassManager && (
                             <React.Suspense fallback={<Empty />}>
-                                <Classes onOutside={onShowLabel} />
+                                <Classes onOutside={onClassManager} />
                             </React.Suspense>
                         )}
                     </Access>

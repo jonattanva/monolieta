@@ -409,8 +409,8 @@ const Root = (props: PropsType): React.Node => {
             })
 
             await saveFile(blob, {
-                filename: 'workspace.eva',
-                extensions: ['.json', '.eva']
+                filename: 'workspace.monolieta',
+                extensions: ['.json', '.monolieta']
             })
 
             dispatch({

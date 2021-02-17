@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import Empty from 'component/empty'
 import Action from 'component/action'
 import Folder from 'component/icon/folder'
+import shortcut from 'util/shortcut'
+import useKeyboard from 'hook/keyboard'
 
 const Option = React.lazy(() => {
     return import('view/option')
@@ -94,6 +96,8 @@ const Root = (props: PropsType): React.Node => {
     const [isOption, setOption] = React.useState(false)
     const [isNewFileDisabled, setNewFileDisabled] = React.useState(true)
 
+    const isCancelKeyPressed = useKeyboard(shortcut.escape.key)
+
     React.useEffect(() => {
         if (key) {
             setNewFileDisabled(false)
@@ -138,6 +142,10 @@ const Root = (props: PropsType): React.Node => {
             )),
         [size, resources]
     )
+
+    if (isCancelKeyPressed && isOption) {
+        setOption(false)
+    }
 
     return (
         <Explorer>

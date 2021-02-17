@@ -145,8 +145,24 @@ const Root = (props: PropsType): React.Node => {
             event.stopPropagation()
 
             if (autoPosition) {
-                const { clientY } = event
-                setPosition(clientY)
+                if (!document.documentElement) {
+                    return
+                }
+
+                const {
+                    height
+                } = document.documentElement.getBoundingClientRect()
+
+                const root = 242
+                const margin = 20
+                const { y } = event.target.getBoundingClientRect()
+
+                let position = y - margin
+                const extra = position + root - height
+                if (extra > 0) {
+                    position = position - extra - 40
+                }
+                setPosition(position)
             }
 
             pickrRef.current.show()

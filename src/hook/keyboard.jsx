@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 
-export const areKeysPressed = (
+const areKeysPressed = (
     keys: Array<string> = [],
     keysPressed: Array<string> = []
 ): boolean => {
@@ -10,12 +10,17 @@ export const areKeysPressed = (
     })
 }
 
-export default (keys: Array<string>): Array<string> => {
+const isWhiteList = (target): boolean => {
+    return target instanceof HTMLInputElement
+}
+
+export default (keys: Array<string>): boolean => {
     const [keyPressed, setKeyPressed] = React.useState([])
 
     const downHandler = React.useCallback(
-        ({ repeat, key }) => {
-            if (repeat) {
+        (event) => {
+            const { key, repeat, target } = event
+            if (repeat || isWhiteList(target)) {
                 return
             }
 
@@ -30,8 +35,10 @@ export default (keys: Array<string>): Array<string> => {
     )
 
     const upHandler = React.useCallback(
-        ({ key }) => {
-            if (!keys.includes(key)) {
+        (event) => {
+            const { key, target } = event
+
+            if (!keys.includes(key) || isWhiteList(target)) {
                 return
             }
 
@@ -57,7 +64,7 @@ export default (keys: Array<string>): Array<string> => {
         }
     }, [downHandler, upHandler])
 
-    return keyPressed
+    return areKeysPressed(keys, keyPressed)
 }
 
 const specialKeys = [

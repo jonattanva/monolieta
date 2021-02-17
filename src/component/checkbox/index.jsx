@@ -105,7 +105,8 @@ const Path = styled.path`
 
 type PropsType = {
     checked?: boolean,
-    onChange: (boolean) => void
+    onChange: (boolean) => void,
+    tabIndex?: number
 }
 
 const Root = (props: PropsType): React.Node => {
@@ -122,7 +123,11 @@ const Root = (props: PropsType): React.Node => {
 
     return (
         <Body data-checked={checked} onClick={onChange} role="input">
-            <Input type="checkbox" defaultChecked={checked} />
+            <Input
+                type="checkbox"
+                defaultChecked={checked}
+                tabIndex={props.tabIndex}
+            />
             <Background $checked={checked}>
                 <Icon viewBox="0 0 24 24">
                     <Path

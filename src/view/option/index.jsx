@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import Dropdown, { Item, Divider, Shortcut } from 'component/dropdown'
+import Dropdown, { Item, Divider } from 'component/dropdown'
 
 type PropsType = {
     isNewFileDisabled?: boolean,
@@ -23,11 +23,9 @@ const Root = (props: PropsType): React.Node => {
             <Divider />
             <Item onClick={props.onNewProject} role="button">
                 New Project
-                <Shortcut>⇧⌃N</Shortcut>
             </Item>
             <Item onClick={props.onOpenProject} role="button">
                 Open Project
-                <Shortcut>⌃O</Shortcut>
             </Item>
         </Dropdown>
     )

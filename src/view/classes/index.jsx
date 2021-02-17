@@ -188,6 +188,10 @@ const Root = (props: PropsType): React.Node => {
     }, [classes, dispatch])
 
     const onRemoveClass = React.useCallback(() => {
+        if (classes.length === 0) {
+            return
+        }
+
         dispatch({
             type: '/class',
             project: {
@@ -283,7 +287,11 @@ const Root = (props: PropsType): React.Node => {
                     <Group>
                         <Search onChange={onSearch} />
                         <Separator>
-                            <Action onClick={onSort}>
+                            <Action
+                                onClick={onSort}
+                                title={`Sort - ${
+                                    ascending ? 'ascending' : 'descending'
+                                }`}>
                                 <Sort ascending={ascending} />
                             </Action>
                         </Separator>
