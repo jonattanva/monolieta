@@ -4,9 +4,9 @@ import Dropdown, { Item, Divider } from 'component/dropdown'
 
 type PropsType = {
     isNewFileDisabled?: boolean,
-    onNewFile?: (Event) => void,
+    onNewFile?: () => Promise<void>,
     onNewProject?: (Event) => void,
-    onOpenProject?: (Event) => void | Promise<void>,
+    onOpenProject?: () => Promise<void>,
     onOutside?: () => void
 }
 

@@ -1,12 +1,21 @@
 // @flow
 import * as Monolieta from 'Monolieta'
 import * as React from 'react'
+import { nanoid } from 'nanoid'
 import styled from 'styled-components'
 import Empty from 'component/empty'
 import Action from 'component/action'
+import support from 'util/support'
 import Folder from 'component/icon/folder'
 import shortcut from 'util/shortcut'
 import useKeyboard from 'hook/keyboard'
+import { Context } from 'component/session'
+import {
+    upload,
+    readJson,
+    directory,
+    isMonolietaFile
+} from 'library/file-system'
 
 const Option = React.lazy(() => {
     return import('view/option')
@@ -85,13 +94,13 @@ const Message = styled.div`
 
 type PropsType = {
     onNewProject?: (Event) => void,
-    onOpenProject?: (Event) => void | Promise<void>,
-    onNewFile?: (Event) => void,
-    project: Monolieta.Project
+    onOpenProject?: (boolean, string) => void,
+    onSelectedImage?: (Monolieta.Resource) => void
 }
 
 const Root = (props: PropsType): React.Node => {
-    const { key = '', name = '', resources = [] } = props.project
+    const indexRef = React.useRef({})
+    const { project, dispatch } = React.useContext(Context)
 
     const [isOption, setOption] = React.useState(false)
     const [isNewFileDisabled, setNewFileDisabled] = React.useState(true)
@@ -99,19 +108,10 @@ const Root = (props: PropsType): React.Node => {
     const isCancelKeyPressed = useKeyboard(shortcut.escape.key)
 
     React.useEffect(() => {
-        if (key) {
+        if (project.key) {
             setNewFileDisabled(false)
         }
-    }, [key, setNewFileDisabled])
-
-    const onNewFile = React.useCallback(
-        (event) => {
-            if (!isNewFileDisabled && props.onNewFile) {
-                props.onNewFile(event)
-            }
-        },
-        [isNewFileDisabled, props]
-    )
+    }, [project.key, setNewFileDisabled])
 
     const onOptionHandle = React.useCallback(() => {
         setOption((previous) => !previous)
@@ -126,26 +126,147 @@ const Root = (props: PropsType): React.Node => {
     }, [])
 
     const isEmpty = React.useMemo(() => {
-        return resources.length === 0
-    }, [resources])
+        return project.resources?.length === 0
+    }, [project.resources])
+
+    if (isCancelKeyPressed && isOption) {
+        setOption(false)
+    }
+
+    const onNewFile = React.useCallback(async () => {
+        if (!isNewFileDisabled) {
+            const files = await upload(
+                (file) => {
+                    return {
+                        id: nanoid(),
+                        file,
+                        selected: false
+                    }
+                },
+                support,
+                true
+            )
+
+            const resources = project.resources || []
+            dispatch({
+                type: '/resource',
+                project: {
+                    resources: [...resources, ...files]
+                }
+            })
+        }
+    }, [dispatch, project.resources, isNewFileDisabled])
+
+    const onOpenProject = React.useCallback(async () => {
+        let setting = null
+        const files = await directory((file: File) => {
+            if (!support.includes(file.type)) {
+                if (isMonolietaFile(file)) {
+                    setting = file
+                }
+                return null
+            }
+
+            return {
+                id: nanoid(),
+                file,
+                selected: false
+            }
+        })
+
+        if (!setting) {
+            if (props.onOpenProject) {
+                props.onOpenProject(
+                    true,
+                    'Project configuration file not found'
+                )
+            }
+            return
+        }
+
+        const workspace = await readJson(setting)
+        if (!workspace) {
+            if (props.onOpenProject) {
+                props.onOpenProject(
+                    true,
+                    'Project configuration file not found'
+                )
+            }
+            return
+        }
+
+        dispatch({
+            type: '/start',
+            project: {
+                ...workspace.project,
+                resources: files,
+                classes: workspace.classes
+            }
+        })
+    }, [dispatch, props])
+
+    const onSelectedImage = React.useCallback(
+        (id) => {
+            const resources = project.resources || []
+            if (resources.length === 0) {
+                return
+            }
+
+            const indexed = Object.keys(indexRef.current)
+            if (indexed.length > 0) {
+                indexed.reverse().forEach((id) => {
+                    const current = resources.find(
+                        (resource) => resource.id === id
+                    )
+
+                    if (current) {
+                        current.selected = false
+                    }
+
+                    delete indexRef.current[id]
+                })
+            }
+
+            const current = resources.find((resource, index) => {
+                if (resource.id === id) {
+                    indexRef.current[id] = index
+                    return true
+                }
+                return false
+            })
+
+            if (current) {
+                current.selected = true
+
+                if (props.onSelectedImage) {
+                    props.onSelectedImage(current)
+                }
+
+                dispatch({
+                    type: '/resource',
+                    project: {
+                        resources: [...resources]
+                    }
+                })
+            }
+        },
+        [dispatch, project.resources, props]
+    )
 
     const visibleChildren = React.useMemo(
         () =>
-            resources.map((resource) => (
+            project.resources?.map((resource) => (
                 <Picture
                     key={resource.id}
                     id={resource.id}
                     file={resource.file}
                     selected={resource.selected}
+                    onSelectedImage={onSelectedImage}
                     {...size}
                 />
             )),
-        [size, resources]
+        [size, project.resources, onSelectedImage]
     )
-
-    if (isCancelKeyPressed && isOption) {
-        setOption(false)
-    }
 
     return (
         <Explorer>
@@ -160,14 +281,14 @@ const Root = (props: PropsType): React.Node => {
                                     onOutside={onOutside}
                                     onNewFile={onNewFile}
                                     onNewProject={props.onNewProject}
-                                    onOpenProject={props.onOpenProject}
+                                    onOpenProject={onOpenProject}
                                     isNewFileDisabled={isNewFileDisabled}
                                 />
                             </React.Suspense>
                         )}
                     </Action>
                 </Panel>
-                <Name>{name}</Name>
+                <Name>{project.name}</Name>
             </Header>
             <Body>
                 {isEmpty ? (

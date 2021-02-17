@@ -38,5 +38,5 @@ declare module Monolieta {
 
     declare type Dispatch = (action: Action) => void
 
-    declare type Type = '/start' | '/class'
+    declare type Type = '/start' | '/class' | '/resource'
 }

@@ -47,6 +47,13 @@ const Root = (props: PropsType) => {
                 }
             }
 
+            case '/resource': {
+                return {
+                    ...state,
+                    resources: [...resources]
+                }
+            }
+
             default: {
                 return defaultValue
             }

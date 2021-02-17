@@ -48,6 +48,36 @@ export const isMonolietaFile = (file: File): boolean => {
     return file.name.split('.').pop() === 'monolieta'
 }
 
+export const upload = async <T>(
+    reviver?: (File: File) => null | T,
+    accept?: Array<string> = ['*/*'],
+    multiple?: boolean = true
+): Promise<Array<T>> => {
+    return new Promise((resolve) => {
+        const input = document.createElement('input')
+        input.type = 'file'
+        input.accept = accept.join(',')
+        input.multiple = multiple
+        input.addEventListener('change', () => {
+            const files = []
+            Array.from(input.files).forEach((file) => {
+                if (!reviver) {
+                    //$FlowFixMe[incompatible-return]
+                    files.push(file)
+                    return
+                }
+
+                const result = reviver(file)
+                if (result) {
+                    files.push(result)
+                }
+            })
+            resolve(files)
+        })
+        input.click()
+    })
+}
+
 export const directory = async <T>(
     reviver?: (File: File) => null | T,
     recursive?: boolean = true

@@ -1,17 +1,13 @@
 // @flow
 import * as React from 'react'
-import { nanoid } from 'nanoid'
 import styled from 'styled-components'
-import support from 'util/support'
 import Empty from 'component/empty'
 import Explorer from 'view/explorer'
 import shortcut from 'util/shortcut'
 import useKeyboard from 'hook/keyboard'
 import Label from 'component/icon/label'
 import Github from 'component/icon/github'
-import { Context } from 'component/session'
 import Navigation, { Access } from 'component/navigation'
-import { directory, readJson, isMonolietaFile } from 'library/file-system'
 
 const Classes = React.lazy(() => {
     return import('view/classes')
@@ -76,69 +72,11 @@ const Body = styled.div`
 `
 
 const Root = (): React.Node => {
-    const { project, dispatch } = React.useContext(Context)
-
     const [message, setMessage] = React.useState('')
     const [isClassManager, setClassManager] = React.useState(false)
     const [isProjectManager, setProjectManager] = React.useState(false)
 
     const isCancelKeyPressed = useKeyboard(shortcut.escape.key)
-
-    const onHideMessage = React.useCallback(() => {
-        setMessage('')
-    }, [setMessage])
-
-    const onOpenProject = React.useCallback(async () => {
-        let setting = null
-        const files = await directory((file: File) => {
-            if (!support.includes(file.type)) {
-                if (isMonolietaFile(file)) {
-                    setting = file
-                }
-                return null
-            }
-
-            return {
-                id: nanoid(),
-                file,
-                selected: false
-            }
-        })
-
-        if (!setting) {
-            setMessage('Project configuration file not found')
-            return
-        }
-
-        const workspace = await readJson(setting)
-        if (!workspace) {
-            setMessage('Project configuration file not found')
-            return
-        }
-
-        dispatch({
-            type: '/start',
-            project: {
-                ...workspace.project,
-                resources: files,
-                classes: workspace.classes
-            }
-        })
-    }, [dispatch])
-
-    const onProjectManager = React.useCallback(() => {
-        setProjectManager(true)
-    }, [setProjectManager])
-
-    const onCancelManager = React.useCallback(() => {
-        setProjectManager(false)
-    }, [setProjectManager])
-
-    const onNewFile = React.useCallback(() => {}, [])
-
-    const onClassManager = React.useCallback(() => {
-        setClassManager((previous) => !previous)
-    }, [])
 
     if (isCancelKeyPressed) {
         if (isClassManager) {
@@ -150,14 +88,39 @@ const Root = (): React.Node => {
         }
     }
 
+    const onHideMessage = React.useCallback(() => {
+        setMessage('')
+    }, [setMessage])
+
+    const onProjectManager = React.useCallback(() => {
+        setProjectManager(true)
+    }, [setProjectManager])
+
+    const onCancelManager = React.useCallback(() => {
+        setProjectManager(false)
+    }, [setProjectManager])
+
+    const onClassManager = React.useCallback(() => {
+        setClassManager((previous) => !previous)
+    }, [])
+
+    const onOpenProject = React.useCallback((error, message) => {
+        if (error) {
+            setMessage(message)
+        }
+    }, [])
+
+    const onSelectedImage = React.useCallback((resource) => {
+        console.log('resource', resource)
+    }, [])
+
     return (
         <Editor>
             <Sidebar>
                 <Explorer
-                    onNewFile={onNewFile}
                     onNewProject={onProjectManager}
                     onOpenProject={onOpenProject}
-                    project={project}
+                    onSelectedImage={onSelectedImage}
                 />
             </Sidebar>
             <Body>
