@@ -67,24 +67,20 @@
         "node": ">=15.0.0"
     },
     "jest": {
+        "verbose": true,
         "coverageReporters": [
             "html",
             "lcov",
             "text-summary"
         ],
-        "moduleFileExtensions": [
-            "js",
-            "jsx",
-            "json"
-        ],
         "moduleNameMapper": {
-            "Monolieta": "<rootDir>/flow-typed/monolieta.js",
             "\\.(css)$": "identity-obj-proxy",
-            "^\\hook(.*)$": "<rootDir>/src/hook$1",
-            "^\\library(.*)$": "<rootDir>/src/library/$1/index",
-            "component/(.*)": "<rootDir>/src/component/$1/index",
-            "util/(.*)$": "<rootDir>/src/util$1",
-            "view/(.*)": "<rootDir>/src/view/$1/index"
+            "^Monolieta$": "<rootDir>/flow-typed/monolieta.js",
+            "^component(.*)$": "<rootDir>/src/component/$1/index",
+            "^hook/(.*)$": "<rootDir>/src/hook/$1",
+            "^library(.*)$": "<rootDir>/src/library/$1/index",
+            "^util/(.*)$": "<rootDir>/src/util/$1",
+            "^view(.*)$": "<rootDir>/src/view$1"
         }
     }
 }
