@@ -95,7 +95,7 @@ const Message = styled.div`
 type PropsType = {
     onNewProject?: (Event) => void,
     onOpenProject?: (boolean, string) => void,
-    onSelectedImage?: (Monolieta.Resource) => void
+    onSelectedImage?: (Monolieta.Resource) => void | Promise<void>
 }
 
 const Root = (props: PropsType): React.Node => {
@@ -214,6 +214,10 @@ const Root = (props: PropsType): React.Node => {
 
             const indexed = Object.keys(indexRef.current)
             if (indexed.length > 0) {
+                if (indexed.includes(id)) {
+                    return
+                }
+
                 indexed.reverse().forEach((id) => {
                     const current = resources.find(
                         (resource) => resource.id === id

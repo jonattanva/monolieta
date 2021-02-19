@@ -31,6 +31,18 @@ declare module Monolieta {
         classes?: Array<Label>
     }
 
+    declare type Size = {
+        width: number,
+        height: number
+    }
+
+    declare type Position = {
+        x: number,
+        y: number,
+        width: number,
+        height: number
+    }
+
     declare type Action = {
         type: Type,
         project: Project

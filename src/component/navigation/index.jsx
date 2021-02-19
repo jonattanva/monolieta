@@ -11,8 +11,9 @@ const Navigation = styled.div`
     display: flex;
     flex-flow: column;
     padding: 8px;
+    margin: 8px;
     position: relative;
-    right: 8px;
+    right: 0;
     top: 56px;
 `
 

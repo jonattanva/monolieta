@@ -2,11 +2,13 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import Empty from 'component/empty'
-import Explorer from 'view/explorer'
 import shortcut from 'util/shortcut'
+import Explorer from 'view/explorer'
+import Canvas from 'component/canvas'
 import useKeyboard from 'hook/keyboard'
 import Label from 'component/icon/label'
 import Github from 'component/icon/github'
+import { readImage } from 'library/file-system'
 import Navigation, { Access } from 'component/navigation'
 
 const Classes = React.lazy(() => {
@@ -73,20 +75,12 @@ const Body = styled.div`
 
 const Root = (): React.Node => {
     const [message, setMessage] = React.useState('')
+    const [current, setCurrent] = React.useState(null)
+
     const [isClassManager, setClassManager] = React.useState(false)
     const [isProjectManager, setProjectManager] = React.useState(false)
 
     const isCancelKeyPressed = useKeyboard(shortcut.escape.key)
-
-    if (isCancelKeyPressed) {
-        if (isClassManager) {
-            setClassManager(false)
-        }
-
-        if (isProjectManager) {
-            setProjectManager(false)
-        }
-    }
 
     const onHideMessage = React.useCallback(() => {
         setMessage('')
@@ -110,9 +104,21 @@ const Root = (): React.Node => {
         }
     }, [])
 
-    const onSelectedImage = React.useCallback((resource) => {
-        console.log('resource', resource)
+    const onSelectedImage = React.useCallback(async (resource) => {
+        const file = await readImage(resource.file)
+        setCurrent({
+            id: resource.id,
+            file
+        })
     }, [])
+
+    if (isCancelKeyPressed && isClassManager) {
+        setClassManager(false)
+    }
+
+    if (isCancelKeyPressed && isProjectManager) {
+        setProjectManager(false)
+    }
 
     return (
         <Editor>
@@ -132,10 +138,11 @@ const Root = (): React.Node => {
                         />
                     )}
                 </React.Suspense>
+                {!isProjectManager && <Canvas file={current?.file} />}
             </Body>
             {!isProjectManager && (
                 <Navigation>
-                    <Access title="Classes">
+                    <Access>
                         <Label onClick={onClassManager} />
                         {isClassManager && (
                             <React.Suspense fallback={<Empty />}>
