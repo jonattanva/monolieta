@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import Label from 'component/label'
 import Action from 'component/action'
 import Button from 'component/button'
+import Sidebar from 'component/sidebar'
 import Search from 'component/search'
 import Sort from 'component/icon/sort'
 import Trash from 'component/icon/trash'
@@ -14,42 +15,9 @@ import { Context } from 'component/session'
 
 const Body = styled.div`
     position: absolute;
-    right: 16px;
-    top: 0;
+    right: 24px;
+    top: 24px;
     z-index: 100;
-`
-
-const Sidebar = styled.div`
-    background-color: hsl(220, 13%, 25%);
-    background-color: var(--color-secondary-light, hsl(220, 13%, 25%));
-    border-radius: 4px;
-    box-sizing: border-box;
-    color: hsl(0, 0%, 90%);
-    color: var(--color-font, hsl(0, 0%, 90%));
-    cursor: default;
-    font-family: Roboto, sans-serif;
-    font-size: 0.875rem;
-    font-weight: 400;
-    min-width: 320px;
-    padding: 16px;
-    position: absolute;
-    right: 48px;
-    top: 100%;
-    user-select: none;
-    width: 320px;
-`
-
-const Title = styled.div`
-    color: hsl(0, 0%, 90%);
-    color: var(--color-font, hsl(0, 0%, 90%));
-    font-family: Roboto, sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    user-select: none;
-    white-space: nowrap;
-    width: 100%;
 `
 
 const Row = styled.div`
@@ -128,6 +96,10 @@ const Root = (props: PropsType): React.Node => {
 
     React.useEffect(() => {
         setClasses((previous) => {
+            if (previous?.length <= 1) {
+                return previous
+            }
+
             return [
                 ...previous.sort((first, second) =>
                     sort(first.name, second.name, ascending)
@@ -263,14 +235,15 @@ const Root = (props: PropsType): React.Node => {
     )
 
     const visible = React.useMemo(() => {
-        return classes.map((value) => (
+        return classes.map((value, index) => (
             <Label
                 key={value.id}
                 id={value.id}
                 name={value.name}
                 color={value.color}
-                selected={value.selected}
                 autoPosition={true}
+                autofocus={index === 0}
+                selected={value.selected}
                 onSavedColor={onSavedColor}
                 onSelectedName={onSelectedName}
                 onSelectedClass={onSelectedClass}
@@ -280,8 +253,7 @@ const Root = (props: PropsType): React.Node => {
 
     return (
         <Body ref={classRef}>
-            <Sidebar>
-                <Title>Class manager</Title>
+            <Sidebar title="Class manager">
                 <Row>
                     <Summary>Filters</Summary>
                     <Group>

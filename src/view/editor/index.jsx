@@ -8,11 +8,16 @@ import Canvas from 'component/canvas'
 import useKeyboard from 'hook/keyboard'
 import Label from 'component/icon/label'
 import Github from 'component/icon/github'
+import Archive from 'component/icon/archive'
 import { readImage } from 'library/file-system'
 import Navigation, { Access } from 'component/navigation'
 
 const Classes = React.lazy(() => {
     return import('view/classes')
+})
+
+const Groups = React.lazy(() => {
+    return import('view/groups')
 })
 
 const Manager = React.lazy(() => {
@@ -51,6 +56,7 @@ const Sidebar = styled.div`
     flex-direction: column;
     flex-wrap: nowrap;
     height: 100%;
+    margin-right: 8px;
     min-width: 300px;
     width: 300px;
 `
@@ -77,6 +83,7 @@ const Root = (): React.Node => {
     const [message, setMessage] = React.useState('')
     const [current, setCurrent] = React.useState(null)
 
+    const [isGroupManager, setGroupManager] = React.useState(false)
     const [isClassManager, setClassManager] = React.useState(false)
     const [isProjectManager, setProjectManager] = React.useState(false)
 
@@ -93,6 +100,10 @@ const Root = (): React.Node => {
     const onCancelManager = React.useCallback(() => {
         setProjectManager(false)
     }, [setProjectManager])
+
+    const onGroupManager = React.useCallback(() => {
+        setGroupManager((previous) => !previous)
+    }, [setGroupManager])
 
     const onClassManager = React.useCallback(() => {
         setClassManager((previous) => !previous)
@@ -141,19 +152,27 @@ const Root = (): React.Node => {
                 {!isProjectManager && <Canvas file={current?.file} />}
             </Body>
             {!isProjectManager && (
-                <Navigation>
-                    <Access>
-                        <Label onClick={onClassManager} />
+                <React.Fragment>
+                    <Navigation>
+                        <Access onClick={onGroupManager}>
+                            <Archive />
+                        </Access>
+                        <Access onClick={onClassManager}>
+                            <Label />
+                        </Access>
+                        <Access>
+                            <Github url="https://github.com/jonattanva/monolieta" />
+                        </Access>
+                    </Navigation>
+                    <React.Suspense fallback={<Empty />}>
                         {isClassManager && (
-                            <React.Suspense fallback={<Empty />}>
-                                <Classes onOutside={onClassManager} />
-                            </React.Suspense>
+                            <Classes onOutside={onClassManager} />
                         )}
-                    </Access>
-                    <Access>
-                        <Github url="https://github.com/jonattanva/monolieta" />
-                    </Access>
-                </Navigation>
+                        {isGroupManager && (
+                            <Groups onOutside={onGroupManager} />
+                        )}
+                    </React.Suspense>
+                </React.Fragment>
             )}
             {message && (
                 <React.Suspense fallback={<Empty />}>

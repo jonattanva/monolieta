@@ -96,11 +96,17 @@ const Virtual = (props: PropsType): React.Node => {
             : 0
     }, [scrollRef, totalWidth])
 
-    const scrollTop = scrollPosition ? scrollPosition.scrollTop : 0
+    const scrollTop = React.useMemo(() => {
+        return scrollPosition ? scrollPosition.scrollTop : 0
+    }, [scrollPosition])
+
     let startNode = Math.floor(scrollTop / height)
     startNode = Math.max(0, startNode)
 
-    const scrollHeight = scrollPosition ? scrollPosition.size.height : 0
+    const scrollHeight = React.useMemo(() => {
+        return scrollPosition ? scrollPosition.size.height : 0
+    }, [scrollPosition])
+
     let visibleNodeCount = Math.ceil(scrollHeight / height) + 2
     visibleNodeCount = Math.min(rows - startNode, visibleNodeCount) * columns
 
@@ -111,6 +117,7 @@ const Virtual = (props: PropsType): React.Node => {
         return props.children.slice(startNode, startNode + visibleNodeCount)
     }, [props.children, startNode, visibleNodeCount])
 
+    console.log('[Virtual]')
     return (
         <Root ref={scrollRef}>
             <Viewport style={{ height: totalHeight }}>

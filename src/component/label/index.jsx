@@ -36,6 +36,7 @@ type PropsType = {
     color: string,
     name: string,
     selected?: boolean,
+    autofocus?: boolean,
     autoPosition?: boolean,
     onSavedColor: (string, string) => void,
     onSelectedClass: (string, boolean) => void,
@@ -90,7 +91,7 @@ const Root = (props: PropsType): React.Node => {
                 placeholder="Enter class name"
                 onChange={onSelectedName}
                 value={props.name}
-                autofocus={true}
+                autofocus={props.autofocus}
             />
         </Body>
     )

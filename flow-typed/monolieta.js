@@ -1,5 +1,4 @@
 declare module Monolieta {
-
     declare type Label = {
         id: string,
         color: string,
@@ -51,4 +50,9 @@ declare module Monolieta {
     declare type Dispatch = (action: Action) => void
 
     declare type Type = '/start' | '/class' | '/resource'
+
+    declare type Select = {
+        label: string,
+        value: string
+    }
 }

@@ -99,6 +99,8 @@ type PropsType = {
 }
 
 const Root = (props: PropsType): React.Node => {
+    const { onSelectedImage = null } = props
+
     const indexRef = React.useRef({})
     const { project, dispatch } = React.useContext(Context)
 
@@ -106,6 +108,7 @@ const Root = (props: PropsType): React.Node => {
     const [isNewFileDisabled, setNewFileDisabled] = React.useState(true)
 
     const isCancelKeyPressed = useKeyboard(shortcut.escape.key)
+    const isOpenProjectKeyPressed = useKeyboard(shortcut.open.key)
 
     React.useEffect(() => {
         if (project.key) {
@@ -128,10 +131,6 @@ const Root = (props: PropsType): React.Node => {
     const isEmpty = React.useMemo(() => {
         return project.resources?.length === 0
     }, [project.resources])
-
-    if (isCancelKeyPressed && isOption) {
-        setOption(false)
-    }
 
     const onNewFile = React.useCallback(async () => {
         if (!isNewFileDisabled) {
@@ -205,7 +204,7 @@ const Root = (props: PropsType): React.Node => {
         })
     }, [dispatch, props])
 
-    const onSelectedImage = React.useCallback(
+    const onSelected = React.useCallback(
         (id) => {
             const resources = project.resources || []
             if (resources.length === 0) {
@@ -242,8 +241,8 @@ const Root = (props: PropsType): React.Node => {
             if (current) {
                 current.selected = true
 
-                if (props.onSelectedImage) {
-                    props.onSelectedImage(current)
+                if (onSelectedImage) {
+                    onSelectedImage(current)
                 }
 
                 dispatch({
@@ -254,7 +253,7 @@ const Root = (props: PropsType): React.Node => {
                 })
             }
         },
-        [dispatch, project.resources, props]
+        [onSelectedImage, project.resources, dispatch]
     )
 
     const visibleChildren = React.useMemo(
@@ -265,12 +264,20 @@ const Root = (props: PropsType): React.Node => {
                     id={resource.id}
                     file={resource.file}
                     selected={resource.selected}
-                    onSelectedImage={onSelectedImage}
+                    onSelectedImage={onSelected}
                     {...size}
                 />
             )),
-        [size, project.resources, onSelectedImage]
+        [size, project.resources, onSelected]
     )
+
+    if (isOpenProjectKeyPressed) {
+        onOpenProject()
+    }
+
+    if (isCancelKeyPressed && isOption) {
+        setOption(false)
+    }
 
     return (
         <Explorer>

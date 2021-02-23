@@ -26,6 +26,9 @@ export default (keys: Array<string>): boolean => {
 
             setKeyPressed((previous) => {
                 if (keys.includes(key) && !previous.includes(key)) {
+                    event.stopPropagation()
+                    event.preventDefault()
+
                     return [...previous, key]
                 }
                 return previous
@@ -43,6 +46,9 @@ export default (keys: Array<string>): boolean => {
             }
 
             setKeyPressed((previous) => {
+                event.stopPropagation()
+                event.preventDefault()
+
                 return previous.filter((value) => {
                     if (specialKeys.includes(key)) {
                         return false
@@ -64,7 +70,11 @@ export default (keys: Array<string>): boolean => {
         }
     }, [downHandler, upHandler])
 
-    return areKeysPressed(keys, keyPressed)
+    const isKeysPressed = areKeysPressed(keys, keyPressed)
+    if (isKeysPressed) {
+        setKeyPressed([])
+    }
+    return isKeysPressed
 }
 
 const specialKeys = [

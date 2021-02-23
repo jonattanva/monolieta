@@ -9,4 +9,5 @@ Resource Annotation Tool
 
 | Functionality               | Context  | Mac            | Windows / Linux  |
 |:----------------------------|:--------:|:--------------:|:----------------:|
+| Open project                | Editor   | <kbd>⌘</kbd> <kbd>O</kbd> | <kbd>Ctrl</kbd> <kbd>O</kbd>  |
 | Dismiss dialogs             | Dialog   | <kbd>Esc</kbd> | <kbd>Esc</kbd>   |

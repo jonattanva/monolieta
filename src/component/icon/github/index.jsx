@@ -15,7 +15,7 @@ type PropsType = {
 const Root = (props: PropsType): React.Node => {
     return (
         <Link href={props.url} rel="noopener noreferrer" target="_blank">
-            <img src="image/github/icon.png" width={24} height={24} />
+            <img src="image/github/icon.png" width={20} height={20} />
         </Link>
     )
 }

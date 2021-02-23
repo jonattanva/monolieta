@@ -10,26 +10,31 @@ const Navigation = styled.div`
     box-sizing: border-box;
     display: flex;
     flex-flow: column;
-    padding: 8px;
     margin: 8px;
+    padding: 0;
     position: relative;
     right: 0;
     top: 56px;
+    user-select: none;
 `
 
 export const Access: React.ComponentType<{}> = styled.div`
     align-items: center;
+    background-color: hsl(220, 13%, 15%);
+    background-color: var(--color-secondary, hsl(220, 13%, 15%));
+    border-radius: 4px;
+    box-sizing: border-box;
     cursor: pointer;
     display: flex;
     height: 32px;
     justify-content: center;
     margin: 4px;
+    padding: 6px;
     width: 32px;
 
-    &:hover {
-        background-color: hsl(220, 13%, 15%);
-        background-color: var(--color-secondary, hsl(220, 13%, 15%));
-        border-radius: 4px;
+    &:active {
+        background-color: hsl(220, 13%, 20%);
+        background-color: var(--color-secondary-dark, hsl(220, 13%, 20%));
     }
 `
 

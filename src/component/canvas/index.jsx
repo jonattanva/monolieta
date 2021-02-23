@@ -27,6 +27,8 @@ const Scroll = styled.div`
 
 const Image = styled.img`
     height: 100%;
+    user-drag: none;
+    user-select: none;
     width: 100%;
 `
 
@@ -45,9 +47,10 @@ const Root = (props: PropsType): React.Node => {
 
     const onLoadComplete = React.useCallback(
         (event) => {
+            const { naturalWidth, naturalHeight } = event.target
             setImage({
-                width: event.target.naturalWidth,
-                height: event.target.naturalHeight
+                width: naturalWidth,
+                height: naturalHeight
             })
         },
         [setImage]
@@ -63,10 +66,11 @@ const Root = (props: PropsType): React.Node => {
             return null
         }
 
+        const { offsetWidth, offsetHeight } = editor
         return spectRatio(
             {
-                width: editor.offsetWidth,
-                height: editor.offsetHeight
+                width: offsetWidth,
+                height: offsetHeight
             },
             ratio
         )
@@ -77,12 +81,12 @@ const Root = (props: PropsType): React.Node => {
             return null
         }
 
-        const { width, height } = getScale(calculateContainer)
+        const scale = getScale(calculateContainer)
 
-        return {
-            width: width + 2 * calculateContainer.x,
-            height: height + 2 * calculateContainer.y
-        }
+        const width = scale.width + 2 * calculateContainer.x
+        const height = scale.height + 2 * calculateContainer.y
+
+        return { width, height }
     }, [calculateContainer])
 
     const imageSize = React.useMemo(() => {
@@ -90,12 +94,13 @@ const Root = (props: PropsType): React.Node => {
             return null
         }
 
-        return {
-            left: calculateContainer.x,
-            top: calculateContainer.y,
-            width: contentSize.width - 2 * calculateContainer.x,
-            height: contentSize.height - 2 * calculateContainer.y
-        }
+        const left = calculateContainer.x
+        const top = calculateContainer.y
+
+        const width = contentSize.width - 2 * calculateContainer.x
+        const height = contentSize.height - 2 * calculateContainer.y
+
+        return { left, top, width, height }
     }, [calculateContainer, contentSize])
 
     return (
@@ -105,8 +110,8 @@ const Root = (props: PropsType): React.Node => {
                     <Absolute style={{ ...imageSize }}>
                         <Image
                             onLoad={onLoadComplete}
-                            role="image"
                             src={props.file}
+                            role="image"
                         />
                     </Absolute>
                 </Absolute>
