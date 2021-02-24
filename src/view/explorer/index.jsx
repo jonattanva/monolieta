@@ -92,6 +92,11 @@ const Message = styled.div`
     width: 100%;
 `
 
+const size = {
+    height: 120,
+    width: 120
+}
+
 type PropsType = {
     onNewProject?: (Event) => void,
     onOpenProject?: (boolean, string) => void,
@@ -116,23 +121,17 @@ const Root = (props: PropsType): React.Node => {
         }
     }, [project.key, setNewFileDisabled])
 
-    const onOptionHandle = React.useCallback(() => {
+    const onOptionHandle = () => {
         setOption((previous) => !previous)
-    }, [setOption])
+    }
 
-    const onOutside = React.useCallback(() => {
+    const onOutside = () => {
         setOption(false)
-    }, [setOption])
+    }
 
-    const size = React.useMemo(() => {
-        return { width: 120, height: 120 }
-    }, [])
+    const isEmpty = project.resources?.length === 0
 
-    const isEmpty = React.useMemo(() => {
-        return project.resources?.length === 0
-    }, [project.resources])
-
-    const onNewFile = React.useCallback(async () => {
+    const onNewFile = async () => {
         if (!isNewFileDisabled) {
             const files = await upload(
                 (file) => {
@@ -154,9 +153,9 @@ const Root = (props: PropsType): React.Node => {
                 }
             })
         }
-    }, [dispatch, project.resources, isNewFileDisabled])
+    }
 
-    const onOpenProject = React.useCallback(async () => {
+    const onOpenProject = async () => {
         let setting = null
         const files = await directory((file: File) => {
             if (!support.includes(file.type)) {
@@ -202,74 +201,65 @@ const Root = (props: PropsType): React.Node => {
                 classes: workspace.classes
             }
         })
-    }, [dispatch, props])
+    }
 
-    const onSelected = React.useCallback(
-        (id) => {
-            const resources = project.resources || []
-            if (resources.length === 0) {
+    const onSelected = (id) => {
+        const resources = project.resources || []
+        if (resources.length === 0) {
+            return
+        }
+
+        const indexed = Object.keys(indexRef.current)
+        if (indexed.length > 0) {
+            if (indexed.includes(id)) {
                 return
             }
 
-            const indexed = Object.keys(indexRef.current)
-            if (indexed.length > 0) {
-                if (indexed.includes(id)) {
-                    return
+            indexed.reverse().forEach((id) => {
+                const current = resources.find((resource) => resource.id === id)
+
+                if (current) {
+                    current.selected = false
                 }
 
-                indexed.reverse().forEach((id) => {
-                    const current = resources.find(
-                        (resource) => resource.id === id
-                    )
-
-                    if (current) {
-                        current.selected = false
-                    }
-
-                    delete indexRef.current[id]
-                })
-            }
-
-            const current = resources.find((resource, index) => {
-                if (resource.id === id) {
-                    indexRef.current[id] = index
-                    return true
-                }
-                return false
+                delete indexRef.current[id]
             })
+        }
 
-            if (current) {
-                current.selected = true
-
-                if (onSelectedImage) {
-                    onSelectedImage(current)
-                }
-
-                dispatch({
-                    type: '/resource',
-                    project: {
-                        resources: [...resources]
-                    }
-                })
+        const current = resources.find((resource, index) => {
+            if (resource.id === id) {
+                indexRef.current[id] = index
+                return true
             }
-        },
-        [onSelectedImage, project.resources, dispatch]
-    )
+            return false
+        })
 
-    const visibleChildren = React.useMemo(
-        () =>
-            project.resources?.map((resource) => (
-                <Picture
-                    key={resource.id}
-                    id={resource.id}
-                    file={resource.file}
-                    selected={resource.selected}
-                    onSelectedImage={onSelected}
-                    {...size}
-                />
-            )),
-        [size, project.resources, onSelected]
-    )
+        if (current) {
+            current.selected = true
+
+            if (onSelectedImage) {
+                onSelectedImage(current)
+            }
+
+            dispatch({
+                type: '/resource',
+                project: {
+                    resources: [...resources]
+                }
+            })
+        }
+    }
+
+    const visibleChildren = project.resources?.map((resource) => (
+        <Picture
+            key={resource.id}
+            id={resource.id}
+            file={resource.file}
+            selected={resource.selected}
+            onSelectedImage={onSelected}
+            {...size}
+        />
+    ))
 
     if (isOpenProjectKeyPressed) {
         onOpenProject()
@@ -318,7 +308,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Explorer'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

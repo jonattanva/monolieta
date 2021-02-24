@@ -45,16 +45,13 @@ const Root = (props: PropsType): React.Node => {
 
     const [image, setImage] = React.useState()
 
-    const onLoadComplete = React.useCallback(
-        (event) => {
-            const { naturalWidth, naturalHeight } = event.target
-            setImage({
-                width: naturalWidth,
-                height: naturalHeight
-            })
-        },
-        [setImage]
-    )
+    const onLoadComplete = (event) => {
+        const { naturalWidth, naturalHeight } = event.target
+        setImage({
+            width: naturalWidth,
+            height: naturalHeight
+        })
+    }
 
     const ratio = React.useMemo(() => {
         return image && getRatio(image.width, image.height)
@@ -122,7 +119,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Canvas'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

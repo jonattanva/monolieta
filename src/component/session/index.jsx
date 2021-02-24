@@ -21,8 +21,8 @@ type PropsType = {
     children: React.Node
 }
 
-const Root = (props: PropsType) => {
-    const onReducer = React.useCallback((state, action) => {
+const Root = (props: PropsType): React.Node => {
+    const onReducer = (state, action) => {
         const {
             key = '',
             name = '',
@@ -58,7 +58,7 @@ const Root = (props: PropsType) => {
                 return defaultValue
             }
         }
-    }, [])
+    }
 
     const [project, dispatch] = React.useReducer(onReducer, defaultValue)
 
@@ -69,7 +69,4 @@ const Root = (props: PropsType) => {
     )
 }
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

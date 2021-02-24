@@ -25,14 +25,6 @@ const Cover = styled.div`
 
     background: linear-gradient(
         90deg,
-        hsl(220, 13%, 15%),
-        hsl(220, 13%, 20%),
-        hsl(220, 13%, 15%),
-        hsl(220, 13%, 20%)
-    );
-
-    background: linear-gradient(
-        90deg,
         var(--color-secondary, hsl(220, 13%, 15%)),
         var(--color-secondary-dark, hsl(220, 13%, 20%)),
         var(--color-secondary, hsl(220, 13%, 15%)),
@@ -44,7 +36,6 @@ const Cover = styled.div`
         selected &&
         complete &&
         css`
-            background: #6200ee;
             background: var(--color-primary, #6200ee);
         `}
 `
@@ -110,11 +101,11 @@ const Root = (props: PropsType): React.Node => {
         }
     }, [props])
 
-    const onSelectedImage = React.useCallback(() => {
+    const onSelectedImage = () => {
         if (props.onSelectedImage) {
             props.onSelectedImage(props.id)
         }
-    }, [props])
+    }
 
     return (
         <Cover
@@ -136,7 +127,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Picture'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

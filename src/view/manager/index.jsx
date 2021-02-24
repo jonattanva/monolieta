@@ -1,20 +1,20 @@
 // @flow
 import * as Monolieta from 'Monolieta'
 import * as React from 'react'
-import styled from 'styled-components'
-import { nanoid } from 'nanoid'
-import Text from 'component/text'
-import useInput from 'hook/input'
 import Action from 'component/action'
-import support from 'util/support'
 import Button from 'component/button'
-import Trash from 'component/icon/trash'
-import { random } from 'component/color'
-import { Context } from 'component/session'
-import { saveFile, directory } from 'library/file-system'
-import Virtual from 'component/virtual'
-import Picture from 'component/picture'
 import Label from 'component/label'
+import Picture from 'component/picture'
+import Text from 'component/text'
+import Trash from 'component/icon/trash'
+import Virtual from 'component/virtual'
+import styled from 'styled-components'
+import support from 'util/support'
+import useInput from 'hook/input'
+import { Context } from 'component/session'
+import { nanoid } from 'nanoid'
+import { random } from 'component/color'
+import { saveFile, directory } from 'library/file-system'
 
 const Medium = styled.div`
     flex: 0 0 58.33333%;
@@ -189,6 +189,11 @@ const Warning = styled.div`
     font-size: 0.875rem;
 `
 
+const size = {
+    height: 130,
+    width: 130
+}
+
 type PropsType = {
     onCancelManager?: (Event) => void,
     onProjectCreated?: (Event) => void
@@ -207,19 +212,10 @@ const Root = (props: PropsType): React.Node => {
         []
     )
 
-    const size = React.useMemo(() => {
-        return { width: 130, height: 130 }
-    }, [])
+    const isEmptyClasses = classes.length === 0
+    const isEmptyResources = resources.length === 0
 
-    const isEmptyClasses = React.useMemo(() => {
-        return classes.length === 0
-    }, [classes])
-
-    const isEmptyResources = React.useMemo(() => {
-        return resources.length === 0
-    }, [resources])
-
-    const onNewClass = React.useCallback(() => {
+    const onNewClass = () => {
         setClasses((previous) => {
             const id = nanoid()
             const color = random(
@@ -238,15 +234,18 @@ const Root = (props: PropsType): React.Node => {
                 }
             ]
         })
-    }, [setClasses])
+    }
 
-    const onRemoveClasses = React.useCallback(() => {
+    const onRemoveClasses = () => {
         setClasses((previous) => {
+            if (previous.length === 0) {
+                return previous
+            }
             return previous.filter((value) => !value.selected)
         })
-    }, [])
+    }
 
-    const onSelectedClass = React.useCallback((id, selected) => {
+    const onSelectedClass = (id, selected) => {
         setClasses((previous) => {
             const current = previous.find((value) => {
                 return value.id === id
@@ -259,45 +258,39 @@ const Root = (props: PropsType): React.Node => {
 
             return previous
         })
-    }, [])
+    }
 
-    const onSavedColor = React.useCallback(
-        (id, color) => {
-            setClasses((previous) => {
-                const current = previous.find((value) => {
-                    return value.id === id
-                })
-
-                if (current) {
-                    current.color = color
-                    return [...previous]
-                }
-
-                return previous
+    const onSavedColor = (id, color) => {
+        setClasses((previous) => {
+            const current = previous.find((value) => {
+                return value.id === id
             })
-        },
-        [setClasses]
-    )
 
-    const onSelectedName = React.useCallback(
-        (id, name) => {
-            setClasses((previous) => {
-                const current = previous.find((value) => {
-                    return value.id === id
-                })
+            if (current) {
+                current.color = color
+                return [...previous]
+            }
 
-                if (current) {
-                    current.name = name
-                    return [...previous]
-                }
+            return previous
+        })
+    }
 
-                return previous
+    const onSelectedName = (id, name) => {
+        setClasses((previous) => {
+            const current = previous.find((value) => {
+                return value.id === id
             })
-        },
-        [setClasses]
-    )
 
-    const onUploadResources = React.useCallback(async () => {
+            if (current) {
+                current.name = name
+                return [...previous]
+            }
+
+            return previous
+        })
+    }
+
+    const onUploadResources = async () => {
         resourcesRef.current = {}
         setResources(
             await directory<Monolieta.Resource>((file: File) => {
@@ -312,9 +305,9 @@ const Root = (props: PropsType): React.Node => {
                 }
             })
         )
-    }, [setResources])
+    }
 
-    const onRemoveResource = React.useCallback(() => {
+    const onRemoveResource = () => {
         const keys = Object.keys(resourcesRef.current)
         if (keys.length === 0) {
             return
@@ -329,108 +322,98 @@ const Root = (props: PropsType): React.Node => {
             resourcesRef.current = {}
             return [...previous]
         })
-    }, [setResources])
+    }
 
-    const onSelectedResource = React.useCallback(
-        (id) => {
-            setResources((previous) => {
-                const index = previous.findIndex((resource) => {
-                    return resource.id === id
-                })
-
-                const resource = previous[index]
-                if (resource) {
-                    resource.selected = !resource.selected
-                    resourcesRef.current[index] = resource.selected
-                    return [...previous]
-                }
-
-                return previous
+    const onSelectedResource = (id) => {
+        setResources((previous) => {
+            const index = previous.findIndex((resource) => {
+                return resource.id === id
             })
-        },
-        [setResources]
-    )
 
-    const visibleClasses = React.useMemo(() => {
-        return classes.map((value) => (
-            <Label
-                key={value.id}
-                id={value.id}
-                name={value.name}
-                color={value.color}
-                selected={value.selected}
-                autoPosition={true}
-                onSavedColor={onSavedColor}
-                onSelectedName={onSelectedName}
-                onSelectedClass={onSelectedClass}
-            />
-        ))
-    }, [classes, onSavedColor, onSelectedClass, onSelectedName])
+            const resource = previous[index]
+            if (resource) {
+                resource.selected = !resource.selected
+                resourcesRef.current[index] = resource.selected
+                return [...previous]
+            }
 
-    const visibleResources = React.useMemo(() => {
-        return resources.map((resource) => {
-            return (
-                <Picture
-                    key={resource.id}
-                    id={resource.id}
-                    file={resource.file}
-                    selected={resource.selected}
-                    onSelectedImage={onSelectedResource}
-                    {...size}
-                />
-            )
+            return previous
         })
-    }, [resources, size, onSelectedResource])
+    }
 
-    const onSave = React.useCallback(
-        async (event) => {
-            if (!name.value) {
-                setNameRequired(true)
-                return
+    const visibleClasses = classes.map((value) => (
+        <Label
+            key={value.id}
+            id={value.id}
+            name={value.name}
+            color={value.color}
+            selected={value.selected}
+            autoPosition={true}
+            onSavedColor={onSavedColor}
+            onSelectedName={onSelectedName}
+            onSelectedClass={onSelectedClass}
+        />
+    ))
+
+    const visibleResources = resources.map((resource) => {
+        return (
+            <Picture
+                key={resource.id}
+                id={resource.id}
+                file={resource.file}
+                selected={resource.selected}
+                onSelectedImage={onSelectedResource}
+                {...size}
+            />
+        )
+    })
+
+    const onSave = async (event) => {
+        if (!name.value) {
+            setNameRequired(true)
+            return
+        }
+
+        const workspace = {
+            project: {
+                key: id.value,
+                name: name.value
+            },
+            classes: classes
+                .filter((clazz) => clazz.name.trim() !== '')
+                .map((clazz) => ({
+                    id: clazz.id,
+                    name: clazz.name,
+                    color: clazz.color
+                })),
+            version: 1
+        }
+
+        const blob = new Blob([JSON.stringify(workspace)], {
+            type: 'application/json'
+        })
+
+        await saveFile(blob, {
+            filename: 'workspace.monolieta',
+            extensions: ['.json', '.monolieta']
+        })
+
+        dispatch({
+            type: '/start',
+            project: {
+                ...workspace.project,
+                resources: resources.map((resource) => ({
+                    id: resource.id,
+                    file: resource.file
+                })),
+                classes: workspace.classes
             }
+        })
 
-            const workspace = {
-                project: {
-                    key: id.value,
-                    name: name.value
-                },
-                classes: classes
-                    .filter((clazz) => clazz.name.trim() !== '')
-                    .map((clazz) => ({
-                        id: clazz.id,
-                        name: clazz.name,
-                        color: clazz.color
-                    })),
-                version: 1
-            }
-
-            const blob = new Blob([JSON.stringify(workspace)], {
-                type: 'application/json'
-            })
-
-            await saveFile(blob, {
-                filename: 'workspace.monolieta',
-                extensions: ['.json', '.monolieta']
-            })
-
-            dispatch({
-                type: '/start',
-                project: {
-                    ...workspace.project,
-                    resources: resources.map((resource) => ({
-                        id: resource.id,
-                        file: resource.file
-                    })),
-                    classes: workspace.classes
-                }
-            })
-
-            if (props.onProjectCreated) {
-                props.onProjectCreated(event)
-            }
-        },
-        [id.value, name.value, resources, classes, dispatch, props]
-    )
+        if (props.onProjectCreated) {
+            props.onProjectCreated(event)
+        }
+    }
 
     return (
         <Project>
@@ -519,7 +502,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Manager'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

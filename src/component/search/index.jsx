@@ -5,7 +5,6 @@ import Search from 'component/icon/search'
 
 const Container = styled.div`
     box-sizing: border-box;
-    color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     font-family: Roboto, sans-serif;
     font-size: 0.875rem;
@@ -16,7 +15,6 @@ const Icon = styled.div`
     align-items: center;
     background: transparent;
     box-sizing: border-box;
-    color: hsl(220, 13%, 65%);
     color: var(--color-font-light, hsl(220, 13%, 65%));
     display: flex;
     height: 32px;
@@ -26,14 +24,12 @@ const Icon = styled.div`
 `
 
 const Input = styled.input`
-    background-color: hsl(220, 13%, 15%);
     background-color: var(--color-secondary, hsl(220, 13%, 15%));
     border-radius: 4px;
     border-color: transparent;
     border-style: solid;
     border-width: 1px;
     box-sizing: border-box;
-    color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     font-family: Roboto, sans-serif;
     font-size: 0.875rem;
@@ -69,14 +65,11 @@ type PropsType = {
 const Root = (props: PropsType): React.Node => {
     const { placeholder = 'Search' } = props
 
-    const onChange = React.useCallback(
-        (event) => {
-            if (props.onChange) {
-                props.onChange(event.target.value)
-            }
-        },
-        [props]
-    )
+    const onChange = (event) => {
+        if (props.onChange) {
+            props.onChange(event.target.value)
+        }
+    }
 
     return (
         <Container>
@@ -94,7 +87,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Search'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

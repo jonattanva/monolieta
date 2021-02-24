@@ -13,6 +13,7 @@ type PropsType = {
 
 const Root = (props: PropsType): React.Node => {
     const { isNewFileDisabled = false } = props
+
     return (
         <Dropdown onOutside={props.onOutside}>
             <Item
@@ -35,7 +36,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Option'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

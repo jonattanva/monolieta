@@ -7,7 +7,6 @@ const Rect = styled.rect`
     stroke-linejoin: round;
     stroke-opacity: 0.7;
     stroke-width: 2px;
-    stroke: #6200ee;
     stroke: var(--color-primary, #6200ee);
     vector-effect: non-scaling-stroke;
 
@@ -39,7 +38,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Rect'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

@@ -108,34 +108,31 @@ const Root = (props: PropsType): React.Node => {
         })
     }, [ascending])
 
-    const onSort = React.useCallback(() => {
+    const onSort = () => {
         setAscending((previous) => !previous)
-    }, [])
+    }
 
-    const onSearch = React.useCallback(
-        (value) => {
-            if (project.classes?.length === 0) {
+    const onSearch = (value) => {
+        if (project.classes?.length === 0) {
+            return
+        }
+
+        const criteria = value.toLowerCase()
+        if (project.classes) {
+            if (!criteria) {
+                setClasses(project.classes)
                 return
             }
 
-            const criteria = value.toLowerCase()
-            if (project.classes) {
-                if (!criteria) {
-                    setClasses(project.classes)
-                    return
-                }
+            setClasses(
+                project.classes.filter(({ name }) => {
+                    return name.toLowerCase().includes(criteria)
+                })
+            )
+        }
+    }
 
-                setClasses(
-                    project.classes.filter(({ name }) => {
-                        return name.toLowerCase().includes(criteria)
-                    })
-                )
-            }
-        },
-        [project.classes]
-    )
-
-    const onNewClass = React.useCallback(() => {
+    const onNewClass = () => {
         const id = nanoid()
         const color = random(
             Array.from(classes, (value) => {
@@ -157,9 +154,9 @@ const Root = (props: PropsType): React.Node => {
                 ]
             }
         })
-    }, [classes, dispatch])
+    }
 
-    const onRemoveClass = React.useCallback(() => {
+    const onRemoveClass = () => {
         if (classes.length === 0) {
             return
         }
@@ -172,84 +169,72 @@ const Root = (props: PropsType): React.Node => {
                 })
             }
         })
-    }, [classes, dispatch])
+    }
 
-    const onSelectedClass = React.useCallback(
-        (id, selected) => {
-            const current = classes?.find((value) => {
-                return value.id === id
+    const onSelectedClass = (id, selected) => {
+        const current = classes?.find((value) => {
+            return value.id === id
+        })
+
+        if (current) {
+            current.selected = selected
+
+            dispatch({
+                type: '/class',
+                project: {
+                    classes: [...classes]
+                }
             })
+        }
+    }
 
-            if (current) {
-                current.selected = selected
+    const onSavedColor = (id, color) => {
+        const current = classes?.find((value) => {
+            return value.id === id
+        })
 
-                dispatch({
-                    type: '/class',
-                    project: {
-                        classes: [...classes]
-                    }
-                })
-            }
-        },
-        [classes, dispatch]
-    )
+        if (current) {
+            current.color = color
 
-    const onSavedColor = React.useCallback(
-        (id, color) => {
-            const current = classes?.find((value) => {
-                return value.id === id
+            dispatch({
+                type: '/class',
+                project: {
+                    classes: [...classes]
+                }
             })
+        }
+    }
 
-            if (current) {
-                current.color = color
+    const onSelectedName = (id, name) => {
+        const current = classes?.find((value) => {
+            return value.id === id
+        })
 
-                dispatch({
-                    type: '/class',
-                    project: {
-                        classes: [...classes]
-                    }
-                })
-            }
-        },
-        [classes, dispatch]
-    )
+        if (current) {
+            current.name = name
 
-    const onSelectedName = React.useCallback(
-        (id, name) => {
-            const current = classes?.find((value) => {
-                return value.id === id
+            dispatch({
+                type: '/class',
+                project: {
+                    classes: [...classes]
+                }
             })
-
-            if (current) {
-                current.name = name
-
-                dispatch({
-                    type: '/class',
-                    project: {
-                        classes: [...classes]
-                    }
-                })
-            }
-        },
-        [classes, dispatch]
-    )
-
-    const visible = React.useMemo(() => {
-        return classes.map((value, index) => (
-            <Label
-                key={value.id}
-                id={value.id}
-                name={value.name}
-                color={value.color}
-                autoPosition={true}
-                autofocus={index === 0}
-                selected={value.selected}
-                onSavedColor={onSavedColor}
-                onSelectedName={onSelectedName}
-                onSelectedClass={onSelectedClass}
-            />
-        ))
-    }, [classes, onSavedColor, onSelectedName, onSelectedClass])
+        }
+    }
+    const visible = classes.map((value, index) => (
+        <Label
+            key={value.id}
+            id={value.id}
+            name={value.name}
+            color={value.color}
+            autoPosition={true}
+            autofocus={index === 0}
+            selected={value.selected}
+            onSavedColor={onSavedColor}
+            onSelectedName={onSelectedName}
+            onSelectedClass={onSelectedClass}
+        />
+    ))
 
     return (
         <Body ref={classRef}>
@@ -290,7 +275,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Classes'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

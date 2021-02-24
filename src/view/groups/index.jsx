@@ -49,7 +49,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Groups'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

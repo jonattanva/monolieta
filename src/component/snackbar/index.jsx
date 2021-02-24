@@ -7,7 +7,6 @@ const Snackbar = styled.div`
     align-items: center;
     bottom: 0;
     box-sizing: border-box;
-    color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     display: flex;
     font-family: Roboto, sans-serif;
@@ -22,7 +21,6 @@ const Snackbar = styled.div`
 
 const Surface = styled.div`
     align-items: center;
-    background-color: hsl(220, 13%, 20%);
     background-color: var(--color-secondary-dark, hsl(220, 13%, 20%));
     border-radius: 4px;
     box-sizing: border-box;
@@ -36,7 +34,6 @@ const Surface = styled.div`
 
 const Label = styled.div`
     box-sizing: border-box;
-    color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     flex-grow: 1;
     font-family: Roboto, sans-serif;
@@ -63,7 +60,6 @@ const Close = styled.div`
     background-color: transparent;
     border: none;
     box-sizing: border-box;
-    color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     cursor: pointer;
     display: inline-block;
@@ -78,7 +74,6 @@ const Close = styled.div`
     width: 36px;
 
     &:hover {
-        background-color: hsl(220, 13%, 25%);
         background-color: var(--color-secondary-light, hsl(220, 13%, 25%));
         border-radius: 50%;
     }
@@ -97,11 +92,11 @@ const Root = (props: PropsType): React.Node => {
         }
     }, props.delay)
 
-    const onClose = React.useCallback(() => {
+    const onClose = () => {
         if (props.onClose) {
             props.onClose()
         }
-    }, [props])
+    }
 
     return (
         <Snackbar>
@@ -129,7 +124,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Snackbar'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

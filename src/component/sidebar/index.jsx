@@ -3,11 +3,9 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 const Sidebar = styled.div`
-    background-color: hsl(220, 13%, 25%);
     background-color: var(--color-secondary-light, hsl(220, 13%, 25%));
     border-radius: 4px;
     box-sizing: border-box;
-    color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     cursor: default;
     font-family: Roboto, sans-serif;
@@ -23,7 +21,6 @@ const Sidebar = styled.div`
 `
 
 const Title = styled.div`
-    color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     font-family: Roboto, sans-serif;
     font-size: 1rem;
@@ -49,7 +46,4 @@ const Root = (props: PropsType): React.Node => (
 
 Root.displayName = 'Sidebar'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

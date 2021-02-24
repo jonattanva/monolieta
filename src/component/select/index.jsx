@@ -67,7 +67,4 @@ Root.defaultProps = {
     defaultValue: null
 }
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

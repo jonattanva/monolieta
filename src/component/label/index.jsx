@@ -11,7 +11,6 @@ const Color = React.lazy(() => {
 
 const Body = styled.div`
     align-items: center;
-    background-color: hsl(220, 13%, 15%);
     background-color: var(--color-secondary, hsl(220, 13%, 15%));
     box-sizing: border-box;
     display: flex;
@@ -32,44 +31,35 @@ const Picker = styled.div`
 `
 
 type PropsType = {
-    id: string,
-    color: string,
-    name: string,
-    selected?: boolean,
-    autofocus?: boolean,
     autoPosition?: boolean,
+    autofocus?: boolean,
+    color: string,
+    id: string,
+    name: string,
     onSavedColor: (string, string) => void,
     onSelectedClass: (string, boolean) => void,
-    onSelectedName: (string, string) => void
+    onSelectedName: (string, string) => void,
+    selected?: boolean
 }
 
 const Root = (props: PropsType): React.Node => {
-    const onSelectedClass = React.useCallback(
-        (checked: boolean) => {
-            if (props.onSelectedClass) {
-                props.onSelectedClass(props.id, checked)
-            }
-        },
-        [props]
-    )
+    const onSelectedClass = (checked: boolean) => {
+        if (props.onSelectedClass) {
+            props.onSelectedClass(props.id, checked)
+        }
+    }
 
-    const onSavedColor = React.useCallback(
-        (color: string) => {
-            if (props.onSavedColor) {
-                props.onSavedColor(props.id, color)
-            }
-        },
-        [props]
-    )
+    const onSavedColor = (color: string) => {
+        if (props.onSavedColor) {
+            props.onSavedColor(props.id, color)
+        }
+    }
 
-    const onSelectedName = React.useCallback(
-        (value: string) => {
-            if (props.onSelectedName) {
-                props.onSelectedName(props.id, value)
-            }
-        },
-        [props]
-    )
+    const onSelectedName = (value: string) => {
+        if (props.onSelectedName) {
+            props.onSelectedName(props.id, value)
+        }
+    }
 
     return (
         <Body>
@@ -99,7 +89,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Label'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

@@ -5,8 +5,12 @@ import Empty from 'component/empty'
 import shortcut from 'util/shortcut'
 import Explorer from 'view/explorer'
 import Canvas from 'component/canvas'
+import Hand from 'component/icon/hand'
+import Rect from 'component/icon/rect'
+import Cube from 'component/icon/cube'
 import useKeyboard from 'hook/keyboard'
 import Label from 'component/icon/label'
+import Cursor from 'component/icon/cursor'
 import Github from 'component/icon/github'
 import Archive from 'component/icon/archive'
 import { readImage } from 'library/file-system'
@@ -56,7 +60,6 @@ const Sidebar = styled.div`
     flex-direction: column;
     flex-wrap: nowrap;
     height: 100%;
-    margin-right: 8px;
     min-width: 300px;
     width: 300px;
 `
@@ -141,6 +144,20 @@ const Root = (): React.Node => {
                 />
             </Sidebar>
             <Body>
+                <Navigation orientation="vertical">
+                    <Access>
+                        <Cursor />
+                    </Access>
+                    <Access>
+                        <Hand />
+                    </Access>
+                    <Access>
+                        <Rect />
+                    </Access>
+                    <Access>
+                        <Cube />
+                    </Access>
+                </Navigation>
                 <React.Suspense fallback={<Empty />}>
                     {isProjectManager && (
                         <Manager
@@ -153,7 +170,7 @@ const Root = (): React.Node => {
             </Body>
             {!isProjectManager && (
                 <React.Fragment>
-                    <Navigation>
+                    <Navigation orientation="horizontal">
                         <Access onClick={onGroupManager}>
                             <Archive />
                         </Access>

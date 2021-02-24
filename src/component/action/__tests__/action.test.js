@@ -2,19 +2,22 @@
 import Action from '..'
 import { render, screen, fireEvent } from '@testing-library/react'
 
+const props = {
+    onClick: jest.fn()
+}
+
 describe('<Action />', function () {
     it('click', function () {
-        const onClick = jest.fn()
-        render(<Action onClick={onClick}>My button</Action>)
+        render(<Action {...props}>My button</Action>)
 
         const input = screen.getByRole('button')
         fireEvent.click(input)
 
-        expect(onClick).toHaveBeenCalledTimes(1)
+        expect(props.onClick).toHaveBeenCalledTimes(1)
     })
 
     it('name', function () {
-        render(<Action onClick={() => {}}>Demo</Action>)
+        render(<Action {...props}>Demo</Action>)
 
         expect(screen.getByText(/demo/i)).toBeDefined()
     })

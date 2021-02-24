@@ -18,12 +18,12 @@ const Root = (props: PropsType): React.Node => (
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+            d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"
         />
     </svg>
 )
 
-Root.displayName = 'Folder'
+Root.displayName = 'Hand'
 
 Root.defaultProps = {
     width: 24,

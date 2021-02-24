@@ -30,7 +30,4 @@ Root.defaultProps = {
     height: 24
 }
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

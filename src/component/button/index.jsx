@@ -4,11 +4,9 @@ import styled from 'styled-components'
 
 const Button = styled.div`
     align-items: center;
-    background-color: #6200ee;
     background-color: var(--color-primary, #6200ee);
     border-radius: 4px;
     box-sizing: border-box;
-    color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     cursor: pointer;
     display: inline-flex;
@@ -28,7 +26,6 @@ const Button = styled.div`
     white-space: nowrap;
 
     &:active {
-        background-color: #9951ff;
         background-color: var(--color-primary-light, #9951ff);
     }
 `
@@ -47,7 +44,4 @@ const Root = (props: PropsType): React.Node => (
 
 Root.displayName = 'Button'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

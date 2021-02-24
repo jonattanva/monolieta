@@ -10,7 +10,6 @@ import Visible from 'component/icon/visible'
 
 const Body = styled.div`
     align-items: center;
-    background-color: hsl(220, 13%, 15%);
     background-color: var(--color-secondary, hsl(220, 13%, 15%));
     box-sizing: border-box;
     display: flex;
@@ -30,7 +29,6 @@ const Color = styled.div`
         var(--group-color, #6f7a90) 4px
     );
     border-radius: 4px;
-    color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     cursor: pointer;
     display: flex;
@@ -45,7 +43,6 @@ const Action = styled.div`
     align-items: center;
     border-radius: 4px;
     box-sizing: border-box;
-    color: hsl(0, 0%, 90%);
     color: var(--color-font, hsl(0, 0%, 90%));
     cursor: pointer;
     display: flex;
@@ -56,7 +53,6 @@ const Action = styled.div`
     width: 32px;
 
     &:hover {
-        background-color: hsl(220, 13%, 25%);
         background-color: var(--color-secondary-light, hsl(220, 13%, 25%));
     }
 `
@@ -71,8 +67,10 @@ type PropsType = {
     classes: Array<Monolieta.Label>,
     color?: string,
     id: string,
+    onShowLabelClass?: (string, boolean) => void,
     onLockClass?: (string, boolean) => void,
     onSelectedClass?: (string, string) => void,
+    onTrashClass?: (string) => void,
     onVisibleClass?: (string, boolean) => void
 }
 
@@ -81,42 +79,54 @@ const Root = (props: PropsType): React.Node => {
 
     const [isLocked, setLocked] = React.useState(false)
     const [isVisible, setVisible] = React.useState(true)
+    const [isShowClass, setShowClass] = React.useState(false)
 
-    const onVisible = React.useCallback(() => {
+    const onVisible = () => {
         setVisible((previous) => {
             const next = !previous
             if (props.onVisibleClass) {
                 props.onVisibleClass(props.id, next)
             }
+            return next
         })
-    }, [props])
+    }
 
-    const onLock = React.useCallback(() => {
+    const onShowLabelClass = () => {
+        setShowClass((previous) => {
+            const next = !previous
+            if (props.onShowLabelClass) {
+                props.onShowLabelClass(props.id, next)
+            }
+            return next
+        })
+    }
+
+    const onLock = () => {
         setLocked((previous) => {
             const next = !previous
             if (props.onLockClass) {
                 props.onLockClass(props.id, next)
             }
+            return next
         })
-    }, [props])
+    }
 
-    const onSelectedClass = React.useCallback(
-        ({ value }) => {
-            if (props.onSelectedClass) {
-                props.onSelectedClass(props.id, value)
-            }
-        },
-        [props]
-    )
+    const onSelectedClass = ({ value }) => {
+        if (props.onSelectedClass) {
+            props.onSelectedClass(props.id, value)
+        }
+    }
 
-    const classes = React.useMemo(
-        () =>
-            props.classes.map((value) => ({
-                label: value.name,
-                value: value.id
-            })),
-        [props.classes]
-    )
+    const onTrash = () => {
+        if (props.onTrashClass) {
+            props.onTrashClass(props.id)
+        }
+    }
+
+    const classes = props.classes.map((value) => ({
+        label: value.name,
+        value: value.id
+    }))
 
     return (
         <Body>
@@ -129,13 +139,13 @@ const Root = (props: PropsType): React.Node => {
             <Name>
                 <Select options={classes} onChange={onSelectedClass} />
             </Name>
-            <Action role="button">
+            <Action onClick={onShowLabelClass} role="button">
                 <Label />
             </Action>
             <Action onClick={onLock} role="button">
                 <Lock locked={isLocked} />
             </Action>
-            <Action role="button">
+            <Action onClick={onTrash} role="button">
                 <Trash />
             </Action>
         </Body>
@@ -144,7 +154,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Group'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root

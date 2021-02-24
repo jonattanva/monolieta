@@ -117,7 +117,6 @@ const Virtual = (props: PropsType): React.Node => {
         return props.children.slice(startNode, startNode + visibleNodeCount)
     }, [props.children, startNode, visibleNodeCount])
 
-    console.log('[Virtual]')
     return (
         <Root ref={scrollRef}>
             <Viewport style={{ height: totalHeight }}>
@@ -134,13 +133,9 @@ const Virtual = (props: PropsType): React.Node => {
 Virtual.displayName = 'Virtual'
 
 Virtual.defaultProps = {
-    children: [],
     height: 120,
     margin: 0,
     width: 120
 }
 
-export default (React.memo<PropsType>(Virtual): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Virtual

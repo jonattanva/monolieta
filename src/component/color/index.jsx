@@ -19,11 +19,9 @@ const Picker = styled.div`
     z-index: 100;
 
     & > .pcr-app {
-        background-color: hsl(220, 13%, 15%);
         background-color: var(--color-secondary, hsl(220, 13%, 15%));
 
         & > .pcr-interaction .pcr-save {
-            background-color: #6200ee;
             background-color: var(--color-primary, #6200ee);
         }
     }
@@ -62,8 +60,8 @@ const picker = (ref: any, color: string = '#42445a') => ({
 })
 
 type PropsType = {
-    color?: string,
     autoPosition?: boolean,
+    color?: string,
     onSavedColor: (string) => void
 }
 
@@ -76,13 +74,13 @@ export const random = (included: Array<string> = []): string => {
 }
 
 const Root = (props: PropsType): React.Node => {
+    const { autoPosition = false, color = '#6200ee' } = props
+
     const colorRef = React.useRef()
     const pickrRef: any = React.useRef()
 
     const [open, setOpen] = React.useState(false)
     const [position, setPosition] = React.useState(null)
-
-    const { autoPosition = false } = props
 
     React.useEffect(() => {
         pickrRef.current = Pickr.create(picker(colorRef))
@@ -93,19 +91,19 @@ const Root = (props: PropsType): React.Node => {
 
     const init = React.useCallback(
         (instance) => {
-            if (props.color && props.color !== '') {
+            if (color && color !== '') {
                 const current = instance
                     .getColor()
                     .toHEXA()
                     .toString()
                     .toUpperCase()
 
-                if (props.color && props.color.toUpperCase() !== current) {
-                    instance.setColor(props.color, true)
+                if (color && color.toUpperCase() !== current) {
+                    instance.setColor(color, true)
                 }
             }
         },
-        [props.color]
+        [color]
     )
 
     const hide = React.useCallback(() => {
@@ -139,46 +137,41 @@ const Root = (props: PropsType): React.Node => {
         }
     }, [init, hide, onSavedColor])
 
-    const onOpenHandle = React.useCallback(
-        (event) => {
-            event.preventDefault()
-            event.stopPropagation()
+    const onOpenHandle = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
 
-            if (autoPosition) {
-                if (!document.documentElement) {
-                    return
-                }
-
-                const {
-                    height
-                } = document.documentElement.getBoundingClientRect()
-
-                const root = 242
-                const margin = 20
-                const { y } = event.target.getBoundingClientRect()
-
-                let position = y - margin
-                const extra = position + root - height
-                if (extra > 0) {
-                    position = position - extra - 40
-                }
-                setPosition(position)
+        if (autoPosition) {
+            if (!document.documentElement) {
+                return
             }
 
-            pickrRef.current.show()
-            setOpen(true)
-        },
-        [autoPosition]
-    )
+            const { height } = document.documentElement.getBoundingClientRect()
 
-    const isShow = React.useMemo(() => {
-        return open ? 'block' : 'none'
-    }, [open])
+            const root = 242
+            const margin = 20
+            const { y } = event.target.getBoundingClientRect()
+
+            let position = y - margin
+            const extra = position + root - height
+            if (extra > 0) {
+                position = position - extra - 40
+            }
+            setPosition(position)
+        }
+
+        pickrRef.current.show()
+        setOpen(true)
+    }
 
     return (
         <React.Fragment>
             <Button onClick={onOpenHandle} role="button" />
-            <Picker style={{ '--color-picker-show': isShow, top: position }}>
+            <Picker
+                style={{
+                    '--color-picker-show': open ? 'block' : 'none',
+                    top: position
+                }}>
                 <div ref={colorRef}></div>
             </Picker>
         </React.Fragment>
@@ -187,14 +180,7 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Color'
 
-Root.defaultProps = {
-    color: '#6200ee'
-}
-
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root
 
 // prettier-ignore
 const colors = [

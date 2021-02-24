@@ -16,7 +16,6 @@ const Body = styled.div`
     width: 18px;
 
     &:hover {
-        background-color: hsl(220, 13%, 20%);
         background-color: var(--color-secondary-dark, hsl(220, 13%, 20%));
         border-radius: 50%;
         cursor: pointer;
@@ -37,12 +36,10 @@ const Input = styled.input`
     width: 40px;
 `
 
-// prettier-ignore
 const Background = styled.div`
     align-items: center;
-    background-color: transparent;
-    border-color: hsl(220, 13%, 65%);
-    border-color: var(--color-font-light, hsl(220, 13%, 65%));
+    background-color: var(--checkbox-background, transparent);
+    border-color: var(--checkbox-border, hsl(220, 13%, 65%));
     border-radius: 4px;
     border-style: solid;
     border-width: 2px;
@@ -58,20 +55,10 @@ const Background = styled.div`
     top: 11px;
     white-space: nowrap;
     width: 18px;
-
-    ${({ $checked }) =>
-        $checked &&
-        `
-        background-color: #6200ee;
-        background-color: var(--color-primary, #6200ee);
-        border-color: #6200ee;
-        border-color: var(--color-primary, #6200ee);
-    `}
 `
 
 const Icon = styled.svg`
     bottom: 0;
-    color: hsl(0, 0%, 90%);
     color: var(--color-font: hsl(0, 0%, 90%));
     cursor: pointer;
     left: 0;
@@ -85,9 +72,8 @@ const Icon = styled.svg`
     width: 100%;
 `
 
-// prettier-ignore
 const Path = styled.path`
-    color: transparent;
+    color: var(--checkbox-color, transparent);
     cursor: pointer;
     line-height: 0;
     pointer-events: none;
@@ -96,11 +82,6 @@ const Path = styled.path`
     stroke-width: 3.12px;
     stroke: currentColor;
     white-space: nowrap;
-
-    ${({ $checked }) => $checked && `
-        color: hsl(0, 0%, 90%);
-        color: var(--color-font: hsl(0, 0%, 90%));
-    `}
 `
 
 type PropsType = {
@@ -112,29 +93,36 @@ type PropsType = {
 const Root = (props: PropsType): React.Node => {
     const { checked = false } = props
 
-    const onChange = React.useCallback(
-        (event) => {
-            if (props.onChange) {
-                props.onChange(event.target.checked)
-            }
-        },
-        [props]
-    )
+    const onChange = (event) => {
+        if (props.onChange) {
+            props.onChange(event.target.checked)
+        }
+    }
 
     return (
-        <Body data-checked={checked} onClick={onChange} role="input">
+        <Body onClick={onChange} role="input">
             <Input
                 type="checkbox"
                 defaultChecked={checked}
                 tabIndex={props.tabIndex}
             />
-            <Background $checked={checked}>
+            <Background
+                style={{
+                    '--checkbox-background': checked
+                        ? '#6200ee'
+                        : 'transparent',
+                    '--checkbox-border': checked
+                        ? '#6200ee'
+                        : 'hsl(220, 13%, 65%)',
+                    '--checkbox-color': checked
+                        ? 'hsl(0, 0%, 90%)'
+                        : 'transparent'
+                }}>
                 <Icon viewBox="0 0 24 24">
                     <Path
                         fill="none"
                         stroke="white"
                         d="M1.73,12.91 8.1,19.28 22.79,4.59"
-                        $checked={checked}
                     />
                 </Icon>
             </Background>
@@ -144,7 +132,4 @@ const Root = (props: PropsType): React.Node => {
 
 Root.displayName = 'Checkbox'
 
-export default (React.memo<PropsType>(Root): React.AbstractComponent<
-    PropsType,
-    mixed
->)
+export default Root
