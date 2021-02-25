@@ -43,6 +43,8 @@ type PropsType = {
 }
 
 const Root = (props: PropsType): React.Node => {
+    const { autoPosition = false } = props
+
     const onSelectedClass = (checked: boolean) => {
         if (props.onSelectedClass) {
             props.onSelectedClass(props.id, checked)
@@ -73,7 +75,7 @@ const Root = (props: PropsType): React.Node => {
                     <Color
                         color={props.color}
                         onSavedColor={onSavedColor}
-                        autoPosition={props.autoPosition}
+                        autoPosition={autoPosition}
                     />
                 </React.Suspense>
             </Picker>

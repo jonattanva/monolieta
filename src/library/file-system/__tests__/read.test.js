@@ -1,7 +1,25 @@
 //@flow
-import { readFile, readJson } from '..'
+import { readFile, readJson, isMonolietaFile } from '..'
 
 describe('Read', function () {
+    it('configuration file', function () {
+        expect(
+            isMonolietaFile(
+                new window.File([`Lorem ipsum dolor sit amet.`], 'text.txt', {
+                    type: 'text/plain'
+                })
+            )
+        ).toBeFalsy()
+
+        expect(
+            isMonolietaFile(
+                new window.File([`{}`], 'workspace.monolieta', {
+                    type: 'application/json'
+                })
+            )
+        ).toBeTruthy()
+    })
+
     it('read json', async function () {
         await expect(
             readJson(
