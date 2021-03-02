@@ -14,20 +14,21 @@ const isWhiteList = (target): boolean => {
     return target instanceof HTMLInputElement
 }
 
-export default (keys: Array<string>): boolean => {
+export default (keys: Array<string>, handler: () => void) => {
     const [keyPressed, setKeyPressed] = React.useState([])
 
     const downHandler = React.useCallback(
         (event) => {
             const { key, repeat, target } = event
+
             if (repeat || isWhiteList(target)) {
                 return
             }
 
             setKeyPressed((previous) => {
                 if (keys.includes(key) && !previous.includes(key)) {
-                    event.stopPropagation()
                     event.preventDefault()
+                    event.stopPropagation()
 
                     return [...previous, key]
                 }
@@ -50,7 +51,7 @@ export default (keys: Array<string>): boolean => {
                 event.preventDefault()
 
                 return previous.filter((value) => {
-                    if (specialKeys.includes(key)) {
+                    if (specialKeys.includes(value)) {
                         return false
                     }
                     return value !== key
@@ -61,20 +62,22 @@ export default (keys: Array<string>): boolean => {
     )
 
     React.useEffect(() => {
-        window.addEventListener('keydown', downHandler)
         window.addEventListener('keyup', upHandler)
+        window.addEventListener('keydown', downHandler)
 
         return () => {
-            window.removeEventListener('keydown', downHandler)
             window.removeEventListener('keyup', upHandler)
+            window.removeEventListener('keydown', downHandler)
         }
     }, [downHandler, upHandler])
 
-    const isKeysPressed = areKeysPressed(keys, keyPressed)
-    if (isKeysPressed) {
-        setKeyPressed([])
-    }
-    return isKeysPressed
+    React.useEffect(() => {
+        const isKeysPressed = areKeysPressed(keys, keyPressed)
+        if (isKeysPressed) {
+            handler()
+            setKeyPressed([])
+        }
+    }, [keys, keyPressed, handler])
 }
 
 const specialKeys = [

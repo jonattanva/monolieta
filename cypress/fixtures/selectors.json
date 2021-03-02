@@ -1,12 +1,5 @@
 {
-    "menu": "[data-cy=menu]",
-    "project": {
-        "file": "[data-cy=file]",
-        "new": "[data-cy=new]",
-        "input": {
-            "id": "[data-cy=id]",
-            "name": "[data-cy=name]",
-            "create": "[data-cy=create]"
-        }
-    }
+    "label":"[data-cy=label]",
+    "sort": "[data-cy=sort]",
+    "trash":"[data-cy=trash]"
 }

@@ -4,11 +4,11 @@ import shortcut from 'util/shortcut'
 import Dropdown, { Item, Divider, Shortcut } from 'component/dropdown'
 
 type PropsType = {
-    isNewFileDisabled?: boolean,
-    onNewFile?: () => Promise<void>,
-    onNewProject?: (Event) => void,
-    onOpenProject?: () => Promise<void>,
-    onOutside?: () => void
+    isNewFileDisabled: boolean,
+    onNewFile: (Event) => Promise<void>,
+    onNewProject: (Event) => void,
+    onOpenProject: (Event) => Promise<void>,
+    onOutside: () => void
 }
 
 const Root = (props: PropsType): React.Node => {

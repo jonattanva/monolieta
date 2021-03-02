@@ -3,12 +3,11 @@ import * as Monolieta from 'Monolieta'
 import * as React from 'react'
 import { nanoid } from 'nanoid'
 import styled from 'styled-components'
-import Empty from 'component/empty'
-import Action from 'component/action'
+import Resource from 'component/resource'
 import support from 'util/support'
-import Folder from 'component/icon/folder'
 import shortcut from 'util/shortcut'
 import useKeyboard from 'hook/keyboard'
+import Menu from 'view/explorer/menu'
 import { Context } from 'component/session'
 import {
     upload,
@@ -16,18 +15,6 @@ import {
     directory,
     isMonolietaFile
 } from 'library/file-system'
-
-const Option = React.lazy(() => {
-    return import('view/option')
-})
-
-const Picture = React.lazy(() => {
-    return import('component/picture')
-})
-
-const Virtual = React.lazy(() => {
-    return import('component/virtual')
-})
 
 const Explorer = styled.div`
     width: 100%;
@@ -78,42 +65,20 @@ const Body = styled.div`
     width: 100%;
 `
 
-const Message = styled.div`
-    align-items: center;
-    color: hsl(0, 0%, 90%);
-    color: var(--color-font, hsl(0, 0%, 90%));
-    display: flex;
-    flex-direction: column;
-    font-family: Roboto, sans-serif;
-    font-size: 0.875rem;
-    height: 100%;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-`
-
-const size = {
-    height: 120,
-    width: 120
-}
-
 type PropsType = {
-    onNewProject?: (Event) => void,
+    onNewProject: (Event) => void,
     onOpenProject?: (boolean, string) => void,
-    onSelectedImage?: (Monolieta.Resource) => void | Promise<void>
+    onSelectedResource?: (Monolieta.Resource) => void | Promise<void>
 }
 
 const Root = (props: PropsType): React.Node => {
-    const { onSelectedImage = null } = props
-
-    const indexRef = React.useRef({})
     const { project, dispatch } = React.useContext(Context)
 
-    const [isOption, setOption] = React.useState(false)
     const [isNewFileDisabled, setNewFileDisabled] = React.useState(true)
 
-    const isCancelKeyPressed = useKeyboard(shortcut.escape.key)
-    const isOpenProjectKeyPressed = useKeyboard(shortcut.open.key)
+    useKeyboard(shortcut.open.key, () => {
+        onOpenProject()
+    })
 
     React.useEffect(() => {
         if (project.key) {
@@ -121,15 +86,18 @@ const Root = (props: PropsType): React.Node => {
         }
     }, [project.key, setNewFileDisabled])
 
-    const onOptionHandle = () => {
-        setOption((previous) => !previous)
-    }
+    const onSelecteResource = (current, resources) => {
+        if (props.onSelectedResource) {
+            props.onSelectedResource(current)
+        }
 
-    const onOutside = () => {
-        setOption(false)
+        dispatch({
+            type: '/resource',
+            project: {
+                resources: [...resources]
+            }
+        })
     }
-
-    const isEmpty = project.resources?.length === 0
 
     const onNewFile = async () => {
         if (!isNewFileDisabled) {
@@ -203,104 +171,26 @@ const Root = (props: PropsType): React.Node => {
         })
     }
 
-    const onSelected = (id) => {
-        const resources = project.resources || []
-        if (resources.length === 0) {
-            return
-        }
-
-        const indexed = Object.keys(indexRef.current)
-        if (indexed.length > 0) {
-            if (indexed.includes(id)) {
-                return
-            }
-
-            indexed.reverse().forEach((id) => {
-                const current = resources.find((resource) => resource.id === id)
-
-                if (current) {
-                    current.selected = false
-                }
-
-                delete indexRef.current[id]
-            })
-        }
-
-        const current = resources.find((resource, index) => {
-            if (resource.id === id) {
-                indexRef.current[id] = index
-                return true
-            }
-            return false
-        })
-
-        if (current) {
-            current.selected = true
-
-            if (onSelectedImage) {
-                onSelectedImage(current)
-            }
-
-            dispatch({
-                type: '/resource',
-                project: {
-                    resources: [...resources]
-                }
-            })
-        }
-    }
-
-    const visibleChildren = project.resources?.map((resource) => (
-        <Picture
-            key={resource.id}
-            id={resource.id}
-            file={resource.file}
-            selected={resource.selected}
-            onSelectedImage={onSelected}
-            {...size}
-        />
-    ))
-
-    if (isOpenProjectKeyPressed) {
-        onOpenProject()
-    }
-
-    if (isCancelKeyPressed && isOption) {
-        setOption(false)
-    }
-
     return (
         <Explorer>
             <Header>
                 <Panel>
                     <Title>Project</Title>
-                    <Action onClick={onOptionHandle}>
-                        <Folder />
-                        {isOption && (
-                            <React.Suspense fallback={<Empty />}>
-                                <Option
-                                    onOutside={onOutside}
-                                    onNewFile={onNewFile}
-                                    onNewProject={props.onNewProject}
-                                    onOpenProject={onOpenProject}
-                                    isNewFileDisabled={isNewFileDisabled}
-                                />
-                            </React.Suspense>
-                        )}
-                    </Action>
+                    <Menu
+                        onNewFile={onNewFile}
+                        onNewProject={props.onNewProject}
+                        onOpenProject={onOpenProject}
+                        isNewFileDisabled={isNewFileDisabled}
+                    />
                 </Panel>
                 <Name>{project.name}</Name>
             </Header>
             <Body>
-                {isEmpty ? (
-                    <Message>You have not yet opened a project</Message>
-                ) : (
-                    <React.Suspense fallback={<Empty />}>
-                        <Virtual {...size} margin={4}>
-                            {visibleChildren}
-                        </Virtual>
-                    </React.Suspense>
-                )}
+                <Resource
+                    dataSource={project.resources}
+                    onSelecteResource={onSelecteResource}
+                    message="You have not yet opened a project"
+                />
             </Body>
         </Explorer>
     )

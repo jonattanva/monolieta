@@ -2,38 +2,33 @@
 import * as React from 'react'
 
 type PropsType = {
-    ascending?: boolean,
-    height?: number,
-    width?: number
+    width?: number,
+    height?: number
 }
 
 const Root = (props: PropsType): React.Node => (
     <svg
-        fill="none"
         role="icon"
+        fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
         width={props.width}
-        height={props.height}>
+        height={props.height}
+        style={{ transform: 'rotate(90deg)' }}>
         <path
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            d={
-                props.ascending
-                    ? 'M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12'
-                    : 'M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4'
-            }
+            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
         />
     </svg>
 )
 
-Root.displayName = 'Sort'
+Root.displayName = 'Adjustments'
 
 Root.defaultProps = {
-    ascending: true,
-    height: 24,
-    width: 24
+    width: 24,
+    height: 24
 }
 
 export default Root

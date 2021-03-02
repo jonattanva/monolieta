@@ -64,7 +64,7 @@ const Root = (props: PropsType): React.Node => {
     }
 
     return (
-        <Body>
+        <Body role="label">
             <Checkbox
                 tabIndex={-1}
                 checked={props.selected}

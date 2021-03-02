@@ -1,31 +1,22 @@
 // @flow
 import * as React from 'react'
 import styled from 'styled-components'
-import Empty from 'component/empty'
-import shortcut from 'util/shortcut'
-import Explorer from 'view/explorer'
-import Canvas from 'component/canvas'
-import Hand from 'component/icon/hand'
-import Rect from 'component/icon/rect'
-import Cube from 'component/icon/cube'
-import useKeyboard from 'hook/keyboard'
-import Label from 'component/icon/label'
-import Cursor from 'component/icon/cursor'
-import Github from 'component/icon/github'
+import Adjustments from 'component/icon/adjustments'
 import Archive from 'component/icon/archive'
-import { readImage } from 'library/file-system'
+import Canvas from 'component/canvas'
+import Cube from 'component/icon/cube'
+import Cursor from 'component/icon/cursor'
+import Empty from 'component/empty'
+import Explorer from 'view/explorer'
+import Github from 'component/icon/github'
+import Hand from 'component/icon/hand'
+import Label from 'component/icon/label'
+import Rect from 'component/icon/rect'
 import Navigation, { Access } from 'component/navigation'
+import { readImage } from 'library/file-system'
 
 const Classes = React.lazy(() => {
     return import('view/classes')
-})
-
-const Groups = React.lazy(() => {
-    return import('view/groups')
-})
-
-const Manager = React.lazy(() => {
-    return import('view/manager')
 })
 
 const Snackbar = React.lazy(() => {
@@ -66,7 +57,7 @@ const Sidebar = styled.div`
 
 const Body = styled.div`
     align-content: center;
-    align-items: center;
+    align-items: flex-start;
     align-self: stretch;
     background-color: hsl(220, 13%, 15%);
     background-color: var(--color-secondary, hsl(220, 13%, 15%));
@@ -77,9 +68,26 @@ const Body = styled.div`
     flex-direction: column;
     flex-wrap: nowrap;
     height: 100%;
-    justify-content: center;
+    justify-content: flex-start;
     min-width: 0;
     width: 100%;
+`
+
+const Layer = styled.div`
+    align-content: center;
+    align-items: center;
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+`
+
+const Content = styled.div`
+    align-self: flex-start;
+    display: flex;
 `
 
 const Root = (): React.Node => {
@@ -90,55 +98,37 @@ const Root = (): React.Node => {
     const [isClassManager, setClassManager] = React.useState(false)
     const [isProjectManager, setProjectManager] = React.useState(false)
 
-    const isCancelKeyPressed = useKeyboard(shortcut.escape.key)
-
-    const onHideMessage = React.useCallback(() => {
-        setMessage('')
-    }, [setMessage])
-
-    const onProjectManager = React.useCallback(() => {
-        setProjectManager(true)
-    }, [setProjectManager])
-
-    const onCancelManager = React.useCallback(() => {
-        setProjectManager(false)
-    }, [setProjectManager])
-
-    const onGroupManager = React.useCallback(() => {
-        setGroupManager((previous) => !previous)
-    }, [setGroupManager])
-
-    const onClassManager = React.useCallback(() => {
+    const onClassManager = () => {
         setClassManager((previous) => !previous)
-    }, [])
+    }
 
-    const onOpenProject = React.useCallback((error, message) => {
+    const onNewProject = () => {
+        setProjectManager(true)
+    }
+
+    const onOpenProject = (error, message) => {
         if (error) {
             setMessage(message)
         }
-    }, [])
+    }
 
-    const onSelectedImage = React.useCallback(async (resource) => {
+    const onHideMessage = () => {
+        setMessage('')
+    }
+
+    const onSelectedImage = async (resource) => {
         const file = await readImage(resource.file)
         setCurrent({
             id: resource.id,
             file
         })
-    }, [])
-
-    if (isCancelKeyPressed && isClassManager) {
-        setClassManager(false)
-    }
-
-    if (isCancelKeyPressed && isProjectManager) {
-        setProjectManager(false)
     }
 
     return (
         <Editor>
             <Sidebar>
                 <Explorer
-                    onNewProject={onProjectManager}
+                    onNewProject={onNewProject}
                     onOpenProject={onOpenProject}
                     onSelectedImage={onSelectedImage}
                 />
@@ -158,39 +148,38 @@ const Root = (): React.Node => {
                         <Cube />
                     </Access>
                 </Navigation>
-                <React.Suspense fallback={<Empty />}>
-                    {isProjectManager && (
-                        <Manager
-                            onCancelManager={onCancelManager}
-                            onProjectCreated={onCancelManager}
-                        />
-                    )}
-                </React.Suspense>
-                {!isProjectManager && <Canvas file={current?.file} />}
+                <Layer>
+                    <Canvas />
+                    <Content>
+                        <Navigation orientation="horizontal">
+                            <Access title="Groups">
+                                <Archive />
+                            </Access>
+                            <Access title="Adjustments">
+                                <Adjustments />
+                            </Access>
+                            <Access
+                                title="Labels"
+                                onClick={onClassManager}
+                                data-cy={
+                                    process.env.NODE_ENV === 'development'
+                                        ? 'label'
+                                        : null
+                                }>
+                                <Label />
+                            </Access>
+                            <Access>
+                                <Github url="https://github.com/jonattanva/monolieta" />
+                            </Access>
+                        </Navigation>
+                        <React.Suspense fallback={<Empty />}>
+                            {isClassManager && (
+                                <Classes onClose={onClassManager} />
+                            )}
+                        </React.Suspense>
+                    </Content>
+                </Layer>
             </Body>
-            {!isProjectManager && (
-                <React.Fragment>
-                    <Navigation orientation="horizontal">
-                        <Access onClick={onGroupManager}>
-                            <Archive />
-                        </Access>
-                        <Access onClick={onClassManager}>
-                            <Label />
-                        </Access>
-                        <Access>
-                            <Github url="https://github.com/jonattanva/monolieta" />
-                        </Access>
-                    </Navigation>
-                    <React.Suspense fallback={<Empty />}>
-                        {isClassManager && (
-                            <Classes onOutside={onClassManager} />
-                        )}
-                        {isGroupManager && (
-                            <Groups onOutside={onGroupManager} />
-                        )}
-                    </React.Suspense>
-                </React.Fragment>
-            )}
             {message && (
                 <React.Suspense fallback={<Empty />}>
                     <Snackbar delay={5000} onClose={onHideMessage}>

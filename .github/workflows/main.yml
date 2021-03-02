@@ -42,6 +42,13 @@ jobs:
     - name: Tests and coverage
       run: yarn test:coverage
 
+    - name: Chrome
+      uses: cypress-io/github-action@v2
+      with:
+        build: yarn start:web
+        browser: chrome
+        wait-on: 'http://localhost:8080'
+
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:

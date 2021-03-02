@@ -1,14 +1,17 @@
 // @flow
 import * as React from 'react'
 import { nanoid } from 'nanoid'
-import styled from 'styled-components'
-import Label from 'component/label'
 import Action from 'component/action'
 import Button from 'component/button'
-import Sidebar from 'component/sidebar'
+import Label from 'component/label'
 import Search from 'component/search'
+import Sidebar from 'component/sidebar'
 import Sort from 'component/icon/sort'
 import Trash from 'component/icon/trash'
+import shortcut from 'util/shortcut'
+import sort from 'util/sort'
+import styled from 'styled-components'
+import useKeyboard from 'hook/keyboard'
 import useMouseOutside from 'hook/outside'
 import { random } from 'component/color'
 import { Context } from 'component/session'
@@ -29,7 +32,6 @@ const Row = styled.div`
 `
 
 const Summary = styled.div`
-    color: hsl(219, 13%, 65%);
     color: var(--color-font-light, hsl(219, 13%, 65%));
     cursor: default;
     font-family: Roboto, sans-serif;
@@ -67,12 +69,8 @@ const Scroll = styled.div`
     width: 100%;
 `
 
-const sort = (first: string, second: string, ascending: boolean = true) => {
-    return ascending ? first.localeCompare(second) : second.localeCompare(first)
-}
-
 type PropsType = {
-    onOutside?: () => void
+    onClose?: () => void
 }
 
 const Root = (props: PropsType): React.Node => {
@@ -81,12 +79,6 @@ const Root = (props: PropsType): React.Node => {
 
     const [classes, setClasses] = React.useState([])
     const [ascending, setAscending] = React.useState(true)
-
-    useMouseOutside(classRef, () => {
-        if (props.onOutside) {
-            props.onOutside()
-        }
-    })
 
     React.useEffect(() => {
         if (project.classes) {
@@ -101,12 +93,24 @@ const Root = (props: PropsType): React.Node => {
             }
 
             return [
-                ...previous.sort((first, second) =>
-                    sort(first.name, second.name, ascending)
-                )
+                ...previous.sort((first, second) => {
+                    return sort(first.name, second.name, ascending)
+                })
             ]
         })
     }, [ascending])
+
+    useMouseOutside(classRef, () => {
+        if (props.onClose) {
+            props.onClose()
+        }
+    })
+
+    useKeyboard(shortcut.escape.key, () => {
+        if (props.onClose) {
+            props.onClose()
+        }
+    })
 
     const onSort = () => {
         setAscending((previous) => !previous)
@@ -158,6 +162,11 @@ const Root = (props: PropsType): React.Node => {
 
     const onRemoveClass = () => {
         if (classes.length === 0) {
+            return
+        }
+
+        const selected = classes.find((value) => value.selected)
+        if (!selected) {
             return
         }
 
@@ -221,6 +230,7 @@ const Root = (props: PropsType): React.Node => {
             })
         }
     }
+
     const visible = classes.map((value, index) => (
         <Label
             key={value.id}
@@ -248,7 +258,12 @@ const Root = (props: PropsType): React.Node => {
                                 onClick={onSort}
                                 title={`Sort - ${
                                     ascending ? 'ascending' : 'descending'
-                                }`}>
+                                }`}
+                                cy={
+                                    process.env.NODE_ENV === 'development'
+                                        ? 'sort'
+                                        : null
+                                }>
                                 <Sort ascending={ascending} />
                             </Action>
                         </Separator>
@@ -258,7 +273,13 @@ const Root = (props: PropsType): React.Node => {
                     <Group>
                         <Summary>Classes</Summary>
                         <Control>
-                            <Action onClick={onRemoveClass}>
+                            <Action
+                                onClick={onRemoveClass}
+                                cy={
+                                    process.env.NODE_ENV === 'development'
+                                        ? 'trash'
+                                        : null
+                                }>
                                 <Trash />
                             </Action>
                             <Separator>
@@ -267,7 +288,7 @@ const Root = (props: PropsType): React.Node => {
                         </Control>
                     </Group>
                 </Row>
-                <Scroll>{visible}</Scroll>
+                <Scroll role="classes">{visible}</Scroll>
             </Sidebar>
         </Body>
     )

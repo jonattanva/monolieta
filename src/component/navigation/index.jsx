@@ -11,9 +11,7 @@ const Navigation = styled.div`
     flex-flow: var(--navigation-orientation, column);
     margin: 8px;
     padding: 0;
-    position: relative;
     right: 0;
-    top: 56px;
     user-select: none;
 `
 
