@@ -42,7 +42,7 @@ jobs:
     - name: "UI Tests - Chrome"
       uses: cypress-io/github-action@v2
       with:
-        build: yarn build:web
+        build: yarn build:web --mode=development
         start: yarn serve
         browser: chrome
 
