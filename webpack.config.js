@@ -95,8 +95,8 @@ module.exports = (_, argv) => {
             new HtmlPlugin({
                 template: './public/index.html',
                 filename: './index.html'
-            })
-            /*, new SizePlugin()*/
+            }),
+            new SizePlugin()
         ],
 
         resolve: {
