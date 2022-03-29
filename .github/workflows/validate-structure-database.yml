@@ -25,4 +25,5 @@ jobs:
       - name: Install postgres client
         run: |
           apt-get update
-          apt-get install -y postgresql-client-14
+          apt-get install --yes --no-install-recommends postgresql-client
+
