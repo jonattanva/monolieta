@@ -13,8 +13,8 @@ jobs:
           POSTGRES_USER: postgres
         ports:
           - 5432:5432
-  steps:
-    - name: Install postgres client
-      run: |
-        apt-get update
-        apt-get install -y postgresql-client-14
+    steps:
+      - name: Install postgres client
+        run: |
+          apt-get update
+          apt-get install -y postgresql-client-14
