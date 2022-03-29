@@ -1,0 +1,9 @@
+root = true
+
+[*]
+charset = utf-8
+indent_size = 4
+indent_style = space
+
+[*.{json,yml}]
+indent_size = 2
