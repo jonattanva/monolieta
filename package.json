@@ -4,10 +4,12 @@
   "version": "0.0.0",
   "scripts": {
     "build": "tsc && vite build",
-    "coverage": "vitest run --coverage",
+    "build:storybook": "npm run build-storybook --prefix ./storybook",
     "dev": "vite",
+    "dev:storybook": "npm run storybook --prefix ./storybook",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "react": "~18.0.0",

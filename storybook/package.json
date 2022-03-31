@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -c config -p 6006",
+    "build-storybook": "build-storybook -c config -o public"
+  },
+  "devDependencies": {
+    "@storybook/addon-actions": "~6.4.19",
+    "@storybook/addon-essentials": "~6.4.19",
+    "@storybook/addon-interactions": "~6.4.19",
+    "@storybook/addon-links": "~6.4.19",
+    "@storybook/builder-webpack5": "~6.4.19",
+    "@storybook/manager-webpack5": "~6.4.19",
+    "@storybook/react": "~6.4.19"
+  },
+  "engines": {
+    "node": ">=14.x"
+  }
+}

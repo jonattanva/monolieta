@@ -1,7 +1,7 @@
-name: Validate assets component
+name: Validate assets components
 on: [push]
 jobs:
-  prepare-enviroment:
+  assets-components:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -21,4 +21,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: npm install
-      - run: npm run coverage
+      - run: npm run test:coverage
