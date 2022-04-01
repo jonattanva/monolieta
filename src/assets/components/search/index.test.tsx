@@ -34,7 +34,7 @@ describe("<Search />", () => {
             () => {
                 expect(search).toHaveBeenCalledTimes(1);
             },
-            { timeout: 500 }
+            { timeout: 1000 }
         );
     });
 

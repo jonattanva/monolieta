@@ -1,0 +1,33 @@
+.main {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.item {
+    align-items: center;
+    background: none;
+    border: none;
+    box-sizing: border-box;
+    color: var(--monolieta-text-primary, hsl(0, 0%, 13%));
+    cursor: pointer;
+    display: flex;
+    font-family: var(--monolieta-font-family, Roboto, sans-serif);
+    font-size: 14px;
+    font-weight: 400;
+    height: 48px;
+    justify-content: center;
+    min-width: 120px;
+    padding: 0 24px;
+}
+
+.item:hover {
+    background-color: #e6e6e6;
+}
+
+.item[data-selected="true"] {
+    border-bottom: 2px solid var(--monolieta-primary, #6200ee);
+    color: var(--monolieta-primary, #6200ee);
+}

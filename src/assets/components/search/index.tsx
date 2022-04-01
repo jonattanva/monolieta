@@ -1,6 +1,14 @@
+import { useRef } from "react";
 import classes from "./index.module.css";
 import source from "../../images/search.svg";
-import Body, { type PropTypes } from "./body";
+
+export type PropTypes = {
+    autofocus?: boolean;
+    delay?: number;
+    search?: (criteria: string) => void | Promise<void>;
+    placeholder?: string;
+    test?: string;
+};
 
 export default function Search(props: PropTypes) {
     return (
@@ -8,7 +16,42 @@ export default function Search(props: PropTypes) {
             <div className={classes.icon}>
                 <img src={source} width={14} height={14} />
             </div>
-            <Body {...props} />
+            <Input {...props} />
         </div>
+    );
+}
+
+function Input(props: PropTypes) {
+    const {
+        autofocus = false,
+        delay = 500,
+        search,
+        placeholder = "Search",
+    } = props;
+
+    const timeoutRef = useRef<number>();
+
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (search) {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+
+            timeoutRef.current = setTimeout(() => {
+                search(event.target.value);
+            }, delay);
+        }
+    };
+
+    return (
+        <input
+            className={classes.input}
+            autoComplete="off"
+            autoFocus={autofocus}
+            data-testid={props.test}
+            onChange={onChange}
+            placeholder={placeholder}
+            type="search"
+        />
     );
 }
