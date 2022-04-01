@@ -1,4 +1,22 @@
 .main {
-    background-color: red;
-    display: flex;
+    border-radius: 4px;
+    border: 1px solid var(--monolieta-button-border-color, transparent);
+    box-sizing: border-box;
+    color: var(--monolieta-button-color, #e6e6e6);
+    cursor: pointer;
+    font-family: var(--monolieta-font-family, Roboto, sans-serif);
+    font-size: 14px;
+    font-weight: 400;
+    height: var(--monolieta-button-height, 28px);
+    min-width: 64px;
+    padding: 0 16px;
+}
+
+.main:hover {
+    background-color: var(--monolieta-button-bg-hover, #822aff);
+}
+
+.main,
+.main:active {
+    background-color: var(--monolieta-primary, #6200ee);
 }

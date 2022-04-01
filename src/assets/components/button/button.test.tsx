@@ -13,13 +13,15 @@ describe("<Button />", () => {
         expect(screen.getByText("Hello")).toBeInTheDocument();
     });
 
-    it("click", () => {
+    it("should render with text and click handler", () => {
         const click = vi.fn();
-        render(<Button click={click} text="General" />);
-
-        const input = screen.getByRole("button");
-        fireEvent.click(input);
-
+        render(<Button text="Hello" click={click} />);
+        fireEvent.click(screen.getByRole("button"));
         expect(click).toHaveBeenCalledTimes(1);
+    });
+
+    it("should render with data test", () => {
+        render(<Button text="Hello" test="test" />);
+        expect(screen.getByTestId("test")).toBeInTheDocument();
     });
 });

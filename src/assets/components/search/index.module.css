@@ -1,0 +1,11 @@
+.icon {
+    align-items: center;
+    background: transparent;
+    box-sizing: border-box;
+    color: var(--monolieta-input-icon-color, #666666);
+    display: flex;
+    height: var(--monolieta-input-height, 28px);
+    justify-content: center;
+    position: absolute;
+    width: var(--monolieta-input-width, 28px);
+}
