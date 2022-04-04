@@ -20,7 +20,7 @@ describe("<Button />", () => {
         expect(click).toHaveBeenCalledTimes(1);
     });
 
-    it("should render with data test", () => {
+    it("should render with text and data test", () => {
         render(<Button text="Hello" test="test" />);
         expect(screen.getByTestId("test")).toBeInTheDocument();
     });
