@@ -1,4 +1,5 @@
-import Fab, { Setting as _Setting, Insight as _Insight } from "./index";
+import Fab from "./index";
+import Setting from "../icon/setting";
 
 export default {
     title: "Component/Action/Fab",
@@ -10,10 +11,10 @@ export default {
     },
 };
 
-const Template = (args) => <_Setting {...args} />;
+const Template = (args) => (
+    <Fab {...args}>
+        <Setting />
+    </Fab>
+);
 
-export const Setting = Template.bind({});
-
-const Template2 = (args) => <_Insight {...args} />;
-
-export const Insight = Template2.bind({});
+export const Primary = Template.bind({});

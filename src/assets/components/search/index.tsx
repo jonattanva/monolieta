@@ -1,6 +1,6 @@
 import { useRef } from "react";
+import Icon from "../icon/search";
 import classes from "./index.module.css";
-import source from "../../images/search.svg";
 
 export type PropTypes = {
     autofocus?: boolean;
@@ -14,7 +14,7 @@ export default function Search(props: PropTypes) {
     return (
         <div>
             <div className={classes.icon}>
-                <img src={source} width={14} height={14} />
+                <Icon width={14} height={14} />
             </div>
             <Input {...props} />
         </div>

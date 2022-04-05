@@ -1,6 +1,5 @@
 import Fab from "./index";
 import { describe, it, vi } from "vitest";
-import source from "../../images/search.svg";
 import { render, screen, fireEvent } from "@testing-library/react";
 
 describe("<Fab />", () => {
@@ -11,13 +10,22 @@ describe("<Fab />", () => {
 
     it("should render with icon and click handler", () => {
         const click = vi.fn();
-        render(<Fab icon={source} click={click} />);
+        render(
+            <Fab click={click}>
+                <i>Icon</i>
+            </Fab>
+        );
+
         fireEvent.click(screen.getByRole("button"));
         expect(click).toHaveBeenCalledTimes(1);
     });
 
     it("should render with icon and data test", () => {
-        render(<Fab icon={source} test="test" />);
+        render(
+            <Fab test="test">
+                <i>Icon</i>
+            </Fab>
+        );
         expect(screen.getByTestId("test")).toBeInTheDocument();
     });
 });

@@ -2,7 +2,7 @@
     align-items: center;
     background: transparent;
     box-sizing: border-box;
-    color: var(--monolieta-input-icon-color, #e6e6e6);
+    color: var(--monolieta-input-icon-color, red);
     display: flex;
     height: var(--monolieta-input-height, 28px);
     justify-content: center;
