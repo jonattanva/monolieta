@@ -1,9 +1,14 @@
 import classes from "./index.module.css";
 import { Fragment, useState } from "react";
 
+type Body = {
+    selected: number;
+};
+
 type PropTypes = {
     click?: (index: number) => void;
     options?: string[];
+    render?: React.ComponentType<Body>;
     selected?: number;
     test?: string;
 };
@@ -17,13 +22,15 @@ export default function Tab(props: PropTypes) {
 }
 
 function Body(props: PropTypes) {
+    const { render: View } = props;
     const [selected, setSelected] = useState(props.selected || 0);
 
     const onClick = (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
         setSelected((previous) => {
-            const item = Number(event.currentTarget.dataset.item);
+            const target = event.target as HTMLButtonElement;
+            const item = Number(target.dataset.item);
             if (props.click && item !== previous) {
                 props.click(item);
             }
@@ -45,6 +52,7 @@ function Body(props: PropTypes) {
                     {option}
                 </button>
             ))}
+            {View && <View selected={selected} />}
         </Fragment>
     );
 }
