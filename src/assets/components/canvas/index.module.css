@@ -1,0 +1,26 @@
+.main {
+    align-items: stretch;
+    display: flex;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.scroll {
+    align-items: stretch;
+    background: transparent;
+    display: flex;
+    height: 100%;
+    margin: 0;
+    overflow: auto;
+    position: relative;
+    transform: translateZ(0);
+    width: 100%;
+    will-change: scroll-position;
+}
+
+.content,
+.viewport {
+    position: absolute;
+}

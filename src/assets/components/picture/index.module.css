@@ -1,0 +1,12 @@
+.cover {
+    height: 100%;
+    width: 100%;
+}
+
+.image {
+    height: 100%;
+    object-fit: cover;
+    padding: 0;
+    user-select: none;
+    width: 100%;
+}
