@@ -1,7 +1,7 @@
-name: Validate assets components
+name: Validate assets
 on: [push]
 jobs:
-  assets-components:
+  assets:
     runs-on: ubuntu-latest
     strategy:
       matrix:
