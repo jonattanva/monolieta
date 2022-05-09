@@ -4,7 +4,6 @@ on: push
 jobs:
   database:
     runs-on: ubuntu-latest
-    container: node:18.1.0-alpine
     services:
       postgres:
         image: postgres:14.2-alpine
