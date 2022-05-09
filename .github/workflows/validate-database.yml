@@ -1,22 +1,19 @@
 name: Validate database
-on: [push]
+on: push
+
 jobs:
   database:
     runs-on: ubuntu-latest
-    container: node:latest
+    container: node:18.1.0-alpine
     services:
-      image: postgres:14.2-alpine
-      env:
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
-        - POSTGRES_DB=development
-        - POSTGRES_PORT=5432
-      ports:
-        - "5432:5432"
-      options: >-
-        --health-cmd pg_isready
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 5
+      postgres:
+        image: postgres:14.2-alpine
+        env:
+          - POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
