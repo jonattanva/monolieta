@@ -17,6 +17,10 @@ type DataSource struct {
 }
 
 func connect(dataSource DataSource) *sql.DB {
+	if dataSource.File == "" {
+		panic("No file specified")
+	}
+
 	connection := fmt.Sprintf(
 		"user=%s password=%s dbname=%s host=%s port=%s sslmode=disable",
 		dataSource.Username, dataSource.Password, dataSource.Name, dataSource.Host, dataSource.Port)
