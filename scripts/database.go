@@ -2,16 +2,16 @@ package main
 
 import (
 	"database/sql"
+	"flag"
 	"fmt"
 	"io/ioutil"
-	"os"
 )
 
 type DataSource struct {
 	Name     string
-	User     string
+	Username string
 	Password string
-	Filename string
+	File     string
 	Host     string
 	Port     string
 }
@@ -19,7 +19,7 @@ type DataSource struct {
 func connect(dataSource DataSource) *sql.DB {
 	connection := fmt.Sprintf(
 		"user=%s password=%s dbname=%s host=%s port=%s sslmode=disable",
-		dataSource.User, dataSource.Password, dataSource.Name, dataSource.Host, dataSource.Port)
+		dataSource.Username, dataSource.Password, dataSource.Name, dataSource.Host, dataSource.Port)
 
 	database, error := sql.Open("postgres", connection)
 	if error != nil {
@@ -45,41 +45,18 @@ func query(database *sql.DB, query string) {
 	fmt.Println("Query executed successfully")
 }
 
-func prepare(args []string) DataSource {
-	filename := args[1]
-
-	name := "postgres"
-	if len(args) > 2 {
-		name = args[3]
-	}
-
-	user := "postgres"
-	if len(args) > 3 {
-		user = args[3]
-	}
-
-	password := "postgres"
-	if len(args) > 4 {
-		password = args[4]
-	}
-
-	host := "localhost"
-	if len(args) > 5 {
-		host = args[5]
-	}
-
-	port := "5432"
-	if len(args) > 6 {
-		port = args[6]
-	}
-
-	return DataSource{
-		name, user, password, filename, host, port}
-}
-
 func main() {
-	dataSource := prepare(os.Args)
+	file := flag.String("file", "", "Read commands from the file filename.")
+	name := flag.String("name", "postgres", "Specifies the name of the database.")
+	username := flag.String("username", "postgres", "User name to connect as.")
+	password := flag.String("password", "postgres", "Password to connect with.")
+	host := flag.String("host", "localhost", "Specifies the host name of the machine on which the server is running.")
+	port := flag.String("port", "5432", "Specifies the TCP port on which the server is listening for connections.")
+
+	flag.Parse()
+	dataSource := DataSource{
+		*name, *username, *password, *file, *host, *port}
 	database := connect(dataSource)
 
-	query(database, read(dataSource.Filename))
+	query(database, read(dataSource.File))
 }
