@@ -4,12 +4,14 @@ import (
 	"database/sql"
 	"fmt"
 	"io/ioutil"
+	"os"
 )
 
 type DataSource struct {
 	Name     string
 	User     string
 	Password string
+	Filename string
 	Host     string
 	Port     string
 }
@@ -44,19 +46,40 @@ func query(database *sql.DB, query string) {
 }
 
 func prepare(args []string) DataSource {
-	name := args[1]
-	user := args[2]
-	password := args[3]
+	filename := args[1]
+
+	name := "postgres"
+	if len(args) > 2 {
+		name = args[3]
+	}
+
+	user := "postgres"
+	if len(args) > 3 {
+		user = args[3]
+	}
+
+	password := "postgres"
+	if len(args) > 4 {
+		password = args[4]
+	}
 
 	host := "localhost"
-	if len(args) > 4 {
-		host = args[4]
+	if len(args) > 5 {
+		host = args[5]
 	}
 
 	port := "5432"
-	if len(args) > 5 {
-		port = args[5]
+	if len(args) > 6 {
+		port = args[6]
 	}
 
-	return DataSource{name, user, password, host, port}
+	return DataSource{
+		name, user, password, filename, host, port}
+}
+
+func main() {
+	dataSource := prepare(os.Args)
+	database := connect(dataSource)
+
+	query(database, read(dataSource.Filename))
 }
