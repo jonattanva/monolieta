@@ -19,8 +19,8 @@ jobs:
           - 5432:5432
     steps:
       - run: |
-          apt-get update
-          apt-get install --yes postgresql-client
+          apk update
+          apk add --no-cache postgresql-clien
 
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
