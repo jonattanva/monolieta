@@ -20,7 +20,7 @@ jobs:
     steps:
       - run: |
           apk update
-          apk add --no-cache postgresql-clien
+          apk add --no-cache postgresql-client
 
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
