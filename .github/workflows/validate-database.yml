@@ -4,6 +4,7 @@ on: push
 jobs:
   database:
     runs-on: ubuntu-latest
+    container: gradle:jdk11-alpine
     services:
       postgres:
         image: postgres:14.2-alpine
@@ -17,8 +18,12 @@ jobs:
         ports:
           - 5432:5432
     steps:
+      - run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
           go-version: "1.16.1"
-      - run: go run scripts/database.go -file database/structure.sql
+      # - run: go run scripts/database.go -file database/structure.sql
