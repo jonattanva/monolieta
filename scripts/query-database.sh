@@ -3,6 +3,7 @@
 psql \
     -v ON_ERROR_STOP=1 \
     --host "$POSTGRES_HOSTNAME" \
-    --username "$POSTGRES_USERNAME" \
+    --port "$POSTGRES_PORT" \
+    --username "$POSTGRES_USER" \
     --dbname "$POSTGRES_DATABASE" \
-    -f $1
+    --file $1
