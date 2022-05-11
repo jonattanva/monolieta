@@ -26,5 +26,6 @@ jobs:
       - run: |
           sh scripts/create-database.sh
         env:
+          POSTGRES_USER: postgres
           POSTGRES_HOSTNAME: postgres
           POSTGRES_DATABASE: monolieta
