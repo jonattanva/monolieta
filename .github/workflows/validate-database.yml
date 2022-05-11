@@ -26,6 +26,6 @@ jobs:
           sh scripts/create-database.sh
           sh scripts/query-database.sh database/structure.sql
         env:
-          POSTGRES_HOSTNAME: localhost
+          POSTGRES_HOSTNAME: postgres
           POSTGRES_USERNAME: postgres
           POSTGRES_DATABASE: monolieta
