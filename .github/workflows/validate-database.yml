@@ -28,4 +28,5 @@ jobs:
         env:
           POSTGRES_HOSTNAME: postgres
           POSTGRES_USERNAME: postgres
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DATABASE: monolieta
