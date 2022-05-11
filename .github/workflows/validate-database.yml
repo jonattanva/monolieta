@@ -24,7 +24,6 @@ jobs:
           apk add --no-cache postgresql-client
       - run: |
           sh scripts/create-database.sh
-          sh scripts/query-database.sh database/structure.sql
         env:
           POSTGRES_HOSTNAME: postgres
           POSTGRES_USERNAME: postgres
