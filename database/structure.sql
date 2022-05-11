@@ -24,7 +24,7 @@ CREATE TABLE projects (
     namespaces_id integer NOT NULL,
     description text,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
     archived boolean DEFAULT false NOT NULL
 );
 
