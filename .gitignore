@@ -1,5 +1,8 @@
 .DS_Store
+/.next
 
-coverage
-node_modules
-storybook/public
+/coverage
+/node_modules
+
+/storybook/public
+/storybook/node_modules

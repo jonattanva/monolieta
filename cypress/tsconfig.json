@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "lib": ["es5", "dom", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "es5",
+    "types": ["cypress", "cypress-file-upload", "@testing-library/cypress"]
+  },
+  "include": ["integration"]
+}
