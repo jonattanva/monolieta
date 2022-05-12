@@ -1,5 +1,6 @@
 import Fab from "./index";
-import Setting from "../icon/setting";
+import Icon from "../icon";
+import setting from "../../images/setting.svg";
 
 export default {
     title: "Component/Action/Fab",
@@ -13,7 +14,7 @@ export default {
 
 const Template = (args) => (
     <Fab {...args}>
-        <Setting />
+        <Icon source={setting} hash="setting" />
     </Fab>
 );
 
