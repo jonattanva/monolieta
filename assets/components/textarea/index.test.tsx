@@ -25,7 +25,13 @@ describe("<Textarea/>", () => {
         const input = screen.getByRole("textbox");
         fireEvent.change(input, {
             target: {
-                value: "temporal",
+                value: "comple",
+            },
+        });
+
+        fireEvent.change(input, {
+            target: {
+                value: "complete",
             },
         });
 
