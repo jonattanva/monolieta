@@ -20,12 +20,18 @@ describe("<Text/>", () => {
 
     it("should render with change", async () => {
         const change = vi.fn();
-        render(<Text change={change} />);
+        render(<Text change={change} delay={200} />);
 
         const input = screen.getByRole("textbox");
         fireEvent.change(input, {
             target: {
-                value: "temporal",
+                value: "comple",
+            },
+        });
+
+        fireEvent.change(input, {
+            target: {
+                value: "complete",
             },
         });
 
@@ -35,5 +41,10 @@ describe("<Text/>", () => {
             },
             { timeout: 1000 }
         );
+    });
+
+    it("should render with error", () => {
+        render(<Text error="error" />);
+        expect(screen.getByText("error")).toBeInTheDocument();
     });
 });
