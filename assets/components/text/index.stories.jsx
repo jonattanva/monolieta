@@ -12,4 +12,5 @@ export const Primary = Template.bind({});
 Primary.args = {
     autofocus: false,
     placeholder: "Placeholder...",
+    error: "The error message...",
 };

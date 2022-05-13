@@ -10,7 +10,11 @@ type PropTypes = {
 
 export default function Button(props: PropTypes) {
     return (
-        <button className={classes.main} onClick={props.click} data-testid={props.test}>
+        <button
+            className={classes.main}
+            onClick={props.click}
+            data-testid={props.test}
+        >
             {props.text}
         </button>
     );
