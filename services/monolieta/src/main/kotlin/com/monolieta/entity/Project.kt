@@ -1,4 +1,4 @@
-package com.monolieta
+package com.monolieta.entity
 
 import java.time.LocalDateTime
 import javax.persistence.*

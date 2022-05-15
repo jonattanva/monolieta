@@ -10,3 +10,8 @@ updates:
     schedule:
       day: "sunday"
       interval: "weekly"
+  - package-ecosystem: "gradle"
+    directory: "/services/monolieta"
+    schedule:
+      day: "sunday"
+      interval: "weekly"

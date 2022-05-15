@@ -1,8 +1,15 @@
 .DS_Store
+/.gradle
 /.next
+/.idea
 
+!gradle/wrapper/gradle-wrapper.jar
+
+/build
 /coverage
 /node_modules
 
 /storybook/public
 /storybook/node_modules
+
+/services/**/build

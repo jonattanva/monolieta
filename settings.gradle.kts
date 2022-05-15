@@ -1,1 +1,2 @@
-include(":services/monolieta")
+include(":monolieta")
+project(":monolieta").projectDir = file("services/monolieta")
