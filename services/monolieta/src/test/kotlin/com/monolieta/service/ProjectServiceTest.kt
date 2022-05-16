@@ -52,4 +52,10 @@ internal class ProjectServiceTest {
 
         assertNull(projectService.findById(1))
     }
+
+    @Test
+    fun `create new project`() {
+        assertNotNull(projectService)
+        assertNotNull(projectRepository)
+    }
 }

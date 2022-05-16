@@ -50,7 +50,10 @@ ALTER TABLE ONLY projects
     ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY projects
-    ADD CONSTRAINT fk_projects_namespaces FOREIGN KEY (namespaces_id) 
+    ADD CONSTRAINT fk_projects_014cb476 FOREIGN KEY (namespaces_id)
     REFERENCES namespaces(id) MATCH SIMPLE
     ON UPDATE RESTRICT
     ON DELETE RESTRICT;
+
+ALTER TABLE ONLY projects
+    ADD CONSTRAINT uq_projects_30ec1788 UNIQUE ("name", "path");
