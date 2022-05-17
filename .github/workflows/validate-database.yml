@@ -4,7 +4,7 @@ on: push
 jobs:
   database:
     runs-on: ubuntu-latest
-    container: gradle:jdk11-alpine
+    container: gradle:jdk17-alpine
     services:
       postgres:
         image: postgres:14.2-alpine

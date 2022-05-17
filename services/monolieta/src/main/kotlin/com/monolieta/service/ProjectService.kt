@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.annotation.Validated
 import java.text.Normalizer
 import java.time.LocalDateTime
+import javax.validation.Valid
 
 @Validated
 @Service(value = "ProjectService")
@@ -18,10 +19,10 @@ class ProjectService(
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     fun findById(id: Long): Project? = projectRepository.findById(id)
-        .orElseGet(null)
+        .orElse(null)
 
     @Transactional(propagation = Propagation.REQUIRED)
-    fun save(project: Project): Project {
+    fun save(@Valid project: Project): Project {
         project.path = prepare(project.path)
         project.updated = if (project.id != null) {
             LocalDateTime.now()

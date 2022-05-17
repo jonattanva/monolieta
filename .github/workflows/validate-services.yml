@@ -2,9 +2,9 @@ name: Validate services
 on: push
 
 jobs:
-  database:
+  services:
     runs-on: ubuntu-latest
-    container: gradle:jdk11-alpine
+    container: gradle:jdk17-alpine
     services:
       postgres:
         image: postgres:14.2-alpine
