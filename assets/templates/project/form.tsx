@@ -4,6 +4,7 @@ import Radio from "../../components/radio";
 import Text from "../../components/text";
 import Textarea from "../../components/textarea";
 import classes from "./form.module.css";
+import global from "./global.module.css";
 import iPrivate from "../../images/lock-close.svg";
 import iPublic from "../../images/globe.svg";
 import { useRef, useState } from "react";
@@ -59,7 +60,7 @@ export default function Form(props: PropTypes) {
     };
 
     return (
-        <div className={classes.main}>
+        <div className={global.main}>
             <div className={classes.title}>Create a new project</div>
 
             <Input

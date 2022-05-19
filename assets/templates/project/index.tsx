@@ -1,11 +1,13 @@
-import Tab from "../../components/tab";
 import Button from "../../components/button";
+import Tab from "../../components/tab";
+import classes from "./index.module.css";
+import global from "./global.module.css";
 
 export default function Home() {
     return (
-        <div>
-            <div>
-                <div>Project</div>
+        <div className={global.main}>
+            <div className={classes.header}>
+                <div className={classes.title}>Project</div>
                 <Button text="New project" test="project" />
             </div>
             <div>

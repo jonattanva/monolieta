@@ -1,7 +1,5 @@
-package com.monolieta.service
+package com.monolieta.project
 
-import com.monolieta.entity.Project
-import com.monolieta.repository.ProjectRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -51,11 +49,5 @@ internal class ProjectServiceTest {
             .willReturn(Optional.empty())
 
         assertNull(projectService.findById(1))
-    }
-
-    @Test
-    fun `create new project`() {
-        assertNotNull(projectService)
-        assertNotNull(projectRepository)
     }
 }

@@ -1,0 +1,6 @@
+.main {
+    color: var(--monolieta-text-primary, hsl(0, 0%, 13%));
+    font-family: var(--monolieta-font-family, Roboto, sans-serif);
+    font-size: 14px;
+    font-weight: 400;
+}

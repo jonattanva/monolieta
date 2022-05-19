@@ -1,6 +1,5 @@
-package com.monolieta.repository
+package com.monolieta.project
 
-import com.monolieta.entity.Project
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface ProjectRepository : JpaRepository<Project, Long>
