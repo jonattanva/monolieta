@@ -8,6 +8,7 @@
     "dev:storybook": "npm run storybook --prefix ./storybook",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:e2e": "start-server-and-test start http://localhost:3000 cypress",
     "test:e2e:ui": "node ./node_modules/.bin/cypress open",
     "test:ui": "vitest --ui"
   },

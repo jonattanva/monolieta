@@ -17,37 +17,4 @@ internal class ProjectServiceTest {
         projectRepository = mock(ProjectRepository::class.java)
         projectService = ProjectService(projectRepository = projectRepository)
     }
-
-    @Test
-    fun `find by id`() {
-        assertNotNull(projectService)
-        assertNotNull(projectRepository)
-
-        val project = Project(
-            id = 1,
-            name = "The demo",
-            path = "the-demo"
-        )
-
-        given(projectRepository.findById(1))
-            .willReturn(Optional.of(project))
-
-        val result = projectService.findById(1)
-        assertNotNull(result)
-        assertEquals(1, result!!.id)
-        assertEquals("The demo", result.name)
-        assertEquals("the-demo", result.path)
-        assertFalse(result.archived)
-    }
-
-    @Test
-    fun `find by id is null`() {
-        assertNotNull(projectService)
-        assertNotNull(projectRepository)
-
-        given(projectRepository.findById(1))
-            .willReturn(Optional.empty())
-
-        assertNull(projectService.findById(1))
-    }
 }
