@@ -1,16 +1,16 @@
-import Form from "./form";
+import New from "./new";
 import { describe, it, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
-describe("<Form />", () => {
+describe("<New />", () => {
     it("should render", () => {
-        render(<Form />);
+        render(<New />);
         expect(screen.getByText("Create a new project")).toBeInTheDocument();
     });
 
     it("should render with error message", () => {
         const submit = vi.fn();
-        render(<Form submit={submit} />);
+        render(<New submit={submit} />);
 
         const action = screen.getByRole("button");
         fireEvent.click(action);
@@ -24,7 +24,7 @@ describe("<Form />", () => {
 
     it("should render with submit", async () => {
         const submit = vi.fn();
-        render(<Form submit={submit} />);
+        render(<New submit={submit} />);
 
         const inputs = screen.getAllByRole("textbox");
         fireEvent.change(inputs[0], {

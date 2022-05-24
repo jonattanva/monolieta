@@ -1,5 +1,5 @@
 import classes from "./index.module.css";
-import { Fragment, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 type PropTypes = {
     autofocus?: boolean;

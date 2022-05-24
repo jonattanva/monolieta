@@ -15,7 +15,7 @@ type PropTypes = {
 
 export default function Tab(props: PropTypes) {
     return (
-        <div className={classes.main} role="tablist" data-testid={props.test}>
+        <div role="tablist" data-testid={props.test}>
             <Body {...props} />
         </div>
     );
@@ -40,18 +40,20 @@ function Body(props: PropTypes) {
 
     return (
         <Fragment>
-            {props.options?.map((option, index) => (
-                <button
-                    className={classes.item}
-                    data-item={index}
-                    data-selected={index === selected}
-                    key={index}
-                    onClick={onClick}
-                    role="tab"
-                >
-                    {option}
-                </button>
-            ))}
+            <div className={classes.tab}>
+                {props.options?.map((option, index) => (
+                    <button
+                        className={classes.item}
+                        data-item={index}
+                        data-selected={index === selected}
+                        key={index}
+                        onClick={onClick}
+                        role="tab"
+                    >
+                        {option}
+                    </button>
+                ))}
+            </div>
             {View && <View selected={selected} />}
         </Fragment>
     );

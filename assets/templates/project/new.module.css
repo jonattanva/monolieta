@@ -41,6 +41,7 @@
 
 .icon {
     align-items: center;
+    color: var(--monolieta-text-primary, hsl(0, 0%, 13%));
     display: flex;
     gap: 8px;
     justify-content: flex-start;

@@ -1,7 +1,8 @@
 .DS_Store
 /.gradle
-/.next
 /.idea
+/.next
+/.nyc_output
 
 !gradle/wrapper/gradle-wrapper.jar
 

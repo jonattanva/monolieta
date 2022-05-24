@@ -1,15 +1,12 @@
 import Button from "../../components/button";
-import Icon from "../../components/icon";
 import Radio from "../../components/radio";
 import Text from "../../components/text";
 import Textarea from "../../components/textarea";
-import classes from "./form.module.css";
+import classes from "./new.module.css";
 import global from "./global.module.css";
-import iPrivate from "../../images/lock-close.svg";
-import iPublic from "../../images/globe.svg";
 import { useRef, useState } from "react";
 
-type Form = {
+export type Project = {
     [key: string]: string;
 };
 
@@ -21,6 +18,7 @@ type InputPropTypes = {
     autofocus?: boolean;
     error?: string;
     name: string;
+    test?: string;
     text: string;
 } & Event;
 
@@ -32,12 +30,12 @@ type PrivacyPropTypes = {
 } & Event;
 
 type PropTypes = {
-    submit?: (form: Form) => {} | Promise<void>;
+    submit?: (form: Project) => void | Promise<void>;
 };
 
-export default function Form(props: PropTypes) {
+export default function New(props: PropTypes) {
     const [error, setError] = useState<string>();
-    const formRef = useRef<Form>({
+    const formRef = useRef<Project>({
         privacy: "public",
     });
 
@@ -62,40 +60,35 @@ export default function Form(props: PropTypes) {
     return (
         <div className={global.main}>
             <div className={classes.title}>Create a new project</div>
-
             <Input
                 autofocus={true}
                 change={change}
                 error={error}
                 name="name"
+                test="project-name"
                 text="Project name"
             />
             <Description change={change} />
-
             <Privacy
                 change={change}
                 message="Anyone on the internet can see this repository"
                 value="public"
                 checked={true}
             >
-                <div className={classes.icon}>
-                    <Icon source={iPublic} hash="globe" />
-                    <div>Public</div>
-                </div>
+                <Public />
             </Privacy>
-
             <Privacy
                 change={change}
                 message="Project access must be granted explicitly to each user"
                 value="private"
             >
-                <div className={classes.icon}>
-                    <Icon source={iPrivate} hash="lock-close" />
-                    <div>Private</div>
-                </div>
+                <Private />
             </Privacy>
-
-            <Button text="Create project" click={submit} />
+            <Button
+                click={submit}
+                test="create-project"
+                text="Create project"
+            />
         </div>
     );
 }
@@ -112,6 +105,7 @@ function Input(props: InputPropTypes) {
                 change={change}
                 error={props.error}
                 name={props.name}
+                test={props.test}
             />
         </label>
     );
@@ -124,7 +118,11 @@ function Description(props: Event) {
     return (
         <label className={classes.label}>
             Decription (Optional)
-            <Textarea name="description" change={change} />
+            <Textarea
+                change={change}
+                name="description"
+                test="project-description"
+            />
         </label>
     );
 }
@@ -144,6 +142,54 @@ function Privacy(props: PrivacyPropTypes) {
                 {props.children}
             </Radio>
             <span className={classes.help}>{props.message}</span>
+        </div>
+    );
+}
+
+function Public() {
+    return (
+        <div className={classes.icon}>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                width={24}
+                height={24}
+                stroke="currentColor"
+                strokeWidth={2}
+            >
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+            </svg>
+            <div>Public</div>
+        </div>
+    );
+}
+
+function Private() {
+    return (
+        <div className={classes.icon}>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                width={24}
+                height={24}
+                stroke="currentColor"
+                strokeWidth={2}
+            >
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+            </svg>
+            <div>Private</div>
         </div>
     );
 }

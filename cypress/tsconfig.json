@@ -8,5 +8,5 @@
     "target": "es5",
     "types": ["cypress", "cypress-file-upload", "@testing-library/cypress"]
   },
-  "include": ["integration"]
+  "include": ["integration/**/*.ts", "support/**/*.ts"]
 }

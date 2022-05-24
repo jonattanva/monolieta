@@ -1,0 +1,6 @@
+{
+  "create project": "[data-testid=create-project]",
+  "new project": "[data-testid=new-project]",
+  "project description": "[data-testid=project-description]",
+  "project name": "[data-testid=project-name]"
+}
