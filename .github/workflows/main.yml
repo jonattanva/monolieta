@@ -1,0 +1,113 @@
+name: "Main action"
+on: push
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache-dependency-path: "**/package-lock.json"
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: npm install
+
+  test-assets:
+    timeout-minutes: 60
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache-dependency-path: "**/package-lock.json"
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: npm install
+      - run: npm run test:coverage
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          retention-days: 1
+          path: |
+            coverage
+
+  test-e2e:
+    timeout-minutes: 60
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache-dependency-path: "**/package-lock.json"
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: npm install
+      - uses: cypress-io/github-action@v2
+        with:
+          env: true
+          install: false
+          start: npm run dev
+          wait-on: "http://localhost:3000"
+          browser: chrome
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          retention-days: 1
+          path: |
+            coverage-report
+
+  test-database:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+      image: postgres:14.2-alpine
+      env:
+        POSTGRES_PASSWORD: ""
+        POSTGRES_HOST_AUTH_METHOD: trust
+      options: >-
+        --health-cmd pg_isready
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 5
+      ports:
+        - 5432:5432
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          apk update
+          apk add --no-cache postgresql-client
+      - run: |
+          sh scripts/create-database.sh
+          sh scripts/query-database.sh database/structure.sql
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_HOSTNAME: postgres
+          POSTGRES_DATABASE: monolieta
