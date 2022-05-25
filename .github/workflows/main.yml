@@ -86,6 +86,7 @@ jobs:
   test-database:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    container: gradle:jdk11-alpine
     services:
       postgres:
         image: postgres:14.2-alpine
