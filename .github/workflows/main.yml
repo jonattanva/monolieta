@@ -115,7 +115,7 @@ jobs:
 
   report-coverage:
     timeout-minutes: 30
-    needs: ["test-e2e", "test-assets"]
+    needs: ["test-assets", "test-e2e"]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -126,13 +126,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache-dependency-path: "**/package-lock.json"
-      - uses: actions/download-artifact@v3
       - uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+      - uses: actions/download-artifact@v3
+      - run: ls -la
       - run: npm install
       - run: npm run report
       - uses: coverallsapp/github-action@master
