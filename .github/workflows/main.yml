@@ -78,10 +78,10 @@ jobs:
           browser: chrome
       - uses: actions/upload-artifact@v3
         with:
-          name: coverage-report
+          name: cypress-coverage
           retention-days: 1
           path: |
-            coverage-report
+            cypress-coverage
 
   test-database:
     timeout-minutes: 60
@@ -133,7 +133,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - uses: actions/download-artifact@v3
-      - run: ls -la
       - run: npm install
       - run: npm run report
       - uses: coverallsapp/github-action@master
