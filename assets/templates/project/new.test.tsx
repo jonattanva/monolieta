@@ -10,7 +10,7 @@ describe("<New />", () => {
 
     it("should render with error message", () => {
         const submit = vi.fn();
-        render(<New submit={submit} />);
+        render(<New onSubmit={submit} />);
 
         const action = screen.getByRole("button");
         fireEvent.click(action);
@@ -24,7 +24,7 @@ describe("<New />", () => {
 
     it("should render with submit", async () => {
         const submit = vi.fn();
-        render(<New submit={submit} />);
+        render(<New onSubmit={submit} />);
 
         const inputs = screen.getAllByRole("textbox");
         fireEvent.change(inputs[0], {

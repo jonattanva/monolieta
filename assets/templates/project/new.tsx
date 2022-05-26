@@ -30,11 +30,11 @@ type PrivacyPropTypes = {
 } & Event;
 
 type PropTypes = {
-    submit?: (form: Project) => void | Promise<void>;
+    onSubmit?: (form: Project) => void | Promise<void>;
 };
 
 export default function New(props: PropTypes) {
-    const [error, setError] = useState<string>();
+    const [error, setError] = useState<string>("");
     const formRef = useRef<Project>({
         privacy: "public",
     });
@@ -52,8 +52,8 @@ export default function New(props: PropTypes) {
         }
 
         setError("");
-        if (props.submit) {
-            props.submit(formRef.current);
+        if (props.onSubmit) {
+            props.onSubmit(formRef.current);
         }
     };
 

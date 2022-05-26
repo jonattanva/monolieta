@@ -3,9 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "build:storybook": "npm run build-storybook --prefix ./storybook",
+    "build:storybook": "npm run build-storybook --prefix ./.storybook",
     "dev": "next dev",
-    "dev:storybook": "npm run storybook --prefix ./storybook",
+    "dev:storybook": "npm run storybook --prefix ./.storybook",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "start-server-and-test start http://localhost:3000 cypress",
@@ -34,7 +34,7 @@
     "eslint": "8.16.0",
     "eslint-plugin-cypress": "~2.12.1",
     "jsdom": "~19.0.0",
-    "typescript": "~4.6.4",
+    "typescript": "~4.7.2",
     "vite": "~2.9.9",
     "vitest": "~0.12.9"
   },

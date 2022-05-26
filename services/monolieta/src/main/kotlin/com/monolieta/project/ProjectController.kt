@@ -18,7 +18,7 @@ class ProjectController(
     fun create(request: ServerRequest): ServerResponse {
         val body = request.body(Project.Request::class.java)
 
-        val path = request.pathVariable("namespace")
+        val path = ""
         val namespace = namespaceService.findByPath(path)
             ?: throw Exception("")
 

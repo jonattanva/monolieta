@@ -18,7 +18,7 @@
     "incremental": true
   },
   "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "cypress"],
   "references": [
     {
       "path": "./tsconfig.node.json"

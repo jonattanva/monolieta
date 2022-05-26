@@ -5,13 +5,11 @@ module.exports = {
     stories: [
         "../../assets/components/**/*.stories.@(js|jsx|ts|tsx)",
         "../../assets/components/**/*.stories.mdx",
-        "../../assets/templates/**/*.stories.@(js|jsx|ts|tsx)",
-        "../../assets/templates/**/*.stories.mdx",
     ],
     addons: [
-        "@storybook/addon-links",
         "@storybook/addon-essentials",
         "@storybook/addon-interactions",
+        "@storybook/addon-links",
     ],
     framework: "@storybook/react",
 };
