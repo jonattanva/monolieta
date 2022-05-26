@@ -8,6 +8,8 @@
 
 /build
 /coverage
+/coverage-report
+/cypress-coverage
 /node_modules
 
 /.storybook/public

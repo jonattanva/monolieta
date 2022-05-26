@@ -26,6 +26,6 @@ fs.emptyDirSync(".nyc_output");
 fs.emptyDirSync(FINAL_OUTPUT_FOLDER);
 
 run([
-    `nyc merge ${REPORTS_FOLDER} && mv coverage.json .nyc_output/out.json`,
-    `nyc report --reporter lcov --report-dir ${FINAL_OUTPUT_FOLDER}`,
+    `npx nyc merge ${REPORTS_FOLDER} && mv coverage.json .nyc_output/out.json`,
+    `npx nyc report --reporter lcov --report-dir ${FINAL_OUTPUT_FOLDER}`,
 ]);

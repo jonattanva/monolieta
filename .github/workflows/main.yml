@@ -73,7 +73,7 @@ jobs:
         with:
           env: true
           install: false
-          start: npm run dev
+          start: npx nyc next dev
           wait-on: "http://localhost:3000"
           browser: chrome
       - uses: actions/upload-artifact@v3
@@ -112,3 +112,29 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_HOSTNAME: postgres
           POSTGRES_DATABASE: monolieta
+
+  report-coverage:
+    timeout-minutes: 30
+    needs: ["test-e2e", "test-assets"]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache-dependency-path: "**/package-lock.json"
+      - uses: actions/download-artifact@v3
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: npm install
+      - run: npm run report
+      - uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

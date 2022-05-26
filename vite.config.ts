@@ -12,7 +12,7 @@ export default defineConfig({
         environment: "jsdom",
         setupFiles: "./setup.js",
         coverage: {
-            reporter: ["lcov"],
+            reporter: ["lcov", "json"],
         },
     },
 });
