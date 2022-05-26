@@ -29,4 +29,22 @@ describe("New project", () => {
                 .click();
         });
     });
+
+    it("should create a new project with empty name", () => {
+        cy.fixture("selector.json").then((it) => {
+            cy.get(it["new project"])
+                .should("exist")
+                .click();
+
+            cy.findByText(/create a new project/i)
+                .should("exist");
+
+            cy.get(it["create project"])
+                .should("exist")
+                .click();
+
+            cy.findByText(/the project name is required/i)
+                .should("exist");
+        });
+    })
 });
