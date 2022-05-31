@@ -1,5 +1,5 @@
 import classes from "./index.module.css";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
 type Body = {
     selected: number;
@@ -39,7 +39,7 @@ function Body(props: PropTypes) {
     };
 
     return (
-        <Fragment>
+        <>
             <div className={classes.tab}>
                 {props.options?.map((option, index) => (
                     <button
@@ -55,6 +55,6 @@ function Body(props: PropTypes) {
                 ))}
             </div>
             {View && <View selected={selected} />}
-        </Fragment>
+        </>
     );
 }

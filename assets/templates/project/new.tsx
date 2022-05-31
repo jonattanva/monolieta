@@ -11,8 +11,13 @@ export type Project = {
 };
 
 type Event = {
-    change: (name: string, value: string) => void;
+    onChange: (name: string, value: string) => void;
 };
+
+type FormPropTypes = {
+    children: React.ReactNode;
+    onSubmit: (form: Project) => void | Promise<void>;
+} & Event;
 
 type InputPropTypes = {
     autofocus?: boolean;
@@ -29,21 +34,66 @@ type PrivacyPropTypes = {
     value: "public" | "private";
 } & Event;
 
+const PRIVACY_PUBLIC = "public";
+
 type PropTypes = {
     onSubmit?: (form: Project) => void | Promise<void>;
 };
 
 export default function New(props: PropTypes) {
+    const formRef = useRef<Project>({
+        privacy: PRIVACY_PUBLIC,
+    });
+
+    const onChange = (name: string, value: string) =>
+        (formRef.current[name] = value);
+
+    const onSubmit = () => {
+        if (props.onSubmit) {
+            props.onSubmit(formRef.current);
+        }
+    };
+
+    return (
+        <div className={global.main}>
+            <div className={classes.title}>Create a new project</div>
+            <Form onChange={onChange} onSubmit={onSubmit}>
+                <Description onChange={onChange} />
+                <Privacy
+                    onChange={onChange}
+                    message="Anyone on the internet can see this repository"
+                    value="public"
+                    checked={true}
+                >
+                    <Public />
+                </Privacy>
+                <Privacy
+                    onChange={onChange}
+                    message="Project access must be granted explicitly to each user"
+                    value="private"
+                >
+                    <Private />
+                </Privacy>
+            </Form>
+        </div>
+    );
+}
+
+function Form(props: FormPropTypes) {
     const [error, setError] = useState<string>("");
     const formRef = useRef<Project>({
-        privacy: "public",
+        privacy: PRIVACY_PUBLIC,
     });
 
     const isNameValid = () =>
         formRef.current.name && formRef.current.name.trim().length > 0;
 
-    const change = (name: string, value: string) =>
-        (formRef.current[name] = value);
+    const onChange = (name: string, value: string) => {
+        formRef.current[name] = value;
+        if (props.onChange) {
+            props.onChange(name, value);
+        }
+    };
 
     const submit = () => {
         if (!isNameValid()) {
@@ -58,51 +108,35 @@ export default function New(props: PropTypes) {
     };
 
     return (
-        <div className={global.main}>
-            <div className={classes.title}>Create a new project</div>
+        <>
             <Input
                 autofocus={true}
-                change={change}
+                onChange={onChange}
                 error={error}
                 name="name"
                 test="project-name"
                 text="Project name"
             />
-            <Description change={change} />
-            <Privacy
-                change={change}
-                message="Anyone on the internet can see this repository"
-                value="public"
-                checked={true}
-            >
-                <Public />
-            </Privacy>
-            <Privacy
-                change={change}
-                message="Project access must be granted explicitly to each user"
-                value="private"
-            >
-                <Private />
-            </Privacy>
+            {props.children}
             <Button
                 click={submit}
                 test="create-project"
                 text="Create project"
             />
-        </div>
+        </>
     );
 }
 
 function Input(props: InputPropTypes) {
-    const change = (event: React.ChangeEvent<HTMLInputElement>) =>
-        props.change(event.target.name, event.target.value);
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+        props.onChange(event.target.name, event.target.value);
 
     return (
         <label className={classes.label}>
             {props.text}
             <Text
                 autofocus={props.autofocus}
-                change={change}
+                change={onChange}
                 error={props.error}
                 name={props.name}
                 test={props.test}
@@ -112,14 +146,14 @@ function Input(props: InputPropTypes) {
 }
 
 function Description(props: Event) {
-    const change = (event: React.ChangeEvent<HTMLTextAreaElement>) =>
-        props.change(event.target.name, event.target.value);
+    const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) =>
+        props.onChange(event.target.name, event.target.value);
 
     return (
         <label className={classes.label}>
             Decription (Optional)
             <Textarea
-                change={change}
+                change={onChange}
                 name="description"
                 test="project-description"
             />
@@ -128,15 +162,15 @@ function Description(props: Event) {
 }
 
 function Privacy(props: PrivacyPropTypes) {
-    const click = (event: React.ChangeEvent<HTMLInputElement>) =>
-        props.change(event.target.name, event.target.value);
+    const onClick = (event: React.ChangeEvent<HTMLInputElement>) =>
+        props.onChange(event.target.name, event.target.value);
 
     return (
         <div className={classes.privacy}>
             <Radio
                 value={props.value}
                 name="privacy"
-                click={click}
+                click={onClick}
                 checked={props.checked}
             >
                 {props.children}

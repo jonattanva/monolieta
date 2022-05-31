@@ -53,7 +53,7 @@ function Input(props: PropTypes) {
     return (
         <input
             autoFocus={autofocus}
-            className={classes.input}
+            className={!props.error ? classes.input : classes.input_error}
             data-testid={props.test}
             name={props.name}
             onChange={change}

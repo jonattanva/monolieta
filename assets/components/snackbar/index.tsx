@@ -24,7 +24,7 @@ export default function Snackbar(props: PropTypes) {
                     {props.message}
                 </div>
                 <div className={classes.action}>
-                    <button className={classes.dismiss}>
+                    <button className={classes.dismiss} onClick={props.close}>
                         <Dismiss />
                     </button>
                 </div>

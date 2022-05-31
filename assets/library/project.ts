@@ -9,6 +9,7 @@ export async function create(project: Project): Promise<string> {
             },
             body: JSON.stringify({
                 name: project.name,
+                path: project.name,
                 description: project.description,
                 privacy: project.privacy,
             }),

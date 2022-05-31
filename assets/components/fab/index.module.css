@@ -5,10 +5,10 @@
     box-sizing: border-box;
     cursor: pointer;
     display: flex;
-    height: var(--monolieta-fab-height, 28px);
+    height: var(--monolieta-fab-height, 32px);
     justify-content: center;
     padding: 4px;
-    width: var(--monolieta-fab-width, 28px);
+    width: var(--monolieta-fab-width, 32px);
 }
 
 .icon {

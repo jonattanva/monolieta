@@ -1,7 +1,0 @@
-.main {
-    color: var(--monolieta-text-primary, hsl(0, 0%, 13%));
-}
-
-.error {
-    color: var(--monolieta-error-color, #b00020);
-}

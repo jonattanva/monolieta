@@ -27,7 +27,7 @@ describe("<Snackbar />", () => {
 
     it("should render with dismiss button", async () => {
         const fn = vi.fn();
-        render(<Snackbar message="message" close={fn} delay={500} />);
+        render(<Snackbar message="message" close={fn} />);
 
         const input = screen.getByRole("button");
         fireEvent.click(input);
