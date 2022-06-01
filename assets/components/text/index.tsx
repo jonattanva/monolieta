@@ -1,3 +1,4 @@
+import Warning from "../resources/warning";
 import classes from "./index.module.css";
 import { useRef, useState } from "react";
 
@@ -18,7 +19,9 @@ export default function Text(props: PropTypes) {
             <Input {...props} />
             {props.error && (
                 <div className={classes.error}>
-                    <Icon />
+                    <div className={classes.icon}>
+                        <Warning width={20} height={20} />
+                    </div>
                     <small>{props.error}</small>
                 </div>
             )}
@@ -61,28 +64,5 @@ function Input(props: PropTypes) {
             type="text"
             value={internal}
         />
-    );
-}
-
-function Icon() {
-    return (
-        <div className={classes.icon}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                width={20}
-                height={20}
-                strokeWidth={2}
-            >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-            </svg>
-        </div>
     );
 }

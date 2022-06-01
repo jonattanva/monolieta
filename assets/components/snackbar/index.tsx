@@ -1,3 +1,4 @@
+import Dismiss from "../resources/dismiss";
 import classes from "./index.module.css";
 import useTimeout from "../../hooks/timeout";
 
@@ -25,31 +26,10 @@ export default function Snackbar(props: PropTypes) {
                 </div>
                 <div className={classes.action}>
                     <button className={classes.dismiss} onClick={props.close}>
-                        <Dismiss />
+                        <Dismiss width={24} height={24} />
                     </button>
                 </div>
             </div>
         </div>
-    );
-}
-
-function Dismiss() {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            width={24}
-            height={24}
-            strokeWidth={2}
-        >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-            />
-        </svg>
     );
 }

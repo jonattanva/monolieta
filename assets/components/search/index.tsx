@@ -1,3 +1,4 @@
+import Icon from "../resources/search";
 import classes from "./index.module.css";
 import { useRef } from "react";
 
@@ -12,7 +13,9 @@ export type PropTypes = {
 export default function Search(props: PropTypes) {
     return (
         <div>
-            <Icon />
+            <div className={classes.icon}>
+                <Icon height={14} width={14} />
+            </div>
             <Input {...props} />
         </div>
     );
@@ -50,28 +53,5 @@ function Input(props: PropTypes) {
             placeholder={placeholder}
             type="search"
         />
-    );
-}
-
-function Icon() {
-    return (
-        <div className={classes.icon}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-                width={14}
-                height={14}
-            >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-            </svg>
-        </div>
     );
 }
