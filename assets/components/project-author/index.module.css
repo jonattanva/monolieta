@@ -18,11 +18,14 @@
     text-transform: lowercase;
 }
 
-.pointer {
+.secondary {
     cursor: pointer;
+    color: var(--monolieta-text-secondary, hsl(0, 0%, 40%));
 }
 
-.pointer:hover {
+.primary:hover,
+.secondary:hover {
+    cursor: pointer;
     text-decoration: underline;
 }
 

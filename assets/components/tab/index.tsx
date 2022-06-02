@@ -40,7 +40,7 @@ function Body(props: PropTypes) {
 
     return (
         <>
-            <div className={classes.tab}>
+            <nav className={classes.tab}>
                 {props.options?.map((option, index) => (
                     <button
                         className={classes.item}
@@ -53,7 +53,7 @@ function Body(props: PropTypes) {
                         {option}
                     </button>
                 ))}
-            </div>
+            </nav>
             {View && <View selected={selected} />}
         </>
     );

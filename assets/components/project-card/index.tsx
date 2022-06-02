@@ -5,12 +5,12 @@ type PropTypes = {
     description?: string;
     name?: string;
     owner?: string;
+    privacy?: "Public" | "Private";
     test?: string;
     total?: number;
-    visibility?: "Public" | "Private";
 };
 
-export default function Project(props: PropTypes) {
+export default function Card(props: PropTypes) {
     const { total = 0 } = props;
 
     return (
@@ -30,7 +30,7 @@ export default function Project(props: PropTypes) {
             <div className={classes.body}>
                 <div className={classes.name}>
                     <div>{props.name}</div>
-                    <div className={classes.visibility}>{props.visibility}</div>
+                    <div className={classes.visibility}>{props.privacy}</div>
                 </div>
                 <div className={classes.owner}>{props.owner}</div>
                 <div className={classes.description}>

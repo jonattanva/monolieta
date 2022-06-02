@@ -1,8 +1,8 @@
-import Project from "./index";
+import Card from "./index";
 
 export default {
-    title: "Component/Navigation/Project",
-    component: Project,
+    title: "Component/Project/Card",
+    component: Card,
     argTypes: {
         click: {
             action: "clicked",
@@ -10,7 +10,7 @@ export default {
     },
 };
 
-const Template = (args) => <Project {...args} />;
+const Template = (args) => <Card {...args} />;
 
 export const Primary = Template.bind({});
 
@@ -19,5 +19,5 @@ Primary.args = {
     name: "MNIST",
     owner: "Yann LeCun",
     total: 0,
-    visibility: "Public",
+    privacy: "Public",
 };

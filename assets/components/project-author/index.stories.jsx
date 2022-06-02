@@ -1,7 +1,7 @@
 import Author from "./index";
 
 export default {
-    title: "Component/Author",
+    title: "Component/Project/Author",
     component: Author,
 };
 
