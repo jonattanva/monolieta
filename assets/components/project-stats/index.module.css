@@ -10,6 +10,8 @@
     display: flex;
     gap: 16px;
     justify-content: flex-start;
+    margin: 0;
+    padding: 0;
 }
 
 .item {

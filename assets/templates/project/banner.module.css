@@ -1,0 +1,27 @@
+.main {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.action {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+}
+
+.control {
+    align-items: flex-start;
+    display: flex;
+    gap: 16px;
+    justify-content: flex-start;
+}
+
+.extra {
+    align-items: flex-start;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+}
