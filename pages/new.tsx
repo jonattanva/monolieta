@@ -1,8 +1,8 @@
-import View, { Project } from "../assets/templates/project/new";
+import Head from "next/head";
 import Snackbar from "../assets/components/snackbar";
+import View, { Project } from "../assets/templates/project/new";
 import classes from "./new.module.css";
 import useMessage from "../assets/hooks/message";
-import { Fragment } from "react";
 import { create } from "../assets/library/project";
 import { useRouter } from "next/router";
 
@@ -16,7 +16,7 @@ export default function New() {
 
 function Body() {
     const router = useRouter();
-    const [isMessage, showMessge, configuration] = useMessage();
+    const [isMessage, showMessage, configuration] = useMessage();
 
     const onSubmit = async (project: Project) => {
         try {
@@ -24,17 +24,20 @@ function Body() {
             router.push(`/namespace/project`);
         } catch (error) {
             if (error instanceof Error) {
-                showMessge(error.message);
+                showMessage(error.message);
                 return;
             }
-            showMessge("Error creating project");
+            showMessage("Error creating project");
         }
     };
 
     return (
-        <Fragment>
+        <>
+            <Head>
+                <title>New Project - Monolieta</title>
+            </Head>
             <View onSubmit={onSubmit} />
             {isMessage && <Snackbar delay={5000} {...configuration} />}
-        </Fragment>
+        </>
     );
 }

@@ -3,16 +3,20 @@ import Chart from "../../components/resources/chart";
 import Fab from "../../components/fab";
 import Information from "../../components/project-information";
 import Setting from "../../components/resources/setting";
-import Stats from "../../components/project-stats";
 import classes from "./banner.module.css";
 
-export default function Banner() {
+type PropTypes = {
+    author: string;
+    project: string;
+};
+
+export default function Banner(props: PropTypes) {
     return (
         <div className={classes.main}>
             <div className={classes.action}>
                 <Information
-                    author="yann lecun"
-                    project="mnist"
+                    author={props.author}
+                    project={props.project}
                     privacy="Public"
                 />
                 <div className={classes.control}>
@@ -27,7 +31,6 @@ export default function Banner() {
                     <Button text="Start labeling" />
                 </div>
             </div>
-            <Stats />
             <div>
                 The MNIST dataset is a set of handwritten digits that have been
                 prepared for machine learning. It consists of 28x28 grayscale

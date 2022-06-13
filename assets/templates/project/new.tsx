@@ -5,7 +5,7 @@ import Radio from "../../components/radio";
 import Text from "../../components/text";
 import Textarea from "../../components/textarea";
 import classes from "./new.module.css";
-import global from "./global.module.css";
+import Main from "../../components/main";
 import { useRef, useState } from "react";
 
 export type Project = {
@@ -57,7 +57,7 @@ export default function New(props: PropTypes) {
     };
 
     return (
-        <div className={global.main}>
+        <Main>
             <div className={classes.title}>Create a new project</div>
             <Form onChange={onChange} onSubmit={onSubmit}>
                 <Description onChange={onChange} />
@@ -77,7 +77,7 @@ export default function New(props: PropTypes) {
                     <Private />
                 </Privacy>
             </Form>
-        </div>
+        </Main>
     );
 }
 

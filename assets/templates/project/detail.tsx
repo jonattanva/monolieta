@@ -1,17 +1,44 @@
-import Author from "../../components/project-information";
-import Button from "../../components/button";
-import Chart from "../../components/resources/chart";
-import Fab from "../../components/fab";
-import Main from "../../components/main";
 import Banner from "./banner";
-import Setting from "../../components/resources/setting";
-import Stats from "../../components/project-stats";
+import Main from "../../components/main";
 import classes from "./detail.module.css";
+import { Grid } from "monolieta-virtual-scroll";
 
-export default function Detail() {
+type PropTypes = {
+    author: string;
+    project: string;
+};
+
+export default function Detail(props: PropTypes) {
+
+
     return (
         <Main>
-            <Banner />
+            <Banner author={props.author} project={props.project} />
+            <div className={classes.main}>
+                <div className={classes.body}>
+                    <Grid
+                        columnWidth={100}
+                        direction="vertical"
+                        rowHeight={100}
+                    >
+                        {new Array(10)
+                            .fill(0)
+                            .map((_, i) =>
+                                new Array(6)
+                                    .fill(0)
+                                    .map((_, j) => (
+                                        <div
+                                            key={j}
+                                        >{`[${i} ${j}]`}</div>
+                                    ))
+                            )}
+                    </Grid>
+                </div>
+                <div>
+                    <div>Stats</div>
+                    <div>Filter</div>
+                </div>
+            </div>
         </Main>
     );
 }

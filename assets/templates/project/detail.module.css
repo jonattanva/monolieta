@@ -1,25 +1,12 @@
 .main {
-    align-items: center;
+    align-items: flex-start;
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
 }
 
-
-
-.control {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-}
-
-.action {
-    display: flex;
-}
-
-.separator {
-    align-items: center;
-    display: flex;
-    gap: 8px;
-    margin-right: 16px;
+.body {
+    height: 450px;
+    width: 80%;
 }
