@@ -8,5 +8,14 @@
 
 .body {
     height: 450px;
-    width: 80%;
+    width: 75%;
+}
+
+.extra {
+    width: 25%;
+}
+
+.stats {
+    margin-bottom: 16px;
+    width: 100%;
 }

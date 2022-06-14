@@ -1,7 +1,7 @@
 import classes from "./index.module.css";
 
 type PropTypes = {
-    click?: (
+    onClick?: (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => void | Promise<void>;
     test?: string;
@@ -12,7 +12,7 @@ export default function Button(props: PropTypes) {
     return (
         <button
             className={classes.main}
-            onClick={props.click}
+            onClick={props.onClick}
             data-testid={props.test}
         >
             {props.text}

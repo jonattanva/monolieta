@@ -5,7 +5,7 @@ export default {
     title: "Component/Action/Fab",
     component: Fab,
     argTypes: {
-        click: {
+        onClick: {
             action: "clicked",
         },
     },

@@ -121,7 +121,7 @@ function Form(props: FormPropTypes) {
             />
             {props.children}
             <Button
-                click={submit}
+                onClick={submit}
                 test="create-project"
                 text="Create project"
             />
@@ -138,7 +138,7 @@ function Input(props: InputPropTypes) {
             {props.text}
             <Text
                 autofocus={props.autofocus}
-                change={onChange}
+                onChange={onChange}
                 error={props.error}
                 name={props.name}
                 test={props.test}
@@ -155,7 +155,7 @@ function Description(props: Event) {
         <label className={classes.label}>
             Decription (Optional)
             <Textarea
-                change={onChange}
+                onChange={onChange}
                 name="description"
                 test="project-description"
             />
@@ -172,7 +172,7 @@ function Privacy(props: PrivacyPropTypes) {
             <Radio
                 value={props.value}
                 name="privacy"
-                click={onClick}
+                onClick={onClick}
                 checked={props.checked}
             >
                 {props.children}

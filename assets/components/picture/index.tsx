@@ -2,7 +2,7 @@ import classes from "./index.module.css";
 
 type PropTypes = {
     alt?: string;
-    click?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     onNaturalSize?: (width: number, height: number) => void;
     source?: string;
     test?: string;
@@ -19,7 +19,7 @@ export default function Picture(props: PropTypes) {
     }
 
     return (
-        <div className={classes.cover} onClick={props.click}>
+        <div className={classes.cover} onClick={props.onClick}>
             {props.source && (
                 <img
                     alt={props.alt}

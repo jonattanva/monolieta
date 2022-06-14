@@ -9,13 +9,21 @@ export default function Detail() {
 
     // TODO: GET project data from API
 
+    const onBack = () => {
+        router.push("/");
+    };
+
     return (
         <>
             <Head>
                 <title>{`${author} / ${project} - Monolieta`}</title>
             </Head>
             <div className={classes.main}>
-                <View author={author as string} project={project as string} />
+                <View
+                    author={author as string}
+                    onBack={onBack}
+                    project={project as string}
+                />
             </div>
         </>
     );

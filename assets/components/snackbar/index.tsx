@@ -3,7 +3,7 @@ import classes from "./index.module.css";
 import useTimeout from "../../hooks/timeout";
 
 type PropTypes = {
-    close?: () => void;
+    onClose?: () => void;
     delay?: number | null;
     message: string;
     test?: string;
@@ -13,8 +13,8 @@ export default function Snackbar(props: PropTypes) {
     const { delay = null } = props;
 
     useTimeout(() => {
-        if (props.close) {
-            props.close();
+        if (props.onClose) {
+            props.onClose();
         }
     }, delay);
 
@@ -25,7 +25,7 @@ export default function Snackbar(props: PropTypes) {
                     {props.message}
                 </div>
                 <div className={classes.action}>
-                    <button className={classes.dismiss} onClick={props.close}>
+                    <button className={classes.dismiss} onClick={props.onClose}>
                         <Dismiss width={24} height={24} />
                     </button>
                 </div>

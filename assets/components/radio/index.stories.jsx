@@ -4,7 +4,7 @@ export default {
     title: "Component/Form/Radio",
     component: Radio,
     argTypes: {
-        click: {
+        onClick: {
             action: "clicked",
         },
     },

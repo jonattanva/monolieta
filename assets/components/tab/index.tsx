@@ -6,7 +6,7 @@ type Body = {
 };
 
 type PropTypes = {
-    click?: (index: number) => void;
+    onClick?: (index: number) => void;
     options?: string[];
     render?: React.ComponentType<Body>;
     selected?: number;
@@ -31,8 +31,8 @@ function Body(props: PropTypes) {
         setSelected((previous) => {
             const target = event.target as HTMLButtonElement;
             const item = Number(target.dataset.item);
-            if (props.click && item !== previous) {
-                props.click(item);
+            if (props.onClick && item !== previous) {
+                props.onClick(item);
             }
             return item;
         });

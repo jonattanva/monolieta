@@ -17,7 +17,7 @@ describe("<Information/>", () => {
                 author="Jonattan"
                 project="Hello"
                 privacy="Public"
-                back={fn}
+                onBack={fn}
             />
         );
 

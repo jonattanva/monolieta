@@ -1,7 +1,7 @@
 import classes from "./index.module.css";
 
 type PropTypes = {
-    click?: (
+    onClick?: (
         event: React.ChangeEvent<HTMLInputElement>
     ) => void | Promise<void>;
     children?: React.ReactNode | string;
@@ -18,7 +18,7 @@ export default function Radio(props: PropTypes) {
                 type="radio"
                 data-testid={props.test}
                 name={props.name}
-                onChange={props.click}
+                onChange={props.onClick}
                 value={props.value}
                 defaultChecked={props.checked}
             />

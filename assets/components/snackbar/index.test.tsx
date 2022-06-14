@@ -15,7 +15,7 @@ describe("<Snackbar />", () => {
 
     it("should render with timeout", async () => {
         const fn = vi.fn();
-        render(<Snackbar message="message" close={fn} delay={400} />);
+        render(<Snackbar message="message" onClose={fn} delay={400} />);
 
         await waitFor(
             () => {
@@ -27,7 +27,7 @@ describe("<Snackbar />", () => {
 
     it("should render with dismiss button", async () => {
         const fn = vi.fn();
-        render(<Snackbar message="message" close={fn} />);
+        render(<Snackbar message="message" onClose={fn} />);
 
         const input = screen.getByRole("button");
         fireEvent.click(input);

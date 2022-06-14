@@ -6,7 +6,7 @@ export type PropTypes = {
     autofocus?: boolean;
     delay?: number;
     placeholder?: string;
-    search?: (criteria: string) => void | Promise<void>;
+    onSearch?: (criteria: string) => void | Promise<void>;
     test?: string;
 };
 
@@ -25,20 +25,20 @@ function Input(props: PropTypes) {
     const {
         autofocus = false,
         delay = 500,
-        search,
+        onSearch,
         placeholder = "Search",
     } = props;
 
     const timeoutRef = useRef<NodeJS.Timeout>();
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (search) {
+        if (onSearch) {
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current);
             }
 
             timeoutRef.current = setTimeout(() => {
-                search(event.target.value);
+                onSearch(event.target.value);
             }, delay);
         }
     };

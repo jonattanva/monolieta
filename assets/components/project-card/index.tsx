@@ -1,7 +1,7 @@
 import classes from "./index.module.css";
 
 type PropTypes = {
-    click?: () => void;
+    onClick?: () => void;
     description?: string;
     name?: string;
     owner?: string;
@@ -17,7 +17,7 @@ export default function Card(props: PropTypes) {
         <div
             className={classes.main}
             data-testid={props.test}
-            onClick={props.click}
+            onClick={props.onClick}
             role="row"
         >
             <div className={classes.banner}>

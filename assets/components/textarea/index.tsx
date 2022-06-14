@@ -4,7 +4,7 @@ import classes from "./index.module.css";
 type PropTypes = {
     autofocus?: boolean;
     delay?: number;
-    change?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
     name?: string;
     placeholder?: string;
     test?: string;
@@ -29,8 +29,8 @@ export default function Textarea(props: PropTypes) {
         }
 
         timeoutRef.current = setTimeout(() => {
-            if (props.change) {
-                props.change(event);
+            if (props.onChange) {
+                props.onChange(event);
             }
         }, delay);
     }

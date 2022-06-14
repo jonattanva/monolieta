@@ -15,7 +15,7 @@ describe("<Radio />", () => {
 
     it("should render with change", () => {
         const click = vi.fn();
-        render(<Radio click={click} />);
+        render(<Radio onClick={click} />);
 
         const input = screen.getByRole("radio");
         fireEvent.click(input);

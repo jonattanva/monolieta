@@ -11,7 +11,7 @@ describe("<Fab />", () => {
     it("should render with icon and click handler", () => {
         const click = vi.fn();
         render(
-            <Fab click={click}>
+            <Fab onClick={click}>
                 <i>Icon</i>
             </Fab>
         );

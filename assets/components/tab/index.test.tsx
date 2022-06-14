@@ -21,12 +21,13 @@ describe("<Tab />", () => {
     });
 
     it("should render with click handler", () => {
-        const click = vi.fn();
-        render(<Tab options={["One", "Two"]} click={click} />);
+        const fn = vi.fn();
+        render(<Tab options={["One", "Two"]} onClick={fn} />);
 
         fireEvent.click(screen.getByText("Two"));
 
-        expect(click).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenCalledTimes(1);
+
         expect(screen.getByText("Two")).toHaveAttribute(
             "data-selected",
             "true"
@@ -34,12 +35,12 @@ describe("<Tab />", () => {
     });
 
     it("should render with multiple click handler", () => {
-        const click = vi.fn();
-        render(<Tab options={["One", "Two"]} click={click} />);
+        const fn = vi.fn();
+        render(<Tab options={["One", "Two"]} onClick={fn} />);
 
         fireEvent.click(screen.getByText("Two"));
 
-        expect(click).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenCalledTimes(1);
         expect(screen.getByText("Two")).toHaveAttribute(
             "data-selected",
             "true"
@@ -47,7 +48,7 @@ describe("<Tab />", () => {
 
         fireEvent.click(screen.getByText("One"));
 
-        expect(click).toHaveBeenCalledTimes(2);
+        expect(fn).toHaveBeenCalledTimes(2);
         expect(screen.getByText("One")).toHaveAttribute(
             "data-selected",
             "true"
@@ -55,12 +56,13 @@ describe("<Tab />", () => {
     });
 
     it("should render with body", () => {
-        const click = vi.fn();
-        render(<Tab options={["One", "Two"]} click={click} render={Fake} />);
+        const fn = vi.fn();
+        render(<Tab options={["One", "Two"]} onClick={fn} render={Fake} />);
         expect(screen.getByText("0")).toBeInTheDocument();
 
         fireEvent.click(screen.getByText("Two"));
-        expect(click).toHaveBeenCalledTimes(1);
+
+        expect(fn).toHaveBeenCalledTimes(1);
         expect(screen.getByText("1")).toBeInTheDocument();
     });
 });

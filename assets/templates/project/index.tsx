@@ -13,7 +13,7 @@ export default function Home(props: PropTypes) {
             <div className={classes.header}>
                 <div className={classes.title}>Project</div>
                 <Button
-                    click={props.onNewProject}
+                    onClick={props.onNewProject}
                     test="new-project"
                     text="New project"
                 />

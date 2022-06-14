@@ -8,6 +8,7 @@ import classes from "./banner.module.css";
 type PropTypes = {
     author: string;
     project: string;
+    onBack?: () => void;
 };
 
 export default function Banner(props: PropTypes) {
@@ -16,8 +17,9 @@ export default function Banner(props: PropTypes) {
             <div className={classes.action}>
                 <Information
                     author={props.author}
-                    project={props.project}
+                    onBack={props.onBack}
                     privacy="Public"
+                    project={props.project}
                 />
                 <div className={classes.control}>
                     <div className={classes.extra}>

@@ -23,8 +23,8 @@ describe("<New />", () => {
     });
 
     it("should render with submit", async () => {
-        const submit = vi.fn();
-        render(<New onSubmit={submit} />);
+        const fn = vi.fn();
+        render(<New onSubmit={fn} />);
 
         const inputs = screen.getAllByRole("textbox");
         fireEvent.change(inputs[0], {
@@ -44,7 +44,7 @@ describe("<New />", () => {
                 const action = screen.getByRole("button");
                 fireEvent.click(action);
 
-                expect(submit).toHaveBeenCalledTimes(1);
+                expect(fn).toHaveBeenCalledTimes(1);
             },
             { timeout: 2000 }
         );

@@ -4,7 +4,7 @@ export default {
     title: "Component/Action/Button",
     component: Button,
     argTypes: {
-        click: {
+        onClick: {
             action: "clicked"
         }
     },

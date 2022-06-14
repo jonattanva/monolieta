@@ -6,9 +6,10 @@
 }
 
 .stats {
-    align-items: center;
+    align-items: flex-start;
     display: flex;
-    gap: 16px;
+    flex-direction: column;
+    gap: 8px;
     justify-content: flex-start;
     margin: 0;
     padding: 0;

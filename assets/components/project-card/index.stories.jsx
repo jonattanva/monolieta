@@ -4,7 +4,7 @@ export default {
     title: "Component/Project/Card",
     component: Card,
     argTypes: {
-        click: {
+        onClick: {
             action: "clicked",
         },
     },

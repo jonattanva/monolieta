@@ -15,7 +15,7 @@ describe("<Button />", () => {
 
     it("should render with text and click handler", () => {
         const click = vi.fn();
-        render(<Button text="Hello" click={click} />);
+        render(<Button text="Hello" onClick={click} />);
         fireEvent.click(screen.getByRole("button"));
         expect(click).toHaveBeenCalledTimes(1);
     });

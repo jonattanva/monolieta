@@ -4,7 +4,7 @@ export default {
     title: "Component/Navigation/Tab",
     component: Tab,
     argTypes: {
-        click: {
+        onClick: {
             action: "clicked",
         },
     },

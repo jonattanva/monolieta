@@ -30,7 +30,7 @@ describe("<Card/>", () => {
 
     it("should render with click", () => {
         const click = vi.fn();
-        render(<Card click={click} />);
+        render(<Card onClick={click} />);
 
         fireEvent.click(screen.getByRole("row"));
         expect(click).toHaveBeenCalledTimes(1);

@@ -19,8 +19,8 @@ describe("<Text/>", () => {
     });
 
     it("should render with change", async () => {
-        const change = vi.fn();
-        render(<Text change={change} delay={200} />);
+        const fn = vi.fn();
+        render(<Text onChange={fn} delay={200} />);
 
         const input = screen.getByRole("textbox");
         fireEvent.change(input, {
@@ -37,7 +37,7 @@ describe("<Text/>", () => {
 
         await waitFor(
             () => {
-                expect(change).toHaveBeenCalledTimes(1);
+                expect(fn).toHaveBeenCalledTimes(1);
             },
             { timeout: 1000 }
         );

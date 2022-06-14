@@ -19,8 +19,8 @@ describe("<Textarea/>", () => {
     });
 
     it("should render with change", async () => {
-        const change = vi.fn();
-        render(<Textarea change={change} />);
+        const fn = vi.fn();
+        render(<Textarea onChange={fn} />);
 
         const input = screen.getByRole("textbox");
         fireEvent.change(input, {
@@ -37,7 +37,7 @@ describe("<Textarea/>", () => {
 
         await waitFor(
             () => {
-                expect(change).toHaveBeenCalledTimes(1);
+                expect(fn).toHaveBeenCalledTimes(1);
             },
             { timeout: 1000 }
         );

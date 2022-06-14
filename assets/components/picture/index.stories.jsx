@@ -2,7 +2,12 @@ import Picture from "./index";
 
 export default {
     title: "Component/Editor/Picture",
-    component: Picture
+    component: Picture,
+    argTypes: {
+        onClick: {
+            action: "clicked",
+        },
+    },
 };
 
 const Template = (args) => <Picture {...args} />;

@@ -15,7 +15,7 @@ describe("<Search />", () => {
 
     it("should render with on change", async () => {
         const search = vi.fn();
-        render(<Search search={search} delay={200} />);
+        render(<Search onSearch={search} delay={200} />);
 
         const input = screen.getByRole("searchbox");
         fireEvent.change(input, {

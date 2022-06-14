@@ -8,7 +8,7 @@ describe("<Picture/>", () => {
         render(
             <Picture
                 alt="picture"
-                click={click}
+                onClick={click}
                 test="picture"
                 source="https://picsum.photos/200/300"
             />

@@ -13,6 +13,7 @@
     "test:ui": "vitest --ui"
   }, 
   "dependencies": {
+    "monolieta-search": "~1.2.0",
     "monolieta-virtual-scroll": "~1.4.1",
     "next": "~12.1.6",
     "react": "~18.1.0",

@@ -2,7 +2,7 @@ import classes from "./index.module.css";
 
 type PropTypes = {
     author?: string;
-    back?: () => void;
+    onBack?: () => void;
     privacy?: "Public" | "Private";
     project?: string;
 };
@@ -12,7 +12,7 @@ export default function Information(props: PropTypes) {
         <div className={classes.main}>
             <div className={classes.container}>
                 <h1 className={classes.project}>{props.project}</h1>
-                <span className={classes.author} onClick={props.back}>
+                <span className={classes.author} onClick={props.onBack}>
                     {props.author}
                 </span>
             </div>

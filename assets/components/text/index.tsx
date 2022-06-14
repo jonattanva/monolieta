@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 
 type PropTypes = {
     autofocus?: boolean;
-    change?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     delay?: number;
     error?: string;
     name?: string;
@@ -47,8 +47,8 @@ function Input(props: PropTypes) {
         }
 
         timeoutRef.current = setTimeout(() => {
-            if (props.change) {
-                props.change(event);
+            if (props.onChange) {
+                props.onChange(event);
             }
         }, delay);
     }
