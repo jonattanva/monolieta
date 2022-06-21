@@ -9,4 +9,12 @@ const Template = (args) => <Select {...args} />;
 
 export const Primary = Template.bind({});
 
-Primary.args = {};
+Primary.args = {
+    multiple: true,
+    options: [
+        { value: "1", label: "Red" },
+        { value: "2", label: "Yellow"},
+        { value: "3", label: "Blue"},
+        { value: "4", label: "Pink"}
+    ],
+};
