@@ -1,3 +1,4 @@
+import X from "../resources/x";
 import classes from "./index.module.css";
 import useEscape from "../../hooks/escape";
 import useOutside from "../../hooks/outside";
@@ -21,6 +22,19 @@ type PropTypes = {
     multiple?: boolean;
     options?: Option[];
     placeholder?: string;
+};
+
+type InternalInput = {
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onClick: () => void;
+    onRemove: (option: Option) => void;
+    options: Option[];
+    placeholder?: string;
+};
+
+type InternalSelected = {
+    onClick: (option: Option) => void;
+    option: Option;
 };
 
 export default function Select(props: PropTypes) {
@@ -113,27 +127,23 @@ function Body(props: PropTypes) {
         }
     }
 
+    function onRemove(option: Option) {
+        setSelected((previous) => {
+            return previous.filter((selected) => {
+                return selected.value !== option.value;
+            });
+        });
+    }
+
     return (
         <div ref={containerRef}>
-            <div>
-                {selected.map((row) => (
-                    <div key={row.value}>{row.label}</div>
-                ))}
-
-                <div className={classes.container} onClick={toggle}>
-                    <input
-                        className={classes.input}
-                        aria-autocomplete="list"
-                        autoCapitalize="none"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        onChange={onChange}
-                        placeholder={placeholder}
-                        spellCheck="false"
-                        type="text"
-                    />
-                </div>
-            </div>
+            <Input
+                onChange={onChange}
+                onClick={toggle}
+                placeholder={placeholder}
+                options={selected}
+                onRemove={onRemove}
+            />
 
             {is && (
                 <div>
@@ -157,20 +167,48 @@ function Body(props: PropTypes) {
     );
 }
 
-function Input() {
+function Input(props: InternalInput) {
     return (
-        <div className={classes.container} onClick={toggle}>
+        <div className={classes.container} onClick={props.onClick}>
+            {props.options?.map((option) => (
+                <Selected
+                    key={option.value}
+                    onClick={props.onRemove}
+                    option={option}
+                />
+            ))}
+
             <input
                 className={classes.input}
                 aria-autocomplete="list"
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect="off"
-                onChange={onChange}
-                placeholder={placeholder}
+                onChange={props.onChange}
+                placeholder={props.placeholder}
                 spellCheck="false"
                 type="text"
             />
+        </div>
+    );
+}
+
+function Selected(props: InternalSelected) {
+    function onClick(event: React.MouseEvent<HTMLElement, MouseEvent>) {
+        if (props.onClick) {
+            props.onClick(props.option);
+        }
+
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
+    return (
+        <div className={classes.tag}>
+            <div>{props.option.label}</div>
+            <div className={classes.icon} onClick={onClick}>
+                <X width={14} height={14} />
+            </div>
         </div>
     );
 }
