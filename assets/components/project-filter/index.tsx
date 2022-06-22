@@ -18,7 +18,7 @@ export default function Filter() {
             <Label title="Order">
                 <Select />
             </Label>
-            <div>
+            <div className={classes.action}>
                 <Button text="Filter" />
             </div>
         </div>

@@ -6,3 +6,10 @@
     justify-content: flex-start;
     width: 100%;
 }
+
+.action {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}

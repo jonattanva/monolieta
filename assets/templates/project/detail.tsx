@@ -41,9 +41,7 @@ export default function Detail(props: PropTypes) {
                     <div className={classes.stats}>
                         <Stats />
                     </div>
-                    <div>
-                        <Filter />
-                    </div>
+                    <Filter />
                 </div>
             </div>
         </Main>
