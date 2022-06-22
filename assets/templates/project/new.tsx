@@ -1,11 +1,12 @@
 import Button from "../../components/button";
 import Closed from "../../components/resources/closed";
 import Globe from "../../components/resources/globe";
+import Label from "../../components/label";
+import Main from "../../components/main";
 import Radio from "../../components/radio";
 import Text from "../../components/text";
 import Textarea from "../../components/textarea";
 import classes from "./new.module.css";
-import Main from "../../components/main";
 import { useRef, useState } from "react";
 
 export type Project = {
@@ -134,8 +135,7 @@ function Input(props: InputPropTypes) {
         props.onChange(event.target.name, event.target.value);
 
     return (
-        <label className={classes.label}>
-            {props.text}
+        <Label title={props.text}>
             <Text
                 autofocus={props.autofocus}
                 onChange={onChange}
@@ -143,7 +143,7 @@ function Input(props: InputPropTypes) {
                 name={props.name}
                 test={props.test}
             />
-        </label>
+        </Label>
     );
 }
 
@@ -152,14 +152,13 @@ function Description(props: Event) {
         props.onChange(event.target.name, event.target.value);
 
     return (
-        <label className={classes.label}>
-            Decription (Optional)
+        <Label title="Decription (Optional)">
             <Textarea
                 onChange={onChange}
                 name="description"
                 test="project-description"
             />
-        </label>
+        </Label>
     );
 }
 

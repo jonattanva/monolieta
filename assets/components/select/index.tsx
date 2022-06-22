@@ -1,4 +1,4 @@
-import X from "../resources/x";
+import Icon from "../resources/x";
 import classes from "./index.module.css";
 import useEscape from "../../hooks/escape";
 import useOutside from "../../hooks/outside";
@@ -35,6 +35,18 @@ type InternalInput = {
 type InternalSelected = {
     onClick: (option: Option) => void;
     option: Option;
+};
+
+type InternalList = {
+    onClick: (option: Option) => void;
+    options?: Option[];
+    selected?: Option[];
+};
+
+type InternalItem = {
+    onClick: (option: Option) => void;
+    option: Option;
+    selected?: Option[];
 };
 
 export default function Select(props: PropTypes) {
@@ -104,18 +116,15 @@ function Body(props: PropTypes) {
         }, delay);
     }
 
-    function onSelect(event: React.MouseEvent<HTMLLIElement, MouseEvent>) {
-        const target = event.target as HTMLLIElement;
-        const value = target.dataset.value;
-
-        const current = selected.find((option) => {
-            return option.value === value;
+    function onSelect(option: Option) {
+        const current = selected.find((self) => {
+            return self.value === option.value;
         });
 
         if (!current) {
             setSelected((previous) => {
-                const current = props.options?.find((option) => {
-                    return option.value === value;
+                const current = props.options?.find((self) => {
+                    return self.value === option.value;
                 });
 
                 if (current) {
@@ -145,24 +154,7 @@ function Body(props: PropTypes) {
                 onRemove={onRemove}
             />
 
-            {is && (
-                <div>
-                    <ul>
-                        {dataset?.length === 0 && <li>No options</li>}
-
-                        {dataset?.map((option) => (
-                            <li
-                                key={option.value}
-                                className={classes.item}
-                                data-value={option.value}
-                                onClick={onSelect}
-                            >
-                                {option.label}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+            {is && <List options={dataset} onClick={onSelect} />}
         </div>
     );
 }
@@ -207,8 +199,41 @@ function Selected(props: InternalSelected) {
         <div className={classes.tag}>
             <div>{props.option.label}</div>
             <div className={classes.icon} onClick={onClick}>
-                <X width={14} height={14} />
+                <Icon width={14} height={14} />
             </div>
+        </div>
+    );
+}
+
+function List(props: InternalList) {
+    return (
+        <div className={classes.list}>
+            {props.options?.length === 0 && <li>No options</li>}
+            {props.options?.map((option) => (
+                <Item
+                    key={option.value}
+                    onClick={props.onClick}
+                    option={option}
+                    selected={props.selected}
+                />
+            ))}
+        </div>
+    );
+}
+
+function Item(props: InternalItem) {
+    function onClick(event: React.MouseEvent<HTMLElement, MouseEvent>) {
+        if (props.onClick) {
+            props.onClick(props.option);
+        }
+
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
+    return (
+        <div className={classes.item} onClick={onClick}>
+            {props.option.label}
         </div>
     );
 }

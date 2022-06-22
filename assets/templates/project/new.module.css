@@ -14,15 +14,6 @@
     width: 100%;
 }
 
-.label {
-    display: flex;
-    flex-direction: column;
-    font-weight: 600;
-    gap: 4px;
-    margin-bottom: 16px;
-    width: 100%;
-}
-
 .privacy {
     align-items: flex-start;
     display: flex;

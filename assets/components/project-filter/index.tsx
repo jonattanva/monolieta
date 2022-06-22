@@ -1,29 +1,23 @@
 import Button from "../button";
+import Label from "../label";
 import Select from "../select";
 import classes from "./index.module.css";
 
 export default function Filter() {
     return (
         <div className={classes.main}>
-            <label>
-                Select
+            <Label title="Select">
                 <Select />
-            </label>
-
-            <label>
-                Group by
+            </Label>
+            <Label title="Group by">
                 <Select />
-            </label>
-
-            <label>
-                Sort by
+            </Label>
+            <Label title="Sort by">
                 <Select />
-            </label>
-
-            <label>
-                Order
+            </Label>
+            <Label title="Order">
                 <Select />
-            </label>
+            </Label>
             <div>
                 <Button text="Filter" />
             </div>
