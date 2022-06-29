@@ -23,4 +23,11 @@ class ProjectService(
 
         return projectRepository.save(project)
     }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    fun findByName(name: String): Project? {
+        return if (name.isNotEmpty()) {
+            projectRepository.findByName(1, name)
+        } else null
+    }
 }

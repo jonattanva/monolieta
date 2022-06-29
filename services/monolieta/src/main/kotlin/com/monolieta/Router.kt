@@ -15,6 +15,7 @@ class Router {
     ) = router {
         "/project".nest {
             POST("", accept(MediaType.APPLICATION_JSON), projectHandle::create)
+            GET("/{namespace}/{project}", projectHandle::detail)
         }
     }
 }

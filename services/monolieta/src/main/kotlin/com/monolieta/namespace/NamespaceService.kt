@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.annotation.Validated
 import java.time.LocalDateTime
+import javax.validation.Valid
 
 @Validated
 @Service(value = "NamespaceService")
@@ -14,7 +15,7 @@ class NamespaceService(
     private val namespaceRepository: NamespaceRepository
 ) {
     @Transactional(propagation = Propagation.REQUIRED)
-    fun save(namespace: Namespace): Namespace {
+    fun save(@Valid namespace: Namespace): Namespace {
         namespace.path = namespace.path.normalize()
         namespace.updated = if (namespace.id != null) {
             LocalDateTime.now()
@@ -24,5 +25,5 @@ class NamespaceService(
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    fun findByPath(path: String): Namespace? = namespaceRepository.findByPath(path)
+    fun getNamespace(): Namespace? = namespaceRepository.getNamespace(1L) // TODO: current user!
 }

@@ -15,12 +15,17 @@ class ProjectController(
     private val projectService: ProjectService,
     private val namespaceService: NamespaceService
 ) {
+    fun detail(request: ServerRequest): ServerResponse {
+        return ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body("message")
+    }
+
     fun create(request: ServerRequest): ServerResponse {
         val body = request.body(Project.Request::class.java)
 
-        val path = ""
-        val namespace = namespaceService.findByPath(path)
-            ?: throw Exception("")
+        val namespace = namespaceService.getNamespace()
+            ?: throw Exception("the.namespace.does.not.exist")
 
         projectService.save(
             Project(
@@ -28,8 +33,7 @@ class ProjectController(
                 name = body.name,
                 path = body.path,
                 description = body.description,
-                namespace = namespace,
-                archived = false
+                namespace = namespace
             )
         )
 
