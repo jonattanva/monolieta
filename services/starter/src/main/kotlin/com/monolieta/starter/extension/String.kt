@@ -1,4 +1,4 @@
-package com.monolieta.backbone.extension
+package com.monolieta.starter.extension
 
 import java.text.Normalizer
 

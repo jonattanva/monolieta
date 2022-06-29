@@ -1,4 +1,5 @@
-include(":backbone", ":monolieta")
+include(":starter", ":starter-test", ":monolieta")
 
-project(":backbone").projectDir = file("services/backbone")
+project(":starter").projectDir = file("services/starter")
+project(":starter-test").projectDir = file("services/starter-test")
 project(":monolieta").projectDir = file("services/monolieta")

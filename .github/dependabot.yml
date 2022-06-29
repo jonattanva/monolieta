@@ -15,3 +15,13 @@ updates:
     schedule:
       day: "sunday"
       interval: "weekly"
+  - package-ecosystem: "gradle"
+    directory: "/services/starter"
+    schedule:
+      day: "sunday"
+      interval: "weekly"
+  - package-ecosystem: "gradle"
+    directory: "/services/starter-test"
+    schedule:
+      day: "sunday"
+      interval: "weekly"

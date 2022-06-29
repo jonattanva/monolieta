@@ -1,4 +1,4 @@
-package com.monolieta.backbone.extension
+package com.monolieta.starter.extension
 
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder

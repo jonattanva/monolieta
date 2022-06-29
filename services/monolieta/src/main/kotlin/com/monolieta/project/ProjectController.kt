@@ -1,7 +1,7 @@
 package com.monolieta.project
 
-import com.monolieta.backbone.extension.getMessage
-import com.monolieta.backbone.http.HttpMessage
+import com.monolieta.starter.extension.getMessage
+import com.monolieta.starter.http.HttpMessage
 import com.monolieta.namespace.NamespaceService
 import org.springframework.context.MessageSource
 import org.springframework.http.MediaType

@@ -1,6 +1,6 @@
 package com.monolieta.namespace
 
-import com.monolieta.backbone.extension.normalize
+import com.monolieta.starter.extension.normalize
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional

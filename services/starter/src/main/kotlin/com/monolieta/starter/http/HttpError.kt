@@ -1,4 +1,4 @@
-package com.monolieta.backbone.http
+package com.monolieta.starter.http
 
 data class HttpError(
     val message: String,
