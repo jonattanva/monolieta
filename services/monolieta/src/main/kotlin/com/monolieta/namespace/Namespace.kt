@@ -19,11 +19,11 @@ open class Namespace(
     @field:SequenceGenerator(name = "NAMESPACES_SEQ", sequenceName = "namespaces_id_seq")
     open val id: Long? = null,
 
-    @field:NotEmpty(message = "the.namespace.name.is.required")
+    @field:NotEmpty(message = "the.name.is.required")
     @field:Column(name = "name", nullable = false)
     open val name: String,
 
-    @field:NotEmpty(message = "the.namespace.path.is.required")
+    @field:NotEmpty(message = "the.path.is.required")
     @field:Column(name = "path", nullable = false)
     open var path: String,
 
