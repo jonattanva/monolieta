@@ -25,5 +25,5 @@ class NamespaceService(
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    fun getNamespace(): Namespace? = namespaceRepository.getNamespace(1L) // TODO: current user!
+    fun getNamespace(): Namespace? = namespaceRepository.getNamespace(1L) // TODO: get current user!
 }

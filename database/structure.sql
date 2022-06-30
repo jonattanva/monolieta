@@ -1,4 +1,4 @@
-CREATE TABLE namespaces (
+CREATE TABLE namespace (
     id integer NOT NULL,
     name character varying NOT NULL,
     path character varying NOT NULL,
@@ -8,14 +8,33 @@ CREATE TABLE namespaces (
     updated_at timestamp without time zone
 );
 
-CREATE SEQUENCE namespaces_id_seq
+CREATE SEQUENCE namespace_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
 
-ALTER SEQUENCE namespaces_id_seq OWNED BY namespaces.id;
+ALTER SEQUENCE namespace_id_seq OWNED BY namespace.id;
+
+ALTER TABLE ONLY namespace
+    ALTER COLUMN id SET DEFAULT nextval('namespace_id_seq');
+
+ALTER TABLE ONLY namespace
+    ADD CONSTRAINT namespace_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY namespace
+    ADD CONSTRAINT uq_namespace_2b3475fe UNIQUE ("name", "path");
+
+
+
+
+
+
+
+
+
+
 
 CREATE TABLE projects (
     id integer NOT NULL,
@@ -37,14 +56,8 @@ CREATE SEQUENCE projects_id_seq
 
 ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
 
-ALTER TABLE ONLY namespaces 
-    ALTER COLUMN id SET DEFAULT nextval('namespaces_id_seq');
-
 ALTER TABLE ONLY projects 
     ALTER COLUMN id SET DEFAULT nextval('projects_id_seq');
-
-ALTER TABLE ONLY namespaces 
-    ADD CONSTRAINT namespaces_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY projects 
     ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
@@ -54,9 +67,6 @@ ALTER TABLE ONLY projects
     REFERENCES namespaces(id) MATCH SIMPLE
     ON UPDATE RESTRICT
     ON DELETE RESTRICT;
-
-ALTER TABLE ONLY namespaces
-    ADD CONSTRAINT uq_namespaces_2b3475fe UNIQUE ("name", "path");
 
 ALTER TABLE ONLY projects
     ADD CONSTRAINT uq_projects_30ec1788 UNIQUE ("name", "path");

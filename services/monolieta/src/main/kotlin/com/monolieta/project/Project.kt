@@ -34,9 +34,9 @@ open class Project(
     @field:Valid
     @field:ManyToOne(fetch = FetchType.LAZY)
     @field:JoinColumn(
-        name = "id_namespaces",
+        name = "id_namespace",
         nullable = false,
-        foreignKey = ForeignKey(name = "fk_projects_namespaces")
+        foreignKey = ForeignKey(name = "fk_projects_namespace")
     )
     open val namespace: Namespace,
 

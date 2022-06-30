@@ -2,6 +2,7 @@ package com.monolieta.namespace
 
 import com.monolieta.starter.extension.getMessage
 import com.monolieta.starter.http.HttpMessage
+import com.monolieta.starter.http.HttpResponse
 import org.springframework.context.MessageSource
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -21,7 +22,7 @@ class NamespaceController(
                 name = body.name,
                 path = body.path,
                 description = body.description,
-                owner = 1
+                owner = 1 // TODO: get current user!
             )
         )
 
@@ -31,6 +32,6 @@ class NamespaceController(
 
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(message)
+            .body(HttpResponse(body = message))
     }
 }
