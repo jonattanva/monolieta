@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -86,7 +86,7 @@ jobs:
   test-database:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    container: gradle:jdk11-alpine
+    container: gradle:jdk17-alpine
     services:
       postgres:
         image: postgres:14.2-alpine
