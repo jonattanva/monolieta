@@ -32,7 +32,7 @@
     "c8": "~7.11.3",
     "cypress": "~10.3.0",
     "cypress-file-upload": "~5.0.8",
-    "eslint": "8.18.0",
+    "eslint": "8.19.0",
     "eslint-plugin-cypress": "~2.12.1",
     "jsdom": "~20.0.0",
     "typescript": "~4.7.4",
