@@ -22,6 +22,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: ./gradlew :monolieta:test
         env:
+          SPRING_PROFILES_ACTIVE: test
           POSTGRES_USER: postgres
           POSTGRES_HOSTNAME: postgres
           POSTGRES_DATABASE: monolieta
