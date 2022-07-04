@@ -29,7 +29,8 @@ class ProjectController(
                 name = body.name,
                 path = body.path,
                 description = body.description,
-                namespace = namespace
+                namespace = namespace,
+                archived = false
             )
         )
 

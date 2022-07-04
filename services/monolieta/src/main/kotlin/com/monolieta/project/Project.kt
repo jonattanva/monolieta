@@ -56,7 +56,8 @@ open class Project(
         val name: String,
         val path: String,
         val description: String? = null,
-        val archived: Boolean = false
+        val archived: Boolean = false,
+        val privacy: String?
     )
 
     data class Response(
