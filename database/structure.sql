@@ -54,7 +54,7 @@ ALTER TABLE ONLY project
     ON UPDATE RESTRICT
     ON DELETE RESTRICT;
 
-ALTER TABLE ONLY projects
+ALTER TABLE ONLY project
     ADD CONSTRAINT uq_project_30ec1788 UNIQUE ("name", "path");
 
 ALTER TABLE ONLY namespace
