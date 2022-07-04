@@ -1,9 +1,9 @@
 spring:
   datasource:
-    name: monolieta
+    name: ${postgres_database:monolieta}
     url: jdbc:postgresql://${postgres_hostname:127.0.0.1}/${spring.datasource.name}
-    username: postgres
-    password: postgres
+    username: ${postgres_user:postgres}
+    password: ${postgres_password:postgres}
   jpa:
     hibernate:
       ddl-auto: create-drop
