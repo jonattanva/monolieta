@@ -31,7 +31,7 @@ open class Namespace(
     @field:Column(name = "path", nullable = false, length = 255)
     open var path: String,
 
-    @field:Column(name = "description")
+    @field:Column(name = "description", columnDefinition = "text")
     open val description: String? = null,
 
     @field:Column(name = "owner_id")

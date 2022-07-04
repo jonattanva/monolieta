@@ -21,3 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: ./gradlew :monolieta:test
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_HOSTNAME: postgres
+          POSTGRES_DATABASE: monolieta

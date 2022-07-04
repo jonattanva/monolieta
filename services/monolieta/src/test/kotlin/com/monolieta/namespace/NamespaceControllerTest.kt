@@ -1,6 +1,7 @@
 package com.monolieta.namespace
 
 import com.monolieta.Application
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -24,12 +25,20 @@ internal class NamespaceControllerTest {
     private lateinit var mockMvc: MockMvc
 
     @Autowired
+    private lateinit var namespaceRepository: NamespaceRepository
+
+    @Autowired
     private lateinit var webApplicationContext: WebApplicationContext
 
     @BeforeEach
     fun setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
             .build()
+    }
+
+    @AfterEach
+    fun cleanup() {
+        namespaceRepository.deleteAll()
     }
 
     @Test
@@ -75,8 +84,30 @@ internal class NamespaceControllerTest {
     }
 
     @Test
+    fun `create new namespace with long description`() {
+        val description = (1..2000)
+            .map { it }
+
+        val json = """{
+         "name": "Monolieta",
+         "path": "Monolieta",
+         "description": "$description"
+        }""".trimMargin()
+
+        mockMvc.perform(post("/namespace")
+            .content(json)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.body.message").value("The namespace has been created"))
+    }
+
+    @Test
     fun `create new namespace with invalid name`() {
-        val name = (1..500).map { it }
+        val name = (1..500)
+            .map { it }
+
         val json = """{
          "name": "$name",
          "path": "Mono",

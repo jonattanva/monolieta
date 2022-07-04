@@ -3,6 +3,7 @@ package com.monolieta.project
 import com.monolieta.starter.extension.getMessage
 import com.monolieta.starter.http.HttpMessage
 import com.monolieta.namespace.NamespaceService
+import com.monolieta.starter.http.HttpResponse
 import org.springframework.context.MessageSource
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.function.ServerRequest
@@ -15,11 +16,6 @@ class ProjectController(
     private val projectService: ProjectService,
     private val namespaceService: NamespaceService
 ) {
-    fun detail(request: ServerRequest): ServerResponse {
-        return ServerResponse.ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body("message")
-    }
 
     fun create(request: ServerRequest): ServerResponse {
         val body = request.body(Project.Request::class.java)
@@ -43,6 +39,18 @@ class ProjectController(
 
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(message)
+            .body(HttpResponse(body = message))
+    }
+
+    fun detail(request: ServerRequest): ServerResponse {
+        val namespace = request.pathVariable("namespace")
+        val project = request.pathVariable("project")
+
+        val result = projectService.findByNamespaceAndProject(namespace, project)
+            ?.toResponse() ?: throw Exception("the.project.does.not.exist")
+
+        return ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(HttpResponse(body = result))
     }
 }

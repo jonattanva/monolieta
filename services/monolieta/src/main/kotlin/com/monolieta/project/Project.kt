@@ -1,6 +1,7 @@
 package com.monolieta.project
 
 import com.monolieta.namespace.Namespace
+import org.hibernate.validator.constraints.Length
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.Valid
@@ -8,27 +9,29 @@ import javax.validation.constraints.NotEmpty
 
 @Entity
 @Table(
-    name = "projects", uniqueConstraints = [
-        UniqueConstraint(name = "uq_projects_30ec1788", columnNames = ["name", "path"])
+    name = "project", uniqueConstraints = [
+        UniqueConstraint(name = "uq_project_30ec1788", columnNames = ["name", "path"])
     ]
 )
 open class Project(
 
     @field:Id
     @field:Column(name = "id")
-    @field:GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROJECTS_SEQ")
-    @field:SequenceGenerator(name = "PROJECTS_SEQ", sequenceName = "projects_id_seq")
+    @field:GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROJECT_SEQ")
+    @field:SequenceGenerator(name = "PROJECT_SEQ", sequenceName = "project_id_seq")
     open val id: Long? = null,
 
-    @field:NotEmpty(message = "the.project.name.is.required")
-    @field:Column(name = "name", nullable = false)
+    @field:Length(max = 255, message = "the.name.must.contain.a.maximum.of.255.characters")
+    @field:NotEmpty(message = "the.name.is.required")
+    @field:Column(name = "name", nullable = false, length = 255)
     open val name: String,
 
-    @field:NotEmpty(message = "the.project.path.is.required")
-    @field:Column(name = "path", nullable = false)
+    @field:Length(max = 255, message = "the.path.must.contain.a.maximum.of.255.characters")
+    @field:NotEmpty(message = "the.path.is.required")
+    @field:Column(name = "path", nullable = false, length = 255)
     open var path: String,
 
-    @field:Column(name = "description")
+    @field:Column(name = "description", columnDefinition = "text")
     open val description: String? = null,
 
     @field:Valid
@@ -36,7 +39,7 @@ open class Project(
     @field:JoinColumn(
         name = "id_namespace",
         nullable = false,
-        foreignKey = ForeignKey(name = "fk_projects_namespace")
+        foreignKey = ForeignKey(name = "fk_project_namespace")
     )
     open val namespace: Namespace,
 
@@ -55,4 +58,26 @@ open class Project(
         val description: String? = null,
         val archived: Boolean = false
     )
+
+    data class Response(
+        val id: Long?,
+        val namespace: String,
+        val created: String,
+        val updated: String?,
+        val name: String,
+        val description: String?,
+        val archived: Boolean
+    )
+
+    fun toResponse(): Response {
+        return Response(
+            id = id,
+            created = created.toString(),
+            updated = updated.toString(),
+            name = name,
+            description = description,
+            namespace = namespace.name,
+            archived = archived
+        )
+    }
 }

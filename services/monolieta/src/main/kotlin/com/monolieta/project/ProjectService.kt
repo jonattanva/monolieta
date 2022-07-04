@@ -25,9 +25,9 @@ class ProjectService(
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    fun findByName(name: String): Project? {
-        return if (name.isNotEmpty()) {
-            projectRepository.findByName(1, name)
+    fun findByNamespaceAndProject(namespace: String, project: String): Project? {
+        return if (namespace.isNotEmpty() && project.isNotEmpty()) {
+            projectRepository.findByNamespaceAndProject(namespace, project)
         } else null
     }
 }

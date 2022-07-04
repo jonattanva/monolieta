@@ -12,7 +12,6 @@ import org.springframework.web.servlet.function.router
 class Router(
     private val filterException: FilterException
 ) {
-
     @Bean
     fun namespace(
         namespaceController: NamespaceController
@@ -24,11 +23,11 @@ class Router(
 
     @Bean
     fun project(
-        projectHandle: ProjectController
+        projectController: ProjectController
     ) = router {
         "/project".nest {
-            POST("", accept(MediaType.APPLICATION_JSON), projectHandle::create)
-            GET("/{namespace}/{project}", projectHandle::detail)
+            POST("", accept(MediaType.APPLICATION_JSON), projectController::create)
+            GET("/{namespace}/{project}", projectController::detail)
         }
-    }
+    }.filter(filterException::handler)
 }

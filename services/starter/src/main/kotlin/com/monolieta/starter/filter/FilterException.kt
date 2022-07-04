@@ -31,7 +31,10 @@ class FilterException(
 
     private fun handle(exception: Exception): ServerResponse {
         val body = HttpMessage(
-            exception.message ?: messageSource.getMessage("an.error.occurred.in.the.requested.action")
+            messageSource.getMessage(
+                exception.message ?: "",
+                messageSource.getMessage("an.error.occurred.in.the.requested.action")
+            )
         )
 
         return ServerResponse.badRequest()
