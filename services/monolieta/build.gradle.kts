@@ -26,11 +26,17 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-aws")
 
-    implementation(project(":starter"))
     runtimeOnly("org.postgresql:postgresql")
+    implementation("org.apache.tika:tika-core:2.4.1")
+    implementation("org.apache.tika:tika-parsers-standard-package:2.4.1")
+
+    implementation(project(":starter"))
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation(project(":starter-test"))
+}
+repositories {
+    mavenCentral()
 }
 
 dependencyManagement {
@@ -40,7 +46,7 @@ dependencyManagement {
 }
 
 jacoco {
-    toolVersion = "0.8.9"
+    toolVersion = "0.8.6"
 }
 
 tasks.withType<KotlinCompile> {
