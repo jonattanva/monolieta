@@ -83,6 +83,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - run: ./gradlew :monolieta:test
       - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
         with:
           name: service-reports
           retention-days: 1
