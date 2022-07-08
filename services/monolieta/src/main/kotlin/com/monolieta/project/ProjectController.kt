@@ -3,12 +3,16 @@ package com.monolieta.project
 import com.monolieta.starter.extension.getMessage
 import com.monolieta.starter.http.HttpMessage
 import com.monolieta.namespace.NamespaceService
+import com.monolieta.starter.extension.md5
 import com.monolieta.starter.http.HttpResponse
 import org.springframework.context.MessageSource
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.function.ServerRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.function.ServerResponse
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 
 @Component
 class ProjectController(
@@ -23,9 +27,11 @@ class ProjectController(
         val namespace = namespaceService.getNamespace()
             ?: throw Exception("the.namespace.does.not.exist")
 
+        val key = projectService.generateKey()
         projectService.save(
             Project(
                 id = null,
+                key = key,
                 name = body.name,
                 path = body.path,
                 description = body.description,

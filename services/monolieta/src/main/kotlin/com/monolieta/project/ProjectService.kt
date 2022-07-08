@@ -1,11 +1,14 @@
 package com.monolieta.project
 
+import com.monolieta.starter.extension.md5
 import com.monolieta.starter.extension.normalize
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.annotation.Validated
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 import javax.validation.Valid
 
 @Validated
@@ -29,5 +32,15 @@ class ProjectService(
         return if (namespace.isNotEmpty() && project.isNotEmpty()) {
             projectRepository.findByNamespaceAndProject(namespace, project)
         } else null
+    }
+
+    fun generateKey(): String {
+        val key = UUID.randomUUID().toString()
+        val now = LocalDateTime.now()
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
+
+        return "${key}-${now}".md5()
     }
 }

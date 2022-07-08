@@ -21,6 +21,11 @@ open class Project(
     @field:SequenceGenerator(name = "PROJECT_SEQ", sequenceName = "project_id_seq")
     open val id: Long? = null,
 
+    @field:Length(max = 100, message = "the.key.must.contain.a.maximum.of.100.characters")
+    @field:NotEmpty(message = "the.key.is.required")
+    @field:Column(name = "key", nullable = false, length = 100)
+    open val key: String,
+
     @field:Length(max = 255, message = "the.name.must.contain.a.maximum.of.255.characters")
     @field:NotEmpty(message = "the.name.is.required")
     @field:Column(name = "name", nullable = false, length = 255)
@@ -62,6 +67,7 @@ open class Project(
 
     data class Response(
         val id: Long?,
+        val key: String,
         val namespace: String,
         val created: String,
         val updated: String?,
@@ -73,6 +79,7 @@ open class Project(
     fun toResponse(): Response {
         return Response(
             id = id,
+            key = key,
             created = created.toString(),
             updated = updated.toString(),
             name = name,
