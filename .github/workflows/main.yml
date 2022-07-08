@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [ 16.x, 18.x ]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [ 16.x, 18.x ]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -49,13 +49,53 @@ jobs:
           path: |
             coverage
 
+  test-service:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    container: gradle:jdk17-alpine
+    env:
+      SPRING_PROFILES_ACTIVE: test
+    services:
+      postgres:
+        image: postgres:14.2-alpine
+        env:
+          POSTGRES_HOSTNAME: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DATABASE: monolieta
+          POSTGRES_HOST_AUTH_METHOD: trust
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: ./gradlew :monolieta:test
+      - uses: actions/upload-artifact@v3
+        with:
+          name: service-reports
+          retention-days: 1
+          path: |
+            build/reports
+
   test-e2e:
     timeout-minutes: 60
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [ 16.x, 18.x ]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -115,11 +155,11 @@ jobs:
 
   report-coverage:
     timeout-minutes: 30
-    needs: ["test-assets", "test-e2e"]
+    needs: [ "test-assets", "test-e2e" ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [ 16.x, 18.x ]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
