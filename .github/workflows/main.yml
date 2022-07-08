@@ -74,6 +74,11 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v3
+      - run: |
+          apk update
+          apk add --no-cache postgresql-client
+      - run: |
+          sh scripts/create-database.sh
       - uses: actions/cache@v3
         with:
           path: |
