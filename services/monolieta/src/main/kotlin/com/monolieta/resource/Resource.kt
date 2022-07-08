@@ -25,12 +25,17 @@ open class Resource(
 
     @field:NotNull(message = "the.size.is.required")
     @field:Column(name = "size", nullable = false)
-    open val size: Int,
+    open val size: Long,
 
     @field:Length(max = 255, message = "the.type.must.contain.a.maximum.of.255.characters")
     @field:NotEmpty(message = "the.type.is.required")
     @field:Column(name = "type", nullable = false, length = 255)
     open val type: String,
+
+    @field:NotEmpty(message = "the.path.is.required")
+    @field:Length(max = 500, message = "the.path.must.contain.a.maximum.of.500.characters")
+    @field:Column(name = "path", nullable = false, length = 500)
+    open val path: String,
 
     @field:Valid
     @field:ManyToOne(fetch = FetchType.LAZY)

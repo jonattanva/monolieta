@@ -171,7 +171,6 @@ internal class ProjectControllerTest {
     @Test
     fun `project not found`() {
         mockMvc.perform(get("/project/monolieta/noting"))
-            .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isBadRequest)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body.message").value("The project does not exist"))

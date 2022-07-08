@@ -1,7 +1,9 @@
-package com.monolieta.bucket
+package com.monolieta.storage
 
+import com.monolieta.domain.File
+import org.apache.tika.config.TikaConfig
 import org.apache.tika.detect.DefaultDetector
-import org.apache.tika.detect.Detector
+import org.apache.tika.io.TikaInputStream
 import org.apache.tika.metadata.Metadata
 import org.apache.tika.mime.MediaType
 import org.springframework.web.multipart.MultipartFile
@@ -16,24 +18,24 @@ import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-abstract class BucketService {
+abstract class StorageService {
 
+    private val config = TikaConfig.getDefaultConfig()
     private val encrypt = MessageDigest.getInstance("MD5")
 
     abstract fun exists(name: String): Boolean
 
-    abstract fun createBucket(name: String): Boolean
+    abstract fun createFolder(name: String): Boolean
 
-    abstract fun upload(bucket: String, input: InputStream)
+    abstract fun upload(folder: String, inputStream: InputStream): File
 
-    fun getContentType(inputStream: InputStream): MediaType? {
-        val metadata = Metadata()
+    fun getContentType(inputStream: InputStream): MediaType? = config.mimeRepository.detect(inputStream, Metadata())
 
-        val detector: Detector = DefaultDetector()
-        return detector.detect(inputStream, metadata)
-    }
+    fun getExtension(mediaType: MediaType): String? = config.mimeRepository.forName(mediaType.toString()).extension
 
-    fun generateNewName(): String {
+    fun copy(inputStream: InputStream): TikaInputStream = TikaInputStream.get(inputStream)
+
+    fun generateHash(): String {
         val random = Random().nextLong()
         val now = LocalDateTime.now()
             .atZone(ZoneId.systemDefault())

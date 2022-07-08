@@ -12,7 +12,7 @@ plugins {
 version = "2022.0"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-extra["springCloudVersion"] = "Hoxton.SR9"
+extra["springCloudVersion"] = "2021.0.3"
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -23,8 +23,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
-    implementation("org.springframework.cloud:spring-cloud-starter-config")
-    implementation("org.springframework.cloud:spring-cloud-starter-aws")
+    // implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("io.awspring.cloud:spring-cloud-aws-context:2.4.1")
 
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.apache.tika:tika-core:2.4.1")
@@ -46,7 +46,7 @@ dependencyManagement {
 }
 
 jacoco {
-    toolVersion = "0.8.6"
+    toolVersion = "0.8.8"
 }
 
 tasks.withType<KotlinCompile> {
