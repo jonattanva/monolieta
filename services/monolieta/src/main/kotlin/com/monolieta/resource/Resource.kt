@@ -32,9 +32,9 @@ open class Resource(
     @field:Column(name = "type", nullable = false, length = 255)
     open val type: String,
 
+    @field:Length(max = 255, message = "the.path.must.contain.a.maximum.of.255.characters")
     @field:NotEmpty(message = "the.path.is.required")
-    @field:Length(max = 500, message = "the.path.must.contain.a.maximum.of.500.characters")
-    @field:Column(name = "path", nullable = false, length = 500)
+    @field:Column(name = "path", nullable = false, length = 255)
     open val path: String,
 
     @field:Valid

@@ -88,7 +88,7 @@ jobs:
           name: service-reports
           retention-days: 1
           path: |
-            build/reports
+            services/monolieta/build/reports
 
   test-e2e:
     timeout-minutes: 60
