@@ -1,4 +1,6 @@
 spring:
+  main:
+    banner-mode: "off"
   messages:
     basename: locale/message
 
