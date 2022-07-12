@@ -2,6 +2,7 @@ package com.monolieta
 
 import com.monolieta.namespace.NamespaceController
 import com.monolieta.project.ProjectController
+import com.monolieta.resource.ResourceController
 import com.monolieta.starter.filter.FilterException
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -29,5 +30,12 @@ class Router(
             POST("", accept(MediaType.APPLICATION_JSON), projectController::create)
             GET("/{namespace}/{project}", projectController::detail)
         }
+    }.filter(filterException::handler)
+
+    @Bean
+    fun resource(
+        resourceController: ResourceController
+    ) = router {
+        POST("/{namespace}/{project}/upload", resourceController::upload)
     }.filter(filterException::handler)
 }

@@ -3,6 +3,12 @@ spring:
     banner-mode: "off"
   messages:
     basename: locale/message
+  servlet:
+    multipart:
+      enabled: true
+      location: /var/tmp/monolieta
+      max-file-size: 30MB
+      max-request-size: 10MB
 
 monolieta:
   location: /var/tmp

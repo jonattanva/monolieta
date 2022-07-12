@@ -18,30 +18,34 @@ class ResourceService(
 ) {
     @Transactional(propagation = Propagation.REQUIRED)
     fun upload(project: Project, files: List<MultipartFile>) {
-        files.map {
-            if (localStorageService.isZip(it)) {
-                localStorageService.extract(it).map {
-                    upload(project, it)
-                }
-
+        if (!localStorageService.exists(project.key)) {
+            if (!localStorageService.createFolder(project.key)) {
+                throw Exception("Could not create folder ${project.key}")
             }
         }
 
-        // localStorageService.isZip()
+        files.forEach { multipart ->
+            if (localStorageService.isZip(multipart)) {
+                localStorageService.extract(multipart).forEach { input ->
+                    upload(project, input)
+                }
+            } else {
+                upload(project, multipart.inputStream)
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    fun upload(project: Project, inputStream: InputStream): Resource {
-        val result = localStorageService.upload(
-            project.key, inputStream
-        )
+    private fun upload(project: Project, inputStream: InputStream): Resource {
+        val result = localStorageService.upload(project.key, inputStream)
+        val type = result.type.toString()
 
         return resourceRepository.save(
             Resource(
                 id = null,
                 name = result.name,
                 size = result.size,
-                type = result.type.toString(),
+                type = type,
                 path = result.path,
                 project = project
             )

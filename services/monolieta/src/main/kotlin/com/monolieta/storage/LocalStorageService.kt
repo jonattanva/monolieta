@@ -17,6 +17,8 @@ class LocalStorageService : StorageService() {
     @Value("\${monolieta.location:/var/tmp}")
     private var location: String = "/var/tmp"
 
+
+    // TODO: Add cache
     override fun exists(name: String): Boolean {
         try {
             if (name.isNotEmpty()) {

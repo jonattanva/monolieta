@@ -25,6 +25,7 @@ class FilterException(
         } catch (constraintViolationException: javax.validation.ConstraintViolationException) {
             handle(constraintViolationException)
         } catch (exception: Exception) {
+            println(exception)
             handle(exception)
         }
     }

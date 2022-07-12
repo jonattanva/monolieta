@@ -78,10 +78,10 @@ internal class LocalStorageServiceTest {
         assertNotNull(localStorageService)
         localStorageService.createFolder(folder)
 
-        val file = Path.of("src/test/resources/$image")
-            .toFile()
-
-        val inputStream = FileInputStream(file)
+        val inputStream = FileInputStream(
+            Path.of("src/test/resources/$image")
+                .toFile()
+        )
         val result = localStorageService.upload(folder, inputStream)
 
         assertTrue(result.name.contains(".jpg"))

@@ -34,6 +34,7 @@ class ProjectService(
         } else null
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     fun generateKey(): String {
         val key = UUID.randomUUID().toString()
         val now = LocalDateTime.now()

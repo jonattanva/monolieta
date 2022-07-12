@@ -9,7 +9,11 @@ import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
 @Entity
-@Table(name = "resource")
+@Table(
+    name = "resource", uniqueConstraints = [
+        UniqueConstraint(name = "uq_resource_30ec1788", columnNames = ["name", "id_project"])
+    ]
+)
 open class Resource(
 
     @field:Id

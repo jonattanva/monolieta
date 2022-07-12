@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
@@ -55,12 +56,10 @@ internal class ProjectControllerTest {
             "path": "Lorem ipsum dolor sit amet"
         }""".trimIndent()
 
-        mockMvc.perform(
-            post("/project")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
+        mockMvc.perform(post("/project")
+            .content(json)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body.message").value("The namespace does not exist"))
@@ -75,12 +74,10 @@ internal class ProjectControllerTest {
             "path": "Lorem ipsum dolor sit amet"
         }""".trimIndent()
 
-        mockMvc.perform(
-            post("/project")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
+        mockMvc.perform(post("/project")
+            .content(json)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body.message").value("The project has been created"))
@@ -95,22 +92,18 @@ internal class ProjectControllerTest {
             "path": "edge"
         }""".trimIndent()
 
-        mockMvc.perform(
-            post("/project")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
+        mockMvc.perform(post("/project")
+            .content(json)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body.message").value("The project has been created"))
 
-        mockMvc.perform(
-            post("/project")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
+        mockMvc.perform(post("/project")
+            .content(json)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body.message").value("The project already exists"))
@@ -128,12 +121,10 @@ internal class ProjectControllerTest {
             "path": "Lorem ipsum dolor sit amet"
         }""".trimIndent()
 
-        mockMvc.perform(
-            post("/project")
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
+        mockMvc.perform(post("/project")
+            .content(json)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body[0]").value("The name must contain a maximum of 255 characters"))
