@@ -42,7 +42,7 @@ open class Project(
     @field:Valid
     @field:ManyToOne(fetch = FetchType.LAZY)
     @field:JoinColumn(
-        name = "id_namespace",
+        name = "namespace_id",
         nullable = false,
         foreignKey = ForeignKey(name = "fk_project_namespace")
     )
@@ -56,36 +56,4 @@ open class Project(
 
     @field:Column(name = "archived", nullable = false)
     open var archived: Boolean = false
-) {
-    data class Request(
-        val name: String,
-        val path: String,
-        val description: String? = null,
-        val archived: Boolean = false,
-        val privacy: String?
-    )
-
-    data class Response(
-        val id: Long?,
-        val key: String,
-        val namespace: String,
-        val created: String,
-        val updated: String?,
-        val name: String,
-        val description: String?,
-        val archived: Boolean
-    )
-
-    fun toResponse(): Response {
-        return Response(
-            id = id,
-            key = key,
-            created = created.toString(),
-            updated = updated.toString(),
-            name = name,
-            description = description,
-            namespace = namespace.name,
-            archived = archived
-        )
-    }
-}
+)

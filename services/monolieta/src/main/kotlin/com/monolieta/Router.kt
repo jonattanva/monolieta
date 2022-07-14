@@ -18,6 +18,7 @@ class Router(
         namespaceController: NamespaceController
     ) = router {
         "/namespace".nest {
+            GET("/{namespace}", namespaceController::detail)
             POST("", accept(MediaType.APPLICATION_JSON), namespaceController::create)
         }
     }.filter(filterException::handler)
@@ -27,8 +28,9 @@ class Router(
         projectController: ProjectController
     ) = router {
         "/project".nest {
-            POST("", accept(MediaType.APPLICATION_JSON), projectController::create)
             GET("/{namespace}/{project}", projectController::detail)
+            POST("", accept(MediaType.APPLICATION_JSON), projectController::create)
+
         }
     }.filter(filterException::handler)
 
@@ -36,6 +38,9 @@ class Router(
     fun resource(
         resourceController: ResourceController
     ) = router {
-        POST("/{namespace}/{project}/upload", resourceController::upload)
+        "/resource".nest {
+            GET("/{namespace}/{project}", resourceController::paginate)
+            POST("/{namespace}/{project}", resourceController::upload)
+        }
     }.filter(filterException::handler)
 }

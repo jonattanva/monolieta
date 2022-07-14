@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull
 @Entity
 @Table(
     name = "resource", uniqueConstraints = [
-        UniqueConstraint(name = "uq_resource_30ec1788", columnNames = ["name", "id_project"])
+        UniqueConstraint(name = "uq_resource_1dfea0cc", columnNames = ["name", "project_id"])
     ]
 )
 open class Resource(
@@ -44,7 +44,7 @@ open class Resource(
     @field:Valid
     @field:ManyToOne(fetch = FetchType.LAZY)
     @field:JoinColumn(
-        name = "id_project",
+        name = "project_id",
         nullable = false,
         foreignKey = ForeignKey(name = "fk_resource_project")
     )

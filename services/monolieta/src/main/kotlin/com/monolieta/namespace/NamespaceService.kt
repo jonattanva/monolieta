@@ -25,5 +25,14 @@ class NamespaceService(
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    fun getNamespace(): Namespace? = namespaceRepository.getNamespace(1L) // TODO: get current user!
+    fun current(): Namespace? {
+        return namespaceRepository.current(1L)
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    fun findBy(namespace: String): Namespace? {
+        return if (namespace.isNotEmpty()) {
+            namespaceRepository.findBy(namespace = namespace)
+        } else null
+    }
 }

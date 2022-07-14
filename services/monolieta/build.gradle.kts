@@ -12,7 +12,11 @@ plugins {
 version = "2022.0"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-extra["springCloudVersion"] = "2021.0.3"
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
+}
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -20,29 +24,26 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
-    // implementation("org.springframework.cloud:spring-cloud-starter-config")
-    implementation("io.awspring.cloud:spring-cloud-aws-context:2.4.1")
-
     runtimeOnly("org.postgresql:postgresql")
+
+    implementation(project(":starter-web"))
     implementation("org.apache.tika:tika-core:2.4.1")
     implementation("org.apache.tika:tika-parsers-standard-package:2.4.1")
+    
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    implementation(project(":starter"))
-
+    testImplementation(project(":starter-web-test"))
+    testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation(project(":starter-test"))
 }
 repositories {
     mavenCentral()
-}
-
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
-    }
 }
 
 jacoco {

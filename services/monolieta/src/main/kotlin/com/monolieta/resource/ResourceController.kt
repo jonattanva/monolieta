@@ -5,6 +5,7 @@ import com.monolieta.starter.extension.getMessage
 import com.monolieta.starter.http.HttpMessage
 import com.monolieta.starter.http.HttpResponse
 import org.springframework.context.MessageSource
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartHttpServletRequest
@@ -17,6 +18,17 @@ class ResourceController(
     private val projectService: ProjectService,
     private val resourceService: ResourceService
 ) {
+    fun paginate(request: ServerRequest): ServerResponse {
+        val pageable = PageRequest.of(0, 10)
+        val result = resourceService.paginate(pageable)
+
+        println(result.content)
+
+        return ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(HttpResponse(body = HttpResponse(body = "result")))
+    }
+
     fun upload(request: ServerRequest): ServerResponse {
         val multipart = request.servletRequest() as MultipartHttpServletRequest
         val files = multipart.getFiles("files")
@@ -28,7 +40,7 @@ class ResourceController(
         val project = request.pathVariable("project")
         val namespace = request.pathVariable("namespace")
 
-        val result = projectService.findByNamespaceAndProject(namespace, project)
+        val result = projectService.findBy(namespace, project)
             ?: throw Exception("the.project.does.not.exist")
 
         resourceService.upload(result, files)

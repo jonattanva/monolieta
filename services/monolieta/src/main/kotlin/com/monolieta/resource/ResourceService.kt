@@ -2,12 +2,15 @@ package com.monolieta.resource
 
 import com.monolieta.project.Project
 import com.monolieta.storage.LocalStorageService
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
+import javax.validation.Valid
 
 @Validated
 @Service("ResourceService")
@@ -16,21 +19,24 @@ class ResourceService(
     private val resourceRepository: ResourceRepository,
     private val localStorageService: LocalStorageService
 ) {
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    fun paginate(pageable: Pageable): Slice<Resource> = resourceRepository.paginate(pageable)
+
     @Transactional(propagation = Propagation.REQUIRED)
-    fun upload(project: Project, files: List<MultipartFile>) {
+    fun upload(@Valid project: Project, files: List<MultipartFile>) {
         if (!localStorageService.exists(project.key)) {
             if (!localStorageService.createFolder(project.key)) {
                 throw Exception("Could not create folder ${project.key}")
             }
         }
 
-        files.forEach { multipart ->
-            if (localStorageService.isZip(multipart)) {
-                localStorageService.extract(multipart).forEach { input ->
+        files.forEach { file ->
+            if (localStorageService.isZip(file)) {
+                localStorageService.extract(file).forEach { input ->
                     upload(project, input)
                 }
             } else {
-                upload(project, multipart.inputStream)
+                upload(project, file.inputStream)
             }
         }
     }

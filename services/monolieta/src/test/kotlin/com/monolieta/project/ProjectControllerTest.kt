@@ -1,7 +1,6 @@
 package com.monolieta.project
 
 import com.monolieta.Application
-import com.monolieta.namespace.Namespace
 import com.monolieta.namespace.NamespaceRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -26,7 +25,7 @@ import org.springframework.web.context.WebApplicationContext
 @ExtendWith(SpringExtension::class)
 internal class ProjectControllerTest {
 
-    private lateinit var mockMvc: MockMvc
+    private lateinit var request: MockMvc
 
     @Autowired
     private lateinit var webApplicationContext: WebApplicationContext
@@ -39,7 +38,7 @@ internal class ProjectControllerTest {
 
     @BeforeEach
     fun setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+        request = MockMvcBuilders.webAppContextSetup(webApplicationContext)
             .build()
     }
 
@@ -50,60 +49,90 @@ internal class ProjectControllerTest {
     }
 
     @Test
-    fun `create new project without namespace`() {
+    fun `create new project`() {
+        createNewNamespace()
+
         val json = """{ 
-            "name": "Lorem ipsum dolor sit amet",
-            "path": "Lorem ipsum dolor sit amet"
+            "name": "edge",
+            "path": "edge",
+            "description": "The description..."
         }""".trimIndent()
 
-        mockMvc.perform(post("/project")
+        val builder = post("/project")
             .content(json)
             .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest)
+            .contentType(MediaType.APPLICATION_JSON)
+
+        request.perform(builder)
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.url").value("http://localhost:8000/monolieta/edge"))
+            .andExpect(jsonPath("$.name").value("edge"))
+            .andExpect(jsonPath("$.path").value("edge"))
+            .andExpect(jsonPath("$.description").value("The description..."))
+            .andExpect(jsonPath("$.archived").value(false))
+    }
+
+    @Test
+    fun `create new project without namespace`() {
+        val json = """{ 
+            "name": "edge",
+            "path": "edge"
+        }""".trimIndent()
+
+        val builder = post("/project")
+            .content(json)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+
+        request.perform(builder)
+            .andExpect(status().isNotFound)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body.message").value("The namespace does not exist"))
     }
 
     @Test
-    fun `create new project`() {
-        createNamespace()
 
-        val json = """{ 
-            "name": "Lorem ipsum dolor sit amet",
-            "path": "Lorem ipsum dolor sit amet"
-        }""".trimIndent()
+    fun `project detail`() {
+        createNewNamespace("Monolieta")
+        createNew()
 
-        mockMvc.perform(post("/project")
-            .content(json)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON))
+        request.perform(get("/project/monolieta/edge"))
+            .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.body.message").value("The project has been created"))
+            .andExpect(jsonPath("$.url").value("http://localhost:8000/monolieta/edge"))
+            .andExpect(jsonPath("$.name").value("edge"))
+            .andExpect(jsonPath("$.path").value("edge"))
+            .andExpect(jsonPath("$.description").value("The description..."))
+            .andExpect(jsonPath("$.archived").value(false))
+    }
+
+    @Test
+    fun `project detail not found`() {
+        request.perform(get("/namespace/monolieta"))
+            .andExpect(status().isNotFound)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.body.message").value("The namespace does not exist"))
     }
 
     @Test
     fun `create new project with duplicate path`() {
-        createNamespace()
+        createNewNamespace("Monolieta")
+        createNew()
 
         val json = """{ 
             "name": "edge",
             "path": "edge"
         }""".trimIndent()
 
-        mockMvc.perform(post("/project")
+        val builder = post("/project")
             .content(json)
             .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.body.message").value("The project has been created"))
+            .contentType(MediaType.APPLICATION_JSON)
 
-        mockMvc.perform(post("/project")
-            .content(json)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON))
+        request.perform(builder)
             .andExpect(status().isBadRequest)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body.message").value("The project already exists"))
@@ -111,64 +140,30 @@ internal class ProjectControllerTest {
 
     @Test
     fun `create new project with name invalid`() {
-        createNamespace()
+        createNewNamespace("Monolieta")
 
         val name = (1..500)
             .map { it }
 
         val json = """{ 
             "name": "$name",
-            "path": "Lorem ipsum dolor sit amet"
+            "path": "edge"
         }""".trimIndent()
 
-        mockMvc.perform(post("/project")
+        val builder = post("/project")
             .content(json)
             .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON))
+            .contentType(MediaType.APPLICATION_JSON)
+
+        request.perform(builder)
             .andExpect(status().isBadRequest)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body[0]").value("The name must contain a maximum of 255 characters"))
     }
 
     @Test
-
-    fun `get project detail`() {
-        createNamespace()
-
-        val json = """{ 
-            "name": "edge",
-            "path": "edge",
-            "description": "The demo project"
-        }""".trimIndent()
-
-        mockMvc.perform(post("/project")
-            .content(json)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.body.message").value("The project has been created"))
-
-        mockMvc.perform(get("/project/monolieta/edge"))
-            .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.body.namespace").value("Monolieta"))
-            .andExpect(jsonPath("$.body.name").value("edge"))
-            .andExpect(jsonPath("$.body.description").value("The demo project"))
-            .andExpect(jsonPath("$.body.archived").value(false))
-    }
-
-    @Test
-    fun `project not found`() {
-        mockMvc.perform(get("/project/monolieta/noting"))
-            .andExpect(status().isBadRequest)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.body.message").value("The project does not exist"))
-    }
-
-    @Test
     fun `create new project with long description`() {
-        createNamespace()
+        createNewNamespace()
 
         val description = (1..2000)
             .map { it }
@@ -179,23 +174,51 @@ internal class ProjectControllerTest {
             "description": "$description"
         }""".trimIndent()
 
-        mockMvc.perform(post("/project")
+        val builder = post("/project")
             .content(json)
             .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON))
+            .contentType(MediaType.APPLICATION_JSON)
+
+        request.perform(builder)
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.body.message").value("The project has been created"))
+            .andExpect(jsonPath("$.url").value("http://localhost:8000/monolieta/edge"))
+            .andExpect(jsonPath("$.name").value("edge"))
+            .andExpect(jsonPath("$.path").value("edge"))
+            .andExpect(jsonPath("$.archived").value(false))
     }
 
-    private fun createNamespace() {
-        namespaceRepository.save(
-            Namespace(
-                id = null,
-                name = "Monolieta",
-                path = "monolieta",
-                owner = 1
-            )
-        )
+    private fun createNewNamespace(name: String = "Monolieta") {
+        val json = """{
+            "name": "$name",
+            "path": "$name",
+            "description": "The description..."
+        }""".trimMargin()
+
+        val builder = post("/namespace")
+            .content(json)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+
+        request.perform(builder)
+            .andExpect(status().isCreated)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+    }
+
+    private fun createNew(name: String = "edge") {
+        val json = """{ 
+            "name": "$name",
+            "path": "$name",
+            "description": "The description..."
+        }""".trimIndent()
+
+        val builder = post("/project")
+            .content(json)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+
+        request.perform(builder)
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
     }
 }

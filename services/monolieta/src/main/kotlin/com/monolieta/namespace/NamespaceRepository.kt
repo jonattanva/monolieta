@@ -5,6 +5,10 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
 interface NamespaceRepository : JpaRepository<Namespace, Long> {
+
     @Query("SELECT N FROM Namespace N WHERE N.owner = :owner")
-    fun getNamespace(@Param("owner") owner: Long): Namespace?
+    fun current(@Param("owner") owner: Long): Namespace?
+
+    @Query("SELECT N FROM Namespace N WHERE N.path = :path")
+    fun findBy(@Param("path") namespace: String): Namespace?
 }

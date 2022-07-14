@@ -1,5 +1,6 @@
 package com.monolieta.starter.filter
 
+import com.monolieta.starter.exception.NotFoundException
 import com.monolieta.starter.extension.getMessage
 import com.monolieta.starter.http.HttpMessage
 import com.monolieta.starter.http.HttpResponse
@@ -8,6 +9,7 @@ import org.springframework.context.MessageSource
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.function.HandlerFunction
 import org.springframework.web.servlet.function.ServerRequest
@@ -24,10 +26,25 @@ class FilterException(
             handle(dataIntegrityViolationException)
         } catch (constraintViolationException: javax.validation.ConstraintViolationException) {
             handle(constraintViolationException)
+        } catch (notFoundException: NotFoundException) {
+            handle(notFoundException)
         } catch (exception: Exception) {
             println(exception)
             handle(exception)
         }
+    }
+
+    private fun handle(notFoundException: NotFoundException): ServerResponse {
+        val body = HttpMessage(
+            messageSource.getMessage(
+                notFoundException.message ?: "",
+                messageSource.getMessage("an.error.occurred.in.the.requested.action")
+            )
+        )
+
+        return ServerResponse.status(HttpStatus.NOT_FOUND)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(HttpResponse(body = body))
     }
 
     private fun handle(exception: Exception): ServerResponse {

@@ -15,7 +15,9 @@ import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
@@ -61,10 +63,37 @@ internal class ResourceControllerTest {
         val namespace = createNamespace()
         val project = createProject(namespace)
 
-        mockMvc.perform(multipart("/${namespace.name}/${project.name}/upload"))
+        mockMvc.perform(multipart("/resource/${namespace.name}/${project.name}"))
             .andExpect(status().isBadRequest)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body.message").value("You must attach one or more files"))
+    }
+
+    @Test
+    fun `temporal sad`() {
+        val namespace = createNamespace()
+        val project = createProject(namespace)
+
+        val input = FileInputStream(
+            Path.of("src/test/resources/dataset.zip")
+                .toFile()
+        )
+
+        val file = MockMultipartFile(
+            "files", "dataset.zip", "application/zip", input
+        )
+
+        mockMvc.perform(multipart("/resource/${namespace.name}/${project.name}")
+            .file(file))
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.body.message").value("New resource have been added"))
+
+
+        mockMvc.perform(get("/resource/${namespace.name}/${project.name}"))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
     }
 
     @Test
@@ -81,7 +110,7 @@ internal class ResourceControllerTest {
             "files", "dataset.zip", "application/zip", input
         )
 
-        mockMvc.perform(multipart("/${namespace.name}/${project.name}/upload")
+        mockMvc.perform(multipart("/resource/${namespace.name}/${project.name}")
             .file(file))
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -99,7 +128,7 @@ internal class ResourceControllerTest {
             "files", "dataset.zip", "application/zip", input
         )
 
-        mockMvc.perform(multipart("/namespace/project/upload")
+        mockMvc.perform(multipart("/resource/namespace/project")
             .file(file))
             .andExpect(status().isBadRequest)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))

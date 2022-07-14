@@ -1,37 +1,29 @@
 package com.monolieta.project
 
-import com.monolieta.starter.extension.getMessage
-import com.monolieta.starter.http.HttpMessage
 import com.monolieta.namespace.NamespaceService
-import com.monolieta.starter.extension.md5
-import com.monolieta.starter.http.HttpResponse
-import org.springframework.context.MessageSource
+import com.monolieta.starter.exception.NotFoundException
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.function.ServerRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.function.ServerResponse
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.*
 
 @Component
 class ProjectController(
-    private val messageSource: MessageSource,
     private val projectService: ProjectService,
-    private val namespaceService: NamespaceService
+    private val projectTransfer: ProjectTransfer,
+    private val namespaceService: NamespaceService,
 ) {
 
     fun create(request: ServerRequest): ServerResponse {
-        val body = request.body(Project.Request::class.java)
+        val body = request.body(ProjectAccess::class.java)
 
-        val namespace = namespaceService.getNamespace()
-            ?: throw Exception("the.namespace.does.not.exist")
+        val namespace = namespaceService.current()
+            ?: throw NotFoundException("the.namespace.does.not.exist")
 
-        val key = projectService.generateKey()
-        projectService.save(
+        val result = projectService.save(
             Project(
                 id = null,
-                key = key,
+                key = projectService.generateKey(),
                 name = body.name,
                 path = body.path,
                 description = body.description,
@@ -40,24 +32,20 @@ class ProjectController(
             )
         )
 
-        val message = HttpMessage(
-            messageSource.getMessage("the.project.has.been.created")
-        )
-
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(HttpResponse(body = message))
+            .body(projectTransfer.convert(result))
     }
 
     fun detail(request: ServerRequest): ServerResponse {
         val namespace = request.pathVariable("namespace")
         val project = request.pathVariable("project")
 
-        val result = projectService.findByNamespaceAndProject(namespace, project)
-            ?.toResponse() ?: throw Exception("the.project.does.not.exist")
+        val result = projectService.findBy(namespace, project)
+            ?: throw NotFoundException("the.project.does.not.exist")
 
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(HttpResponse(body = result))
+            .body(projectTransfer.convert(result))
     }
 }

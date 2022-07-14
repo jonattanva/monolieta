@@ -3,6 +3,8 @@ spring:
     banner-mode: "off"
   messages:
     basename: locale/message
+  jpa:
+    open-in-view: false
   servlet:
     multipart:
       enabled: true
@@ -11,4 +13,5 @@ spring:
       max-request-size: 10MB
 
 monolieta:
+  app-url: http://localhost:8000
   location: /var/tmp

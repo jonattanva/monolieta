@@ -51,10 +51,4 @@ open class Namespace(
 
     @field:Column(name = "updated_at")
     open var updated: LocalDateTime? = null,
-) {
-    data class Request(
-        val name: String,
-        val path: String,
-        val description: String?
-    )
-}
+)
