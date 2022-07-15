@@ -66,7 +66,6 @@ internal class ProjectControllerTest {
         request.perform(builder)
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.id").value(1))
             .andExpect(jsonPath("$.url").value("http://localhost:8000/monolieta/edge"))
             .andExpect(jsonPath("$.name").value("edge"))
             .andExpect(jsonPath("$.path").value("edge"))

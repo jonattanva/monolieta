@@ -1,6 +1,5 @@
 package com.monolieta.storage
 
-import com.monolieta.domain.File
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -17,17 +16,14 @@ class LocalStorageService : StorageService() {
     @Value("\${monolieta.location:/var/tmp}")
     private var location: String = "/var/tmp"
 
-
-    // TODO: Add cache
     override fun exists(name: String): Boolean {
-        try {
+        return try {
             if (name.isNotEmpty()) {
-                return Files.exists(Path.of("$location/$name"))
-            }
-            return false
+                Files.exists(Path.of("$location/$name"))
+            } else false
         } catch (exception: Exception) {
             logger.error("The file does not exists ($name)", exception)
-            return false
+            false
         }
     }
 
@@ -49,7 +45,7 @@ class LocalStorageService : StorageService() {
         }
     }
 
-    override fun upload(folder: String, inputStream: InputStream): File {
+    override fun upload(folder: String, inputStream: InputStream): Storage {
         try {
             val stream = copy(inputStream)
             val type = getContentType(stream)
@@ -67,7 +63,7 @@ class LocalStorageService : StorageService() {
             Files.copy(stream, Path.of("$location/$path"))
             stream.close()
 
-            return File(
+            return Storage(
                 name = name,
                 size = size,
                 type = type,

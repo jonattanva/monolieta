@@ -20,7 +20,9 @@ class ResourceService(
     private val localStorageService: LocalStorageService
 ) {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    fun paginate(pageable: Pageable): Slice<Resource> = resourceRepository.paginate(pageable)
+    fun paginate(pageable: Pageable): Slice<Resource> {
+        return resourceRepository.paginate(pageable)
+    }
 
     @Transactional(propagation = Propagation.REQUIRED)
     fun upload(@Valid project: Project, files: List<MultipartFile>) {
@@ -43,16 +45,16 @@ class ResourceService(
 
     @Transactional(propagation = Propagation.REQUIRED)
     private fun upload(project: Project, inputStream: InputStream): Resource {
-        val result = localStorageService.upload(project.key, inputStream)
-        val type = result.type.toString()
+        val file = localStorageService.upload(project.key, inputStream)
+        val type = file.type.toString()
 
         return resourceRepository.save(
             Resource(
                 id = null,
-                name = result.name,
-                size = result.size,
+                name = file.name,
+                size = file.size,
                 type = type,
-                path = result.path,
+                path = file.path,
                 project = project
             )
         )

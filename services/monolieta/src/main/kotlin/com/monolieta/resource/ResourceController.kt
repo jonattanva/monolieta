@@ -16,17 +16,19 @@ import org.springframework.web.servlet.function.ServerResponse
 class ResourceController(
     private val messageSource: MessageSource,
     private val projectService: ProjectService,
-    private val resourceService: ResourceService
+    private val resourceService: ResourceService,
+    private val resourceTransfer: ResourceTransfer
 ) {
     fun paginate(request: ServerRequest): ServerResponse {
-        val pageable = PageRequest.of(0, 10)
-        val result = resourceService.paginate(pageable)
+        val page = request.param("page")
+            .orElse("0").toIntOrNull() ?: 0
 
-        println(result.content)
+        val pageable = PageRequest.of(page, 10)
+        val result = resourceService.paginate(pageable)
 
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(HttpResponse(body = HttpResponse(body = "result")))
+            .body(resourceTransfer.convert(result))
     }
 
     fun upload(request: ServerRequest): ServerResponse {

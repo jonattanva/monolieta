@@ -1,8 +1,6 @@
 package com.monolieta.storage
 
-import com.monolieta.domain.File
 import org.apache.tika.config.TikaConfig
-import org.apache.tika.detect.DefaultDetector
 import org.apache.tika.io.TikaInputStream
 import org.apache.tika.metadata.Metadata
 import org.apache.tika.mime.MediaType
@@ -27,13 +25,19 @@ abstract class StorageService {
 
     abstract fun createFolder(name: String): Boolean
 
-    abstract fun upload(folder: String, inputStream: InputStream): File
+    abstract fun upload(folder: String, inputStream: InputStream): Storage
 
-    fun getContentType(inputStream: InputStream): MediaType? = config.mimeRepository.detect(inputStream, Metadata())
+    fun getContentType(inputStream: InputStream): MediaType? {
+        return config.mimeRepository.detect(inputStream, Metadata())
+    }
 
-    fun getExtension(mediaType: MediaType): String? = config.mimeRepository.forName(mediaType.toString()).extension
+    fun getExtension(mediaType: MediaType): String? {
+        return config.mimeRepository.forName(mediaType.toString()).extension
+    }
 
-    fun copy(inputStream: InputStream): TikaInputStream = TikaInputStream.get(inputStream)
+    fun copy(inputStream: InputStream): TikaInputStream {
+        return TikaInputStream.get(inputStream)
+    }
 
     fun generateHash(): String {
         val random = Random().nextLong()
