@@ -27,7 +27,7 @@
     "@types/react": "~18.0.15",
     "@types/react-dom": "~18.0.6",
     "@vitejs/plugin-react": "~2.0.0",
-    "@vitest/ui": "~0.18.0",
+    "@vitest/ui": "~0.18.1",
     "babel-plugin-istanbul": "~6.1.1",
     "c8": "~7.11.3",
     "cypress": "~10.3.0",
