@@ -28,21 +28,14 @@ import java.nio.file.Path
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ExtendWith(SpringExtension::class)
-internal class ResourceControllerTest {
+internal class ResourceIntegrationTest @Autowired constructor(
+    private var projectRepository: ProjectRepository,
+    private var resourceRepository: ResourceRepository,
+    private var namespaceRepository: NamespaceRepository,
+    private var webApplicationContext: WebApplicationContext,
+) {
 
     private lateinit var request: MockMvc
-
-    @Autowired
-    private lateinit var webApplicationContext: WebApplicationContext
-
-    @Autowired
-    private lateinit var namespaceRepository: NamespaceRepository
-
-    @Autowired
-    private lateinit var projectRepository: ProjectRepository
-
-    @Autowired
-    private lateinit var resourceRepository: ResourceRepository
 
     @BeforeEach
     fun setUp() {

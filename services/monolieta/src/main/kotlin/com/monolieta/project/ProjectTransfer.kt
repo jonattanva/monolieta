@@ -1,6 +1,6 @@
 package com.monolieta.project
 
-import com.monolieta.starter.Transfer
+import com.monolieta.starter.http.Transfer
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 

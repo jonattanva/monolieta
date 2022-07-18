@@ -21,15 +21,11 @@ import org.springframework.web.context.WebApplicationContext
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ExtendWith(SpringExtension::class)
-internal class NamespaceControllerTest {
-
+internal class NamespaceIntegrationTest @Autowired constructor(
+    private var namespaceRepository: NamespaceRepository,
+    private var webApplicationContext: WebApplicationContext
+) {
     private lateinit var request: MockMvc
-
-    @Autowired
-    private lateinit var namespaceRepository: NamespaceRepository
-
-    @Autowired
-    private lateinit var webApplicationContext: WebApplicationContext
 
     @BeforeEach
     fun setUp() {

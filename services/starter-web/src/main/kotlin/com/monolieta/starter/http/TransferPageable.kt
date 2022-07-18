@@ -1,4 +1,4 @@
-package com.monolieta.starter
+package com.monolieta.starter.http
 
 import org.springframework.data.domain.Slice
 

@@ -1,6 +1,6 @@
 package com.monolieta.resource
 
-import com.monolieta.starter.TransferPageable
+import com.monolieta.starter.http.TransferPageable
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
