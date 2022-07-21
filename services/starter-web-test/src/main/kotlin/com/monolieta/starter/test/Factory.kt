@@ -1,18 +1,14 @@
 package com.monolieta.starter.test
 
-abstract class Factory<T> {
+abstract class Factory<T, R> {
 
     abstract fun definition(): T
 
-    abstract fun make(entity: T): T
+    abstract fun make(entity: T): R
 
     abstract fun cleanup()
 
-    fun create(): T {
-        return create(definition())
-    }
+    fun create(): R = create(definition())
 
-    fun create(entity: T): T {
-        return make(entity)
-    }
+    fun create(entity: T): R = make(entity)
 }

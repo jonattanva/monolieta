@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 internal class NamespaceFactory @Autowired constructor(
     private val namespaceService: NamespaceService,
     private val namespaceRepository: NamespaceRepository
-) : Factory<Namespace>() {
+) : Factory<Namespace, Namespace>() {
 
     override fun make(entity: Namespace): Namespace {
         return namespaceService.save(entity)

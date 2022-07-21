@@ -2,6 +2,7 @@ package com.monolieta.project
 
 import com.monolieta.starter.extension.md5
 import com.monolieta.starter.extension.normalize
+import com.monolieta.storage.LocalStorageService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -15,7 +16,8 @@ import javax.validation.Valid
 @Service(value = "ProjectService")
 @Transactional(propagation = Propagation.MANDATORY)
 class ProjectService(
-    private val projectRepository: ProjectRepository
+    private val projectRepository: ProjectRepository,
+    private val localStorageService: LocalStorageService
 ) {
     @Transactional(propagation = Propagation.REQUIRED)
     fun save(@Valid project: Project): Project {
@@ -24,7 +26,14 @@ class ProjectService(
             LocalDateTime.now()
         } else null
 
-        return projectRepository.save(project)
+        val result = projectRepository.save(project)
+        if (!localStorageService.exists(result.key)) {
+            if (!localStorageService.createFolder(project.key)) {
+                throw Exception("Could not create folder ${project.key}")
+            }
+        }
+
+        return result
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)

@@ -25,26 +25,29 @@ class ResourceService(
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    fun upload(@Valid project: Project, files: List<MultipartFile>) {
-        if (!localStorageService.exists(project.key)) {
-            if (!localStorageService.createFolder(project.key)) {
-                throw Exception("Could not create folder ${project.key}")
-            }
+    fun upload(project: Project, files: List<MultipartFile>): List<Resource> {
+        val result = arrayListOf<Resource>()
+        files.forEach {
+            result.addAll(upload(project, it.inputStream))
         }
-
-        files.forEach { file ->
-            if (localStorageService.isZip(file)) {
-                localStorageService.extract(file).forEach { input ->
-                    upload(project, input)
-                }
-            } else {
-                upload(project, file.inputStream)
-            }
-        }
+        return result
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    private fun upload(project: Project, inputStream: InputStream): Resource {
+    fun upload(project: Project, inputStream: InputStream): List<Resource> {
+        val result = arrayListOf<Resource>()
+        if (localStorageService.isZip(inputStream)) {
+            localStorageService.extract(inputStream).forEach {
+                result.add(save(project, it))
+            }
+        } else {
+            result.add(save(project, inputStream))
+        }
+        return result
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    private fun save(@Valid project: Project, inputStream: InputStream): Resource {
         val file = localStorageService.upload(project.key, inputStream)
         val type = file.type.toString()
 

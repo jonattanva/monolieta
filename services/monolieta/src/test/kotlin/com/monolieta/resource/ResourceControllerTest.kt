@@ -28,7 +28,7 @@ import java.nio.file.Path
 @ExtendWith(SpringExtension::class)
 internal class ResourceControllerTest @Autowired constructor(
     private val projectFactory: ProjectFactory,
-    private val resourceRepository: ResourceRepository,
+    private val resourceFactory: ResourceFactory,
     private var webApplicationContext: WebApplicationContext,
 ) {
 
@@ -42,8 +42,7 @@ internal class ResourceControllerTest @Autowired constructor(
 
     @AfterEach
     fun cleanup() {
-        resourceRepository.deleteAll()
-        projectFactory.cleanup()
+        resourceFactory.cleanup()
     }
 
     @Test
@@ -93,19 +92,7 @@ internal class ResourceControllerTest @Autowired constructor(
 
     @Test
     fun paginate() {
-        projectFactory.create()
-
-        val path = Path.of("src/test/resources/dataset.zip")
-            .toFile()
-        val input = FileInputStream(path)
-
-        val file = MockMultipartFile("files", "dataset.zip", "application/zip", input)
-        val builder = multipart("/resource/monolieta/edge").file(file)
-
-        mockMvc.perform(builder)
-            .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.body.message").value("New resource have been added"))
+        resourceFactory.create()
 
         mockMvc.perform(get("/resource/monolieta/edge"))
             .andDo(MockMvcResultHandlers.print())

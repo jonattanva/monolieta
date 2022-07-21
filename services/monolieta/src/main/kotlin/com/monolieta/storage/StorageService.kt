@@ -59,23 +59,27 @@ abstract class StorageService {
         }
     }
 
-    fun isZip(multipartFile: MultipartFile): Boolean {
+    fun isZip(multipartFile: MultipartFile): Boolean = isZip(multipartFile.inputStream)
+
+    fun isZip(inputStream: InputStream): Boolean {
         try {
-            val inputStream = ZipInputStream(multipartFile.inputStream)
-            if (inputStream.nextEntry == null) {
-                inputStream.close()
+            val zipInputStream = ZipInputStream(inputStream)
+            if (zipInputStream.nextEntry == null) {
+                zipInputStream.close()
                 return false
             }
-            inputStream.close()
+            zipInputStream.close()
             return true
         } catch (exception: Exception) {
             return false
         }
     }
 
-    fun extract(file: MultipartFile): MutableList<InputStream> {
+    fun extract(multipartFile: MultipartFile): MutableList<InputStream> = extract(multipartFile.inputStream)
+
+    fun extract(inputStream: InputStream): MutableList<InputStream> {
         val inputs = mutableListOf<InputStream>()
-        ZipInputStream(file.inputStream).use {
+        ZipInputStream(inputStream).use {
             var entry: ZipEntry? = it.nextEntry
             while (entry != null) {
                 if (!entry.isDirectory && !isIgnoreFile(entry)) {

@@ -19,7 +19,7 @@ open class Project(
     @field:Column(name = "id")
     @field:GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROJECT_SEQ")
     @field:SequenceGenerator(name = "PROJECT_SEQ", sequenceName = "project_id_seq")
-    open val id: Long? = null,
+    open var id: Long? = null,
 
     @field:Length(max = 100, message = "the.key.must.contain.a.maximum.of.100.characters")
     @field:NotEmpty(message = "the.key.is.required")

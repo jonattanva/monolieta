@@ -10,16 +10,18 @@ internal class ProjectFactory @Autowired constructor(
     private val projectService: ProjectService,
     private val namespaceFactory: NamespaceFactory,
     private val projectRepository: ProjectRepository,
-) : Factory<Project>() {
+) : Factory<Project, Project>() {
 
     override fun definition(): Project {
+        val namespace = namespaceFactory.definition()
+
         return Project(
             id = null,
             key = "key",
             name = "edge",
             path = "edge",
             description = "This is a description",
-            namespace = namespaceFactory.definition()
+            namespace = namespace
         )
     }
 
