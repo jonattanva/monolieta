@@ -19,7 +19,7 @@ open class Namespace(
     @field:Column(name = "id")
     @field:GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "NAMESPACE_SEQ")
     @field:SequenceGenerator(name = "NAMESPACE_SEQ", sequenceName = "namespace_id_seq")
-    open val id: Long? = null,
+    open var id: Long? = null,
 
     @field:Length(max = 255, message = "the.name.must.contain.a.maximum.of.255.characters")
     @field:NotEmpty(message = "the.name.is.required")
@@ -44,7 +44,7 @@ open class Namespace(
         orphanRemoval = true,
         cascade = [CascadeType.ALL]
     )
-    open var project: MutableSet<Project> = mutableSetOf(),
+    open val project: MutableSet<Project> = mutableSetOf(),
 
     @field:Column(name = "created_at", nullable = false, updatable = false)
     open val created: LocalDateTime = LocalDateTime.now(),

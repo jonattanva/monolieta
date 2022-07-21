@@ -21,40 +21,40 @@ import org.springframework.web.context.WebApplicationContext
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ExtendWith(SpringExtension::class)
-internal class NamespaceIntegrationTest @Autowired constructor(
-    private var namespaceRepository: NamespaceRepository,
-    private var webApplicationContext: WebApplicationContext
+internal class NamespaceControllerTest @Autowired constructor(
+    private val namespaceFactory: NamespaceFactory,
+    private val webApplicationContext: WebApplicationContext
 ) {
-    private lateinit var request: MockMvc
+    private lateinit var mockMvc: MockMvc
 
     @BeforeEach
     fun setUp() {
-        request = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
             .build()
     }
 
     @AfterEach
     fun cleanup() {
-        namespaceRepository.deleteAll()
+        namespaceFactory.cleanup()
     }
 
     @Test
-    fun `namespace detail`() {
-        createNew()
+    fun detail() {
+        namespaceFactory.create()
 
-        request.perform(get("/namespace/monolieta"))
+        mockMvc.perform(get("/namespace/monolieta"))
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.url").value("http://localhost:8000/monolieta"))
             .andExpect(jsonPath("$.name").value("Monolieta"))
             .andExpect(jsonPath("$.path").value("monolieta"))
-            .andExpect(jsonPath("$.description").value("The description..."))
+            .andExpect(jsonPath("$.description").value("This is a description"))
             .andExpect(jsonPath("$.owner").value(1))
     }
 
     @Test
-    fun `namespace detail not found`() {
-        request.perform(get("/namespace/monolieta"))
+    fun `detail not found`() {
+        mockMvc.perform(get("/namespace/monolieta"))
             .andExpect(status().isNotFound)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body.message").value("The namespace does not exist"))
@@ -73,7 +73,7 @@ internal class NamespaceIntegrationTest @Autowired constructor(
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
 
-        request.perform(builder)
+        mockMvc.perform(builder)
             .andExpect(status().isCreated)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.url").value("http://localhost:8000/monolieta"))
@@ -85,7 +85,7 @@ internal class NamespaceIntegrationTest @Autowired constructor(
 
     @Test
     fun `create new namespace with duplicate path`() {
-        createNew()
+        namespaceFactory.create()
 
         val json = """{
             "name": "Monolieta",
@@ -98,7 +98,7 @@ internal class NamespaceIntegrationTest @Autowired constructor(
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
 
-        request.perform(builder)
+        mockMvc.perform(builder)
             .andExpect(status().isBadRequest)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body.message").value("The namespace already exists"))
@@ -120,7 +120,7 @@ internal class NamespaceIntegrationTest @Autowired constructor(
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
 
-        request.perform(builder)
+        mockMvc.perform(builder)
             .andExpect(status().isCreated)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.url").value("http://localhost:8000/monolieta"))
@@ -145,26 +145,9 @@ internal class NamespaceIntegrationTest @Autowired constructor(
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
 
-        request.perform(builder)
+        mockMvc.perform(builder)
             .andExpect(status().isBadRequest)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.body[0]").value("The name must contain a maximum of 255 characters"))
-    }
-
-    private fun createNew(name: String = "Monolieta") {
-        val json = """{
-            "name": "$name",
-            "path": "$name",
-            "description": "The description..."
-        }""".trimMargin()
-
-        val builder = post("/namespace")
-            .content(json)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-
-        request.perform(builder)
-            .andExpect(status().isCreated)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
     }
 }
