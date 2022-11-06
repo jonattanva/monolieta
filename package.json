@@ -15,7 +15,7 @@
   "dependencies": {
     "monolieta-search": "~1.2.0",
     "monolieta-virtual-scroll": "~1.4.1",
-    "next": "~12.2.2",
+    "next": "~13.0.2",
     "react": "~18.2.0",
     "react-dom": "~18.2.0"
   },
